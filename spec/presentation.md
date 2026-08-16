@@ -86,7 +86,10 @@ end of the whole header block and the first body paragraph.
 Bridgehead lines under a chapter mark (a header's paragraphs — subtitle,
 "Kept in shorthand") stay in the book face but drop to its quiet register:
 Literata **13 px, weight 300**, letter-spacing 0.04 em, color `muted`, no
-indent, no extra space between successive bridgehead lines.
+indent, no extra space between successive bridgehead lines. A letter or
+telegram header inside a blockquote ("Letter, Lucy Westenra to Mina
+Murray.") speaks in the same bridgehead voice while keeping the quote's
+inset.
 
 ## Palette — paper and ink
 

@@ -36,11 +36,15 @@ One JSON document per tale:
   normalize, or repair an id — an id is a shareable URL fragment, and a
   reading system with two anchor generators has two contracts. A block the
   server did not anchor has no id.
-- `kind` is `"heading"` (with `level`: 2 or 3) or `"paragraph"`.
+- `kind` is `"heading"` (with `level`: 2 or 3), `"paragraph"`, or
+  `"divider"` — a scene break. A divider has no id and no `runs`; it
+  renders as the scene-divider rule in `spec/presentation.md`, and the
+  paragraph after it sits flush.
 - `quote: true` marks a paragraph inside a blockquote. `header: true`
-  marks a bridgehead — a paragraph inside a section's header, rendered in
-  the header's quiet voice (see `spec/presentation.md`). Both are absent
-  when false.
+  marks a bridgehead — a paragraph inside *any* header, a chapter's or a
+  letter's, rendered in the header's quiet voice (see
+  `spec/presentation.md`); a letter header inside a quote carries both
+  flags and keeps the quote's inset. Both are absent when false.
 - `runs` carry text with minimal inline style: optional `italic` and
   `bold`, absent when false. Adjacent runs with identical styling are
   merged; no empty runs.
@@ -51,6 +55,18 @@ One JSON document per tale:
   encountering an unknown `kind` fails loudly rather than skipping content
   silently — an unknown kind means the payload is newer than the client,
   not that the block is optional.
+
+## Draft gaps
+
+Known losses in schema 1, recorded rather than papered over; each is a
+deliberate call awaiting a real need:
+
+- A section with no heading element (a dedication, a preface) contributes
+  no block for its own section id — its paragraphs are present, the
+  section anchor itself is not addressable in the payload.
+- `sub`/`sup` flatten to plain text (a chemical formula loses its
+  subscripts).
+- Verse-indentation classes flatten to line breaks alone.
 
 ## Versioning
 
