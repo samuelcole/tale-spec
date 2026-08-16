@@ -1,0 +1,1465 @@
+{
+  "area": "reader",
+  "version": 1,
+  "cases": [
+    {
+      "op": "current-paragraph-index",
+      "name": "chooses the first eligible top edge inside the viewport",
+      "input": {
+        "bounds": [
+          {
+            "top": 50,
+            "bottom": 90
+          },
+          {
+            "top": 100,
+            "bottom": 250
+          },
+          {
+            "top": 300,
+            "bottom": 700
+          },
+          {
+            "top": 800,
+            "bottom": 900
+          }
+        ],
+        "viewportTop": 0,
+        "viewportBottom": 400,
+        "ineligible": [
+          0
+        ]
+      },
+      "expected": 1
+    },
+    {
+      "op": "current-paragraph-index",
+      "name": "prefers a visible paragraph top over an earlier intersection",
+      "input": {
+        "bounds": [
+          {
+            "top": 50,
+            "bottom": 90
+          },
+          {
+            "top": 100,
+            "bottom": 250
+          },
+          {
+            "top": 300,
+            "bottom": 700
+          },
+          {
+            "top": 800,
+            "bottom": 900
+          }
+        ],
+        "viewportTop": 110,
+        "viewportBottom": 700
+      },
+      "expected": 2
+    },
+    {
+      "op": "current-paragraph-index",
+      "name": "falls back to the first intersecting paragraph when no top is visible",
+      "input": {
+        "bounds": [
+          {
+            "top": 0,
+            "bottom": 100
+          },
+          {
+            "top": 100,
+            "bottom": 1200
+          },
+          {
+            "top": 1200,
+            "bottom": 1300
+          }
+        ],
+        "viewportTop": 250,
+        "viewportBottom": 900
+      },
+      "expected": 1
+    },
+    {
+      "op": "current-paragraph-index",
+      "name": "keeps an eligible intersection when visible tops are ineligible",
+      "input": {
+        "bounds": [
+          {
+            "top": 0,
+            "bottom": 1000
+          },
+          {
+            "top": 100,
+            "bottom": 200
+          }
+        ],
+        "viewportTop": 50,
+        "viewportBottom": 250,
+        "ineligible": [
+          1
+        ]
+      },
+      "expected": 0
+    },
+    {
+      "op": "current-paragraph-index",
+      "name": "is nowhere when every paragraph is ineligible",
+      "input": {
+        "bounds": [
+          {
+            "top": 50,
+            "bottom": 90
+          },
+          {
+            "top": 100,
+            "bottom": 250
+          },
+          {
+            "top": 300,
+            "bottom": 700
+          },
+          {
+            "top": 800,
+            "bottom": 900
+          }
+        ],
+        "viewportTop": 0,
+        "viewportBottom": 400,
+        "ineligible": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "expected": -1
+    },
+    {
+      "op": "current-paragraph-index",
+      "name": "is nowhere in the gap between two paragraphs",
+      "input": {
+        "bounds": [
+          {
+            "top": 50,
+            "bottom": 90
+          },
+          {
+            "top": 100,
+            "bottom": 250
+          },
+          {
+            "top": 300,
+            "bottom": 700
+          },
+          {
+            "top": 800,
+            "bottom": 900
+          }
+        ],
+        "viewportTop": 700,
+        "viewportBottom": 790
+      },
+      "expected": -1
+    },
+    {
+      "op": "current-paragraph-index",
+      "name": "is nowhere when the next top sits exactly at the viewport bottom",
+      "input": {
+        "bounds": [
+          {
+            "top": 50,
+            "bottom": 90
+          },
+          {
+            "top": 100,
+            "bottom": 250
+          },
+          {
+            "top": 300,
+            "bottom": 700
+          },
+          {
+            "top": 800,
+            "bottom": 900
+          }
+        ],
+        "viewportTop": 700,
+        "viewportBottom": 800
+      },
+      "expected": -1
+    },
+    {
+      "op": "current-paragraph-index",
+      "name": "is nowhere on a page with no paragraphs",
+      "input": {
+        "bounds": [],
+        "viewportTop": 0,
+        "viewportBottom": 100
+      },
+      "expected": -1
+    },
+    {
+      "op": "percent-of",
+      "name": "is 1-based over the paragraph count",
+      "input": {
+        "index": 0,
+        "total": 4
+      },
+      "expected": 25
+    },
+    {
+      "op": "percent-of",
+      "name": "the last paragraph is the whole book",
+      "input": {
+        "index": 3,
+        "total": 4
+      },
+      "expected": 100
+    },
+    {
+      "op": "percent-of",
+      "name": "rounds down",
+      "input": {
+        "index": 0,
+        "total": 3
+      },
+      "expected": 33
+    },
+    {
+      "op": "percent-of",
+      "name": "rounds up",
+      "input": {
+        "index": 1,
+        "total": 3
+      },
+      "expected": 67
+    },
+    {
+      "op": "percent-of",
+      "name": "says 0 for no position",
+      "input": {
+        "index": -1,
+        "total": 10
+      },
+      "expected": 0
+    },
+    {
+      "op": "percent-of",
+      "name": "says 0 for an empty book",
+      "input": {
+        "index": 5,
+        "total": 0
+      },
+      "expected": 0
+    },
+    {
+      "op": "percent-of",
+      "name": "never exceeds 100",
+      "input": {
+        "index": 12,
+        "total": 10
+      },
+      "expected": 100
+    },
+    {
+      "op": "dim-boundary",
+      "name": "keeps a mid-book mark as the dim boundary",
+      "input": {
+        "furthestIndex": 3,
+        "total": 10,
+        "percent": 40
+      },
+      "expected": 3
+    },
+    {
+      "op": "dim-boundary",
+      "name": "keeps the first paragraph of a two-paragraph tale",
+      "input": {
+        "furthestIndex": 0,
+        "total": 2,
+        "percent": 50
+      },
+      "expected": 0
+    },
+    {
+      "op": "dim-boundary",
+      "name": "draws no line for a finished tale — it re-opens as clean ink",
+      "input": {
+        "furthestIndex": 9,
+        "total": 10,
+        "percent": 100
+      },
+      "expected": -1
+    },
+    {
+      "op": "dim-boundary",
+      "name": "draws no line for a mark past the end",
+      "input": {
+        "furthestIndex": 12,
+        "total": 10,
+        "percent": 100
+      },
+      "expected": -1
+    },
+    {
+      "op": "dim-boundary",
+      "name": "the one-paragraph tale is finished the moment it is read at all",
+      "input": {
+        "furthestIndex": 0,
+        "total": 1,
+        "percent": 100
+      },
+      "expected": -1
+    },
+    {
+      "op": "dim-boundary",
+      "name": "trusts the percent, not the anchor — a short tale finishes mid-mark",
+      "input": {
+        "furthestIndex": 4,
+        "total": 9,
+        "percent": 100
+      },
+      "expected": -1
+    },
+    {
+      "op": "dim-boundary",
+      "name": "draws no line with no mark",
+      "input": {
+        "furthestIndex": -1,
+        "total": 10,
+        "percent": 0
+      },
+      "expected": -1
+    },
+    {
+      "op": "dim-boundary",
+      "name": "draws no line with no paragraphs",
+      "input": {
+        "furthestIndex": 0,
+        "total": 0,
+        "percent": 0
+      },
+      "expected": -1
+    },
+    {
+      "op": "reading-position",
+      "name": "finds the first paragraph whose top is visible",
+      "input": {
+        "bounds": [
+          {
+            "top": 0,
+            "bottom": 80
+          },
+          {
+            "top": 100,
+            "bottom": 180
+          },
+          {
+            "top": 200,
+            "bottom": 280
+          },
+          {
+            "top": 300,
+            "bottom": 380
+          }
+        ],
+        "viewportTop": 150,
+        "viewportBottom": 350,
+        "atEnd": false
+      },
+      "expected": {
+        "current": 2,
+        "anchor": 2
+      }
+    },
+    {
+      "op": "reading-position",
+      "name": "keeps a viewport-tall paragraph while scrolling into it",
+      "input": {
+        "bounds": [
+          {
+            "top": 0,
+            "bottom": 80
+          },
+          {
+            "top": 100,
+            "bottom": 1200
+          },
+          {
+            "top": 1200,
+            "bottom": 1280
+          }
+        ],
+        "viewportTop": 250,
+        "viewportBottom": 900,
+        "atEnd": false
+      },
+      "expected": {
+        "current": 1,
+        "anchor": 1
+      }
+    },
+    {
+      "op": "reading-position",
+      "name": "keeps a viewport-tall paragraph at its far edge",
+      "input": {
+        "bounds": [
+          {
+            "top": 0,
+            "bottom": 80
+          },
+          {
+            "top": 100,
+            "bottom": 1200
+          },
+          {
+            "top": 1200,
+            "bottom": 1280
+          }
+        ],
+        "viewportTop": 900,
+        "viewportBottom": 1100,
+        "atEnd": false
+      },
+      "expected": {
+        "current": 1,
+        "anchor": 1
+      }
+    },
+    {
+      "op": "reading-position",
+      "name": "keeps a viewport-tall paragraph while wholly inside it",
+      "input": {
+        "bounds": [
+          {
+            "top": 0,
+            "bottom": 80
+          },
+          {
+            "top": 100,
+            "bottom": 1200
+          },
+          {
+            "top": 1200,
+            "bottom": 1280
+          }
+        ],
+        "viewportTop": 300,
+        "viewportBottom": 800,
+        "atEnd": false
+      },
+      "expected": {
+        "current": 1,
+        "anchor": 1
+      }
+    },
+    {
+      "op": "reading-position",
+      "name": "counts a paragraph exactly at the viewport top",
+      "input": {
+        "bounds": [
+          {
+            "top": 0,
+            "bottom": 80
+          },
+          {
+            "top": 100,
+            "bottom": 180
+          },
+          {
+            "top": 200,
+            "bottom": 280
+          },
+          {
+            "top": 300,
+            "bottom": 380
+          }
+        ],
+        "viewportTop": 200,
+        "viewportBottom": 400,
+        "atEnd": false
+      },
+      "expected": {
+        "current": 2,
+        "anchor": 2
+      }
+    },
+    {
+      "op": "reading-position",
+      "name": "is nowhere above the first paragraph",
+      "input": {
+        "bounds": [
+          {
+            "top": 50,
+            "bottom": 100
+          }
+        ],
+        "viewportTop": 0,
+        "viewportBottom": 40,
+        "atEnd": false
+      },
+      "expected": {
+        "current": -1,
+        "anchor": -1
+      }
+    },
+    {
+      "op": "reading-position",
+      "name": "counts the whole book at the end, but anchors the bookmark honestly",
+      "input": {
+        "bounds": [
+          {
+            "top": 0,
+            "bottom": 80
+          },
+          {
+            "top": 100,
+            "bottom": 180
+          },
+          {
+            "top": 200,
+            "bottom": 280
+          },
+          {
+            "top": 300,
+            "bottom": 380
+          }
+        ],
+        "viewportTop": 150,
+        "viewportBottom": 350,
+        "atEnd": true
+      },
+      "expected": {
+        "current": 3,
+        "anchor": 2
+      }
+    },
+    {
+      "op": "reading-position",
+      "name": "still counts the whole book when a short page never scrolls",
+      "input": {
+        "bounds": [
+          {
+            "top": 50,
+            "bottom": 100
+          }
+        ],
+        "viewportTop": 0,
+        "viewportBottom": 500,
+        "atEnd": true
+      },
+      "expected": {
+        "current": 0,
+        "anchor": 0
+      }
+    },
+    {
+      "op": "reading-position",
+      "name": "is nowhere on a page with no paragraphs",
+      "input": {
+        "bounds": [],
+        "viewportTop": 0,
+        "viewportBottom": 100,
+        "atEnd": true
+      },
+      "expected": {
+        "current": -1,
+        "anchor": -1
+      }
+    },
+    {
+      "op": "reading-position",
+      "name": "counts the whole book at the end even with nothing visible",
+      "input": {
+        "bounds": [
+          {
+            "top": 50,
+            "bottom": 100
+          }
+        ],
+        "viewportTop": 0,
+        "viewportBottom": 40,
+        "atEnd": true
+      },
+      "expected": {
+        "current": 0,
+        "anchor": -1
+      },
+      "note": "Reference-derived: reaching the end makes the final paragraph current whether or not the viewport rule found an anchor."
+    },
+    {
+      "op": "advance-reading-progress",
+      "name": "advances the paragraph and percentage together",
+      "input": {
+        "furthestIndex": 1,
+        "savedPercent": 20,
+        "position": {
+          "current": 3,
+          "anchor": 3
+        },
+        "total": 10
+      },
+      "expected": {
+        "furthestIndex": 3,
+        "percent": 40
+      }
+    },
+    {
+      "op": "advance-reading-progress",
+      "name": "can finish the page without moving an earlier anchor backwards",
+      "input": {
+        "furthestIndex": 8,
+        "savedPercent": 90,
+        "position": {
+          "current": 9,
+          "anchor": 7
+        },
+        "total": 10
+      },
+      "expected": {
+        "furthestIndex": 8,
+        "percent": 100
+      }
+    },
+    {
+      "op": "advance-reading-progress",
+      "name": "does nothing when both saved fields are already further",
+      "input": {
+        "furthestIndex": 8,
+        "savedPercent": 90,
+        "position": {
+          "current": 7,
+          "anchor": 7
+        },
+        "total": 10
+      },
+      "expected": null
+    },
+    {
+      "op": "advance-reading-progress",
+      "name": "does not rewind a high-water mark for someone re-reading",
+      "input": {
+        "furthestIndex": 19,
+        "savedPercent": 100,
+        "position": {
+          "current": 0,
+          "anchor": 0
+        },
+        "total": 20
+      },
+      "expected": null
+    },
+    {
+      "op": "next-unread-index",
+      "name": "continues after the inclusive read boundary",
+      "input": {
+        "index": 3,
+        "paragraphCount": 10,
+        "percent": 40
+      },
+      "expected": 4
+    },
+    {
+      "op": "next-unread-index",
+      "name": "continues into the second of two paragraphs",
+      "input": {
+        "index": 0,
+        "paragraphCount": 2,
+        "percent": 50
+      },
+      "expected": 1
+    },
+    {
+      "op": "next-unread-index",
+      "name": "opens a fresh book at its cover",
+      "input": {
+        "index": -1,
+        "paragraphCount": 10,
+        "percent": 0
+      },
+      "expected": null
+    },
+    {
+      "op": "next-unread-index",
+      "name": "the last paragraph has nowhere to continue to",
+      "input": {
+        "index": 9,
+        "paragraphCount": 10,
+        "percent": 100
+      },
+      "expected": null
+    },
+    {
+      "op": "next-unread-index",
+      "name": "a one-paragraph page is always finished",
+      "input": {
+        "index": 0,
+        "paragraphCount": 1,
+        "percent": 100
+      },
+      "expected": null
+    },
+    {
+      "op": "next-unread-index",
+      "name": "a page with no paragraphs has nowhere to continue to",
+      "input": {
+        "index": 0,
+        "paragraphCount": 0,
+        "percent": 0
+      },
+      "expected": null
+    },
+    {
+      "op": "next-unread-index",
+      "name": "trusts completion percent when the last viewport cannot mark the final paragraph",
+      "input": {
+        "index": 4,
+        "paragraphCount": 9,
+        "percent": 100
+      },
+      "expected": null
+    },
+    {
+      "op": "is-finished-read",
+      "name": "a short tale finished with the mark still mid-book",
+      "input": {
+        "furthestIndex": 4,
+        "total": 9,
+        "percent": 100
+      },
+      "expected": true
+    },
+    {
+      "op": "is-finished-read",
+      "name": "a mark on the final paragraph says it the other way round",
+      "input": {
+        "furthestIndex": 9,
+        "total": 10,
+        "percent": 95
+      },
+      "expected": true
+    },
+    {
+      "op": "is-finished-read",
+      "name": "the one-paragraph tale",
+      "input": {
+        "furthestIndex": 0,
+        "total": 1,
+        "percent": 100
+      },
+      "expected": true
+    },
+    {
+      "op": "is-finished-read",
+      "name": "leaves a tale still being read alone",
+      "input": {
+        "furthestIndex": 3,
+        "total": 10,
+        "percent": 40
+      },
+      "expected": false
+    },
+    {
+      "op": "is-finished-read",
+      "name": "leaves the first of two paragraphs alone",
+      "input": {
+        "furthestIndex": 0,
+        "total": 2,
+        "percent": 50
+      },
+      "expected": false
+    },
+    {
+      "op": "is-finished-read",
+      "name": "never fires without a mark — that is unstarted, not finished",
+      "input": {
+        "furthestIndex": -1,
+        "total": 10,
+        "percent": 0
+      },
+      "expected": false
+    },
+    {
+      "op": "is-finished-read",
+      "name": "no mark under a full percent is still unstarted",
+      "input": {
+        "furthestIndex": -1,
+        "total": 10,
+        "percent": 100
+      },
+      "expected": false
+    },
+    {
+      "op": "is-finished-read",
+      "name": "no mark and no paragraphs is unstarted",
+      "input": {
+        "furthestIndex": -1,
+        "total": 0,
+        "percent": 0
+      },
+      "expected": false
+    },
+    {
+      "op": "may-auto-continue",
+      "name": "a plain navigation resumes",
+      "input": {
+        "hash": "",
+        "navType": "navigate"
+      },
+      "expected": true
+    },
+    {
+      "op": "may-auto-continue",
+      "name": "a reload resumes",
+      "input": {
+        "hash": "",
+        "navType": "reload"
+      },
+      "expected": true
+    },
+    {
+      "op": "may-auto-continue",
+      "name": "an unreported navigation type resumes",
+      "input": {
+        "hash": ""
+      },
+      "expected": true
+    },
+    {
+      "op": "may-auto-continue",
+      "name": "a requested passage wins",
+      "input": {
+        "hash": "#chapter-3-p1",
+        "navType": "navigate"
+      },
+      "expected": false
+    },
+    {
+      "op": "may-auto-continue",
+      "name": "a back/forward navigation keeps the browser's own restore",
+      "input": {
+        "hash": "",
+        "navType": "back_forward"
+      },
+      "expected": false
+    },
+    {
+      "op": "is-same-document-fragment-link",
+      "name": "a relative fragment seek on this document",
+      "input": {
+        "href": "#note-1",
+        "currentHref": "https://tale.fyi/dracula?plan=quiet#chapter-1-p1"
+      },
+      "expected": true
+    },
+    {
+      "op": "is-same-document-fragment-link",
+      "name": "an absolute fragment seek on this document",
+      "input": {
+        "href": "https://tale.fyi/dracula?plan=quiet#noteref-1",
+        "currentHref": "https://tale.fyi/dracula?plan=quiet#chapter-1-p1"
+      },
+      "expected": true
+    },
+    {
+      "op": "is-same-document-fragment-link",
+      "name": "an empty fragment is not a seek",
+      "input": {
+        "href": "#",
+        "currentHref": "https://tale.fyi/dracula?plan=quiet#chapter-1-p1"
+      },
+      "expected": false
+    },
+    {
+      "op": "is-same-document-fragment-link",
+      "name": "a different query is a different document",
+      "input": {
+        "href": "/dracula?plan=loud#note-1",
+        "currentHref": "https://tale.fyi/dracula?plan=quiet#chapter-1-p1"
+      },
+      "expected": false
+    },
+    {
+      "op": "is-same-document-fragment-link",
+      "name": "a different path is a different document",
+      "input": {
+        "href": "/frankenstein#note-1",
+        "currentHref": "https://tale.fyi/dracula?plan=quiet#chapter-1-p1"
+      },
+      "expected": false
+    },
+    {
+      "op": "is-same-document-fragment-link",
+      "name": "a different origin is a different document",
+      "input": {
+        "href": "https://example.com/#note-1",
+        "currentHref": "https://tale.fyi/dracula?plan=quiet#chapter-1-p1"
+      },
+      "expected": false
+    },
+    {
+      "op": "is-same-document-fragment-link",
+      "name": "a link with no fragment at all",
+      "input": {
+        "href": "https://tale.fyi/dracula?plan=quiet",
+        "currentHref": "https://tale.fyi/dracula?plan=quiet#chapter-1-p1"
+      },
+      "expected": false,
+      "note": "Reference-derived: pins the non-empty-fragment requirement on a link that is otherwise this same document."
+    },
+    {
+      "op": "is-same-document-fragment-link",
+      "name": "an unparseable current address",
+      "input": {
+        "href": "#note-1",
+        "currentHref": "not a url"
+      },
+      "expected": false,
+      "note": "Reference-derived: an address that cannot be parsed resolves nothing, so no link qualifies."
+    },
+    {
+      "op": "paragraph-start-scroll-top",
+      "name": "places paragraph 0 at the reading edge in a 200px viewport",
+      "input": {
+        "bounds": [
+          {
+            "top": 0,
+            "bottom": 250
+          },
+          {
+            "top": 300,
+            "bottom": 700
+          },
+          {
+            "top": 750,
+            "bottom": 2250
+          }
+        ],
+        "targetIndex": 0,
+        "viewportHeight": 200
+      },
+      "expected": -1,
+      "note": "Reference-derived from the property assertion: the result makes this paragraph current under the current-paragraph rule."
+    },
+    {
+      "op": "paragraph-start-scroll-top",
+      "name": "places paragraph 1 at the reading edge in a 200px viewport",
+      "input": {
+        "bounds": [
+          {
+            "top": 0,
+            "bottom": 250
+          },
+          {
+            "top": 300,
+            "bottom": 700
+          },
+          {
+            "top": 750,
+            "bottom": 2250
+          }
+        ],
+        "targetIndex": 1,
+        "viewportHeight": 200
+      },
+      "expected": 299,
+      "note": "Reference-derived from the property assertion: the result makes this paragraph current under the current-paragraph rule."
+    },
+    {
+      "op": "paragraph-start-scroll-top",
+      "name": "places paragraph 2 at the reading edge in a 200px viewport",
+      "input": {
+        "bounds": [
+          {
+            "top": 0,
+            "bottom": 250
+          },
+          {
+            "top": 300,
+            "bottom": 700
+          },
+          {
+            "top": 750,
+            "bottom": 2250
+          }
+        ],
+        "targetIndex": 2,
+        "viewportHeight": 200
+      },
+      "expected": 749,
+      "note": "Reference-derived from the property assertion: the result makes this paragraph current under the current-paragraph rule."
+    },
+    {
+      "op": "paragraph-start-scroll-top",
+      "name": "places paragraph 0 at the reading edge in a 500px viewport",
+      "input": {
+        "bounds": [
+          {
+            "top": 0,
+            "bottom": 250
+          },
+          {
+            "top": 300,
+            "bottom": 700
+          },
+          {
+            "top": 750,
+            "bottom": 2250
+          }
+        ],
+        "targetIndex": 0,
+        "viewportHeight": 500
+      },
+      "expected": -1,
+      "note": "Reference-derived from the property assertion: the result makes this paragraph current under the current-paragraph rule."
+    },
+    {
+      "op": "paragraph-start-scroll-top",
+      "name": "places paragraph 1 at the reading edge in a 500px viewport",
+      "input": {
+        "bounds": [
+          {
+            "top": 0,
+            "bottom": 250
+          },
+          {
+            "top": 300,
+            "bottom": 700
+          },
+          {
+            "top": 750,
+            "bottom": 2250
+          }
+        ],
+        "targetIndex": 1,
+        "viewportHeight": 500
+      },
+      "expected": 299,
+      "note": "Reference-derived from the property assertion: the result makes this paragraph current under the current-paragraph rule."
+    },
+    {
+      "op": "paragraph-start-scroll-top",
+      "name": "places paragraph 2 at the reading edge in a 500px viewport",
+      "input": {
+        "bounds": [
+          {
+            "top": 0,
+            "bottom": 250
+          },
+          {
+            "top": 300,
+            "bottom": 700
+          },
+          {
+            "top": 750,
+            "bottom": 2250
+          }
+        ],
+        "targetIndex": 2,
+        "viewportHeight": 500
+      },
+      "expected": 749,
+      "note": "Reference-derived from the property assertion: the result makes this paragraph current under the current-paragraph rule."
+    },
+    {
+      "op": "paragraph-start-scroll-top",
+      "name": "places paragraph 0 at the reading edge in a 1000px viewport",
+      "input": {
+        "bounds": [
+          {
+            "top": 0,
+            "bottom": 250
+          },
+          {
+            "top": 300,
+            "bottom": 700
+          },
+          {
+            "top": 750,
+            "bottom": 2250
+          }
+        ],
+        "targetIndex": 0,
+        "viewportHeight": 1000
+      },
+      "expected": -1,
+      "note": "Reference-derived from the property assertion: the result makes this paragraph current under the current-paragraph rule."
+    },
+    {
+      "op": "paragraph-start-scroll-top",
+      "name": "places paragraph 1 at the reading edge in a 1000px viewport",
+      "input": {
+        "bounds": [
+          {
+            "top": 0,
+            "bottom": 250
+          },
+          {
+            "top": 300,
+            "bottom": 700
+          },
+          {
+            "top": 750,
+            "bottom": 2250
+          }
+        ],
+        "targetIndex": 1,
+        "viewportHeight": 1000
+      },
+      "expected": 299,
+      "note": "Reference-derived. The scroll top is one pixel above the paragraph top, and the result makes that paragraph current under the current-paragraph rule."
+    },
+    {
+      "op": "paragraph-start-scroll-top",
+      "name": "places paragraph 2 at the reading edge in a 1000px viewport",
+      "input": {
+        "bounds": [
+          {
+            "top": 0,
+            "bottom": 250
+          },
+          {
+            "top": 300,
+            "bottom": 700
+          },
+          {
+            "top": 750,
+            "bottom": 2250
+          }
+        ],
+        "targetIndex": 2,
+        "viewportHeight": 1000
+      },
+      "expected": 749,
+      "note": "Reference-derived from the property assertion: the result makes this paragraph current under the current-paragraph rule."
+    },
+    {
+      "op": "paragraph-start-scroll-top",
+      "name": "rejects a negative target",
+      "input": {
+        "bounds": [
+          {
+            "top": 0,
+            "bottom": 250
+          },
+          {
+            "top": 300,
+            "bottom": 700
+          },
+          {
+            "top": 750,
+            "bottom": 2250
+          }
+        ],
+        "targetIndex": -1,
+        "viewportHeight": 1000
+      },
+      "expected": null
+    },
+    {
+      "op": "paragraph-start-scroll-top",
+      "name": "rejects a target past the last paragraph",
+      "input": {
+        "bounds": [
+          {
+            "top": 0,
+            "bottom": 250
+          },
+          {
+            "top": 300,
+            "bottom": 700
+          },
+          {
+            "top": 750,
+            "bottom": 2250
+          }
+        ],
+        "targetIndex": 3,
+        "viewportHeight": 1000
+      },
+      "expected": null
+    },
+    {
+      "op": "paragraph-start-scroll-top",
+      "name": "rejects a non-positive viewport",
+      "input": {
+        "bounds": [
+          {
+            "top": 0,
+            "bottom": 250
+          },
+          {
+            "top": 300,
+            "bottom": 700
+          },
+          {
+            "top": 750,
+            "bottom": 2250
+          }
+        ],
+        "targetIndex": 1,
+        "viewportHeight": 0
+      },
+      "expected": null
+    },
+    {
+      "op": "paragraph-start-scroll-top",
+      "name": "rejects a paragraph no scroll position can make current",
+      "input": {
+        "bounds": [
+          {
+            "top": 100,
+            "bottom": 200
+          },
+          {
+            "top": 100,
+            "bottom": 200
+          }
+        ],
+        "targetIndex": 1,
+        "viewportHeight": 100
+      },
+      "expected": null
+    },
+    {
+      "op": "follow-scroll-top",
+      "name": "places a short narrated paragraph where the shared rule selects it",
+      "input": {
+        "bounds": [
+          {
+            "top": 0,
+            "bottom": 250
+          },
+          {
+            "top": 300,
+            "bottom": 700
+          },
+          {
+            "top": 750,
+            "bottom": 2250
+          },
+          {
+            "top": 2300,
+            "bottom": 2500
+          }
+        ],
+        "targetIndex": 1,
+        "scrollTop": 0,
+        "progress": 0.5,
+        "viewportHeight": 1000
+      },
+      "expected": 1,
+      "note": "Reference-derived from the property assertion: the result is non-null and makes the target current under the current-paragraph rule."
+    },
+    {
+      "op": "follow-scroll-top",
+      "name": "follows inside a tall paragraph without exposing the next top",
+      "input": {
+        "bounds": [
+          {
+            "top": 0,
+            "bottom": 250
+          },
+          {
+            "top": 300,
+            "bottom": 700
+          },
+          {
+            "top": 750,
+            "bottom": 2250
+          },
+          {
+            "top": 2300,
+            "bottom": 2500
+          }
+        ],
+        "targetIndex": 2,
+        "scrollTop": 750,
+        "progress": 0.9,
+        "viewportHeight": 1000
+      },
+      "expected": 1300,
+      "note": "Reference-derived from the property assertion: the result is non-null and makes the target current under the current-paragraph rule."
+    },
+    {
+      "op": "follow-scroll-top",
+      "name": "does not scroll when the target is current and already in its band",
+      "input": {
+        "bounds": [
+          {
+            "top": 0,
+            "bottom": 250
+          },
+          {
+            "top": 300,
+            "bottom": 700
+          },
+          {
+            "top": 750,
+            "bottom": 2250
+          },
+          {
+            "top": 2300,
+            "bottom": 2500
+          }
+        ],
+        "targetIndex": 2,
+        "scrollTop": 900,
+        "progress": 0.3,
+        "viewportHeight": 1000
+      },
+      "expected": null
+    },
+    {
+      "op": "follow-scroll-top",
+      "name": "does not scroll without a target",
+      "input": {
+        "bounds": [
+          {
+            "top": 0,
+            "bottom": 250
+          },
+          {
+            "top": 300,
+            "bottom": 700
+          },
+          {
+            "top": 750,
+            "bottom": 2250
+          },
+          {
+            "top": 2300,
+            "bottom": 2500
+          }
+        ],
+        "targetIndex": -1,
+        "scrollTop": 0,
+        "progress": 0.5,
+        "viewportHeight": 1000
+      },
+      "expected": null
+    },
+    {
+      "op": "follow-scroll-top",
+      "name": "does not scroll without a viewport",
+      "input": {
+        "bounds": [
+          {
+            "top": 0,
+            "bottom": 250
+          },
+          {
+            "top": 300,
+            "bottom": 700
+          },
+          {
+            "top": 750,
+            "bottom": 2250
+          },
+          {
+            "top": 2300,
+            "bottom": 2500
+          }
+        ],
+        "targetIndex": 1,
+        "scrollTop": 0,
+        "progress": 0.5,
+        "viewportHeight": 0
+      },
+      "expected": null
+    },
+    {
+      "op": "follow-scroll-top",
+      "name": "leaves a short paragraph resting inside the comfort band",
+      "input": {
+        "bounds": [
+          {
+            "top": 0,
+            "bottom": 250
+          },
+          {
+            "top": 300,
+            "bottom": 700
+          },
+          {
+            "top": 750,
+            "bottom": 2250
+          },
+          {
+            "top": 2300,
+            "bottom": 2500
+          }
+        ],
+        "targetIndex": 1,
+        "scrollTop": 250,
+        "progress": 0,
+        "viewportHeight": 1000
+      },
+      "expected": null,
+      "note": "Reference-derived: the paragraph top sits 50px down, inside the short-paragraph band, so the move is a no-op."
+    },
+    {
+      "op": "follow-scroll-top",
+      "name": "clamps progress past the end of a tall paragraph",
+      "input": {
+        "bounds": [
+          {
+            "top": 0,
+            "bottom": 250
+          },
+          {
+            "top": 300,
+            "bottom": 700
+          },
+          {
+            "top": 750,
+            "bottom": 2250
+          },
+          {
+            "top": 2300,
+            "bottom": 2500
+          }
+        ],
+        "targetIndex": 2,
+        "scrollTop": 750,
+        "progress": 4,
+        "viewportHeight": 1000
+      },
+      "expected": 1300,
+      "note": "Reference-derived: progress outside 0..1 is clamped, so this matches progress = 1."
+    },
+    {
+      "op": "follow-scroll-top",
+      "name": "clamps progress before the start of a tall paragraph",
+      "input": {
+        "bounds": [
+          {
+            "top": 0,
+            "bottom": 250
+          },
+          {
+            "top": 300,
+            "bottom": 700
+          },
+          {
+            "top": 750,
+            "bottom": 2250
+          },
+          {
+            "top": 2300,
+            "bottom": 2500
+          }
+        ],
+        "targetIndex": 2,
+        "scrollTop": 1400,
+        "progress": -1,
+        "viewportHeight": 1000
+      },
+      "expected": 330,
+      "note": "Reference-derived: progress outside 0..1 is clamped, so this matches progress = 0."
+    }
+  ]
+}

@@ -1,0 +1,1138 @@
+{
+  "area": "progress",
+  "version": 1,
+  "cases": [
+    {
+      "op": "load",
+      "name": "starts fresh when the stored value is corrupt",
+      "input": {
+        "raw": "{not json"
+      },
+      "expected": {}
+    },
+    {
+      "op": "load",
+      "name": "starts fresh on an unknown schema version",
+      "input": {
+        "raw": "{\"version\":2,\"books\":{}}"
+      },
+      "expected": {}
+    },
+    {
+      "op": "load",
+      "name": "starts fresh when nothing was ever persisted",
+      "input": {},
+      "expected": {},
+      "note": "Extra case, derived by running the reference implementation: an absent `raw` is a store that has never been written."
+    },
+    {
+      "op": "load",
+      "name": "starts fresh on a v1 envelope with no books map",
+      "input": {
+        "raw": "{\"version\":1}"
+      },
+      "expected": {},
+      "note": "Extra case, derived by running the reference implementation."
+    },
+    {
+      "op": "load",
+      "name": "round-trips a valid v1 store",
+      "input": {
+        "raw": "{\"version\":1,\"books\":{\"dracula\":{\"sections\":{\"chapter-1\":true},\"furthest\":\"chapter-3-p14\",\"percent\":33,\"title\":\"Dracula\",\"authorName\":\"Bram Stoker\",\"tip\":\"plan-tip\",\"updatedAt\":\"2026-07-01T00:00:00Z\"},\"frankenstein\":{\"sections\":{},\"furthest\":\"letter-1-p2\",\"updatedAt\":\"2026-07-02T00:00:00Z\"}}}"
+      },
+      "expected": {
+        "dracula": {
+          "sections": {
+            "chapter-1": true
+          },
+          "furthest": "chapter-3-p14",
+          "percent": 33,
+          "title": "Dracula",
+          "authorName": "Bram Stoker",
+          "tip": "plan-tip",
+          "updatedAt": "2026-07-01T00:00:00Z"
+        },
+        "frankenstein": {
+          "sections": {},
+          "furthest": "letter-1-p2",
+          "updatedAt": "2026-07-02T00:00:00Z"
+        }
+      }
+    },
+    {
+      "op": "migrate-books",
+      "name": "carries progress from a tale's old URL to its new one, with a title",
+      "input": {
+        "books": {
+          "old-road": {
+            "sections": {},
+            "furthest": "beginning-p9",
+            "updatedAt": "t"
+          }
+        },
+        "moves": {
+          "old-road": {
+            "to": "@rider/new-road",
+            "title": "the long road home"
+          }
+        }
+      },
+      "expected": {
+        "@rider/new-road": {
+          "sections": {},
+          "furthest": "beginning-p9",
+          "updatedAt": "t",
+          "title": "the long road home"
+        }
+      },
+      "note": "Verified against the reference implementation with its own deployment moves table, then renamed to a neutral fixture; the merge never inspects key content, so every position, percent, timestamp and tip is unchanged."
+    },
+    {
+      "op": "migrate-books",
+      "name": "keeps whatever already lives at the new key",
+      "input": {
+        "books": {
+          "old-road": {
+            "sections": {},
+            "furthest": "beginning-p2",
+            "updatedAt": "old"
+          },
+          "@rider/new-road": {
+            "sections": {},
+            "furthest": "beginning-p40",
+            "updatedAt": "new"
+          }
+        },
+        "moves": {
+          "old-road": {
+            "to": "@rider/new-road",
+            "title": "the long road home"
+          }
+        }
+      },
+      "expected": {
+        "@rider/new-road": {
+          "sections": {},
+          "furthest": "beginning-p40",
+          "updatedAt": "new",
+          "title": "the long road home"
+        }
+      },
+      "note": "Verified against the reference implementation with its own deployment moves table, then renamed to a neutral fixture; the merge never inspects key content, so every position, percent, timestamp and tip is unchanged."
+    },
+    {
+      "op": "migrate-books",
+      "name": "keeps the deeper position when the old URL is the further one",
+      "input": {
+        "books": {
+          "old-road": {
+            "sections": {},
+            "furthest": "beginning-p400",
+            "percent": 80,
+            "updatedAt": "2026-07-01T00:00:00Z"
+          },
+          "@rider/new-road": {
+            "sections": {},
+            "furthest": "beginning-p3",
+            "percent": 1,
+            "updatedAt": "2026-07-02T00:00:00Z"
+          }
+        },
+        "moves": {
+          "old-road": {
+            "to": "@rider/new-road",
+            "title": "the long road home"
+          }
+        }
+      },
+      "expected": {
+        "@rider/new-road": {
+          "sections": {},
+          "furthest": "beginning-p400",
+          "percent": 80,
+          "updatedAt": "2026-07-02T00:00:00Z",
+          "title": "the long road home"
+        }
+      },
+      "note": "Verified against the reference implementation with its own deployment moves table, then renamed to a neutral fixture; the merge never inspects key content, so every position, percent, timestamp and tip is unchanged."
+    },
+    {
+      "op": "migrate-books",
+      "name": "does not re-enter the moves table after folding case",
+      "input": {
+        "books": {
+          "Old-Road": {
+            "sections": {},
+            "furthest": "beginning-p9",
+            "updatedAt": "t"
+          }
+        },
+        "moves": {
+          "old-road": {
+            "to": "@rider/new-road",
+            "title": "the long road home"
+          }
+        }
+      },
+      "expected": {
+        "old-road": {
+          "sections": {},
+          "furthest": "beginning-p9",
+          "updatedAt": "t"
+        }
+      },
+      "note": "Extra case, derived by running the reference implementation: the moves pass matches keys exactly and runs first, so a mixed-case spelling of a moved key lands on its lowercase twin and stays there. Verified against the reference implementation with its own deployment moves table, then renamed to a neutral fixture; the merge never inspects key content, so every position, percent, timestamp and tip is unchanged."
+    },
+    {
+      "op": "migrate-books",
+      "name": "folds a key written under a mixed-case URL into its lowercase twin",
+      "input": {
+        "books": {
+          "@Rider/New-Road": {
+            "sections": {},
+            "furthest": "beginning-p9",
+            "updatedAt": "t"
+          }
+        },
+        "moves": {}
+      },
+      "expected": {
+        "@rider/new-road": {
+          "sections": {},
+          "furthest": "beginning-p9",
+          "updatedAt": "t"
+        }
+      }
+    },
+    {
+      "op": "migrate-books",
+      "name": "keeps the lowercase position when both casings have one",
+      "input": {
+        "books": {
+          "Dracula": {
+            "sections": {},
+            "furthest": "chapter-1-p2",
+            "percent": 2,
+            "updatedAt": "2026-07-01T00:00:00Z"
+          },
+          "dracula": {
+            "sections": {},
+            "furthest": "chapter-9-p3",
+            "percent": 90,
+            "updatedAt": "2026-07-02T00:00:00Z"
+          }
+        },
+        "moves": {}
+      },
+      "expected": {
+        "dracula": {
+          "sections": {},
+          "furthest": "chapter-9-p3",
+          "percent": 90,
+          "updatedAt": "2026-07-02T00:00:00Z"
+        }
+      }
+    },
+    {
+      "op": "migrate-books",
+      "name": "keeps a further mixed-case position over a newer lowercase one",
+      "input": {
+        "books": {
+          "Dracula": {
+            "sections": {
+              "intro": true
+            },
+            "furthest": "chapter-8-p4",
+            "percent": 80,
+            "title": "Dracula",
+            "updatedAt": "2026-07-01T00:00:00Z"
+          },
+          "dracula": {
+            "sections": {
+              "chapter1": true
+            },
+            "furthest": "chapter-1-p3",
+            "percent": 10,
+            "authorName": "Bram Stoker",
+            "updatedAt": "2026-07-02T00:00:00Z"
+          }
+        },
+        "moves": {}
+      },
+      "expected": {
+        "dracula": {
+          "sections": {
+            "chapter1": true,
+            "intro": true
+          },
+          "furthest": "chapter-8-p4",
+          "percent": 80,
+          "title": "Dracula",
+          "updatedAt": "2026-07-02T00:00:00Z",
+          "authorName": "Bram Stoker"
+        }
+      }
+    },
+    {
+      "op": "migrate-books",
+      "name": "takes a byline from the losing record when the winner has none",
+      "input": {
+        "books": {
+          "Dracula": {
+            "sections": {},
+            "furthest": "chapter-8-p4",
+            "percent": 80,
+            "authorName": null,
+            "updatedAt": "2026-07-01T00:00:00Z"
+          },
+          "dracula": {
+            "sections": {},
+            "furthest": "chapter-1-p3",
+            "percent": 10,
+            "title": "Dracula",
+            "authorName": "Bram Stoker",
+            "updatedAt": "2026-07-02T00:00:00Z"
+          }
+        },
+        "moves": {}
+      },
+      "expected": {
+        "dracula": {
+          "sections": {},
+          "furthest": "chapter-8-p4",
+          "percent": 80,
+          "authorName": "Bram Stoker",
+          "updatedAt": "2026-07-02T00:00:00Z",
+          "title": "Dracula"
+        }
+      },
+      "note": "Extra case, derived by running the reference implementation: a null byline counts as absent when title and authorName fill in."
+    },
+    {
+      "op": "migrate-books",
+      "name": "uses recency to break a level-position tie",
+      "input": {
+        "books": {
+          "Dracula": {
+            "sections": {},
+            "furthest": "chapter-3-p1",
+            "percent": 30,
+            "updatedAt": "2026-07-02T00:00:00Z"
+          },
+          "dracula": {
+            "sections": {},
+            "furthest": "chapter-3-p0",
+            "percent": 30,
+            "updatedAt": "2026-07-01T00:00:00Z"
+          }
+        },
+        "moves": {}
+      },
+      "expected": {
+        "dracula": {
+          "sections": {},
+          "furthest": "chapter-3-p1",
+          "percent": 30,
+          "updatedAt": "2026-07-02T00:00:00Z"
+        }
+      }
+    },
+    {
+      "op": "migrate-books",
+      "name": "keeps a legacy position with no percent and a newer plan tip",
+      "input": {
+        "books": {
+          "Dracula": {
+            "sections": {},
+            "furthest": "chapter-7-p2",
+            "updatedAt": "2026-07-01T00:00:00Z"
+          },
+          "dracula": {
+            "sections": {},
+            "tip": "new-plan-tip",
+            "updatedAt": "2026-07-02T00:00:00Z"
+          }
+        },
+        "moves": {}
+      },
+      "expected": {
+        "dracula": {
+          "sections": {},
+          "furthest": "chapter-7-p2",
+          "updatedAt": "2026-07-02T00:00:00Z",
+          "tip": "new-plan-tip"
+        }
+      }
+    },
+    {
+      "op": "migrate-books",
+      "name": "keeps an older tip when the newer casing never knew it",
+      "input": {
+        "books": {
+          "Dracula": {
+            "sections": {},
+            "furthest": "chapter-8-p4",
+            "percent": 80,
+            "tip": "old-plan-tip",
+            "updatedAt": "2026-07-01T00:00:00Z"
+          },
+          "dracula": {
+            "sections": {},
+            "furthest": "chapter-1-p3",
+            "percent": 10,
+            "updatedAt": "2026-07-02T00:00:00Z"
+          }
+        },
+        "moves": {}
+      },
+      "expected": {
+        "dracula": {
+          "sections": {},
+          "furthest": "chapter-8-p4",
+          "percent": 80,
+          "tip": "old-plan-tip",
+          "updatedAt": "2026-07-02T00:00:00Z"
+        }
+      }
+    },
+    {
+      "op": "migrate-books",
+      "name": "keeps the furthest position without resurrecting a cleared tip",
+      "input": {
+        "books": {
+          "Dracula": {
+            "sections": {},
+            "furthest": "chapter-8-p4",
+            "percent": 80,
+            "tip": "old-plan-tip",
+            "updatedAt": "2026-07-01T00:00:00Z"
+          },
+          "dracula": {
+            "sections": {},
+            "furthest": "chapter-1-p3",
+            "percent": 10,
+            "tip": null,
+            "updatedAt": "2026-07-02T00:00:00Z"
+          }
+        },
+        "moves": {}
+      },
+      "expected": {
+        "dracula": {
+          "sections": {},
+          "furthest": "chapter-8-p4",
+          "percent": 80,
+          "tip": null,
+          "updatedAt": "2026-07-02T00:00:00Z"
+        }
+      }
+    },
+    {
+      "op": "merge-remote",
+      "name": "adopts a book started on another device",
+      "input": {
+        "books": {},
+        "remote": [
+          {
+            "path": "dracula",
+            "title": "Dracula",
+            "authorName": "Bram Stoker",
+            "furthest": "chapter-3-p1",
+            "percent": 30,
+            "updatedAt": "2026-07-01T00:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "dracula": {
+          "sections": {},
+          "furthest": "chapter-3-p1",
+          "percent": 30,
+          "title": "Dracula",
+          "authorName": "Bram Stoker",
+          "updatedAt": "2026-07-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "op": "merge-remote",
+      "name": "moves a position forward",
+      "input": {
+        "books": {
+          "dracula": {
+            "sections": {},
+            "furthest": "chapter-1-p1",
+            "percent": 10,
+            "updatedAt": "t"
+          }
+        },
+        "remote": [
+          {
+            "path": "dracula",
+            "title": "Dracula",
+            "authorName": "Bram Stoker",
+            "furthest": "chapter-3-p1",
+            "percent": 30,
+            "updatedAt": "2026-07-01T00:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "dracula": {
+          "sections": {},
+          "furthest": "chapter-3-p1",
+          "percent": 30,
+          "title": "Dracula",
+          "authorName": "Bram Stoker",
+          "updatedAt": "2026-07-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "op": "merge-remote",
+      "name": "never moves a position back",
+      "input": {
+        "books": {
+          "dracula": {
+            "sections": {},
+            "furthest": "chapter-3-p1",
+            "percent": 30,
+            "title": "Dracula",
+            "authorName": "Bram Stoker",
+            "updatedAt": "2026-07-01T00:00:00Z"
+          }
+        },
+        "remote": [
+          {
+            "path": "dracula",
+            "title": "Dracula",
+            "authorName": "Bram Stoker",
+            "furthest": "chapter-1-p1",
+            "percent": 5,
+            "updatedAt": "2026-07-01T00:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "dracula": {
+          "sections": {},
+          "furthest": "chapter-3-p1",
+          "percent": 30,
+          "title": "Dracula",
+          "authorName": "Bram Stoker",
+          "updatedAt": "2026-07-01T00:00:00Z"
+        }
+      },
+      "note": "The second half of the reference test's forward-only case: the store here is what the first merge produced."
+    },
+    {
+      "op": "merge-remote",
+      "name": "lets a level local copy learn its name without moving",
+      "input": {
+        "books": {
+          "dracula": {
+            "sections": {},
+            "furthest": "chapter-9-p1",
+            "percent": 90,
+            "updatedAt": "t"
+          }
+        },
+        "remote": [
+          {
+            "path": "dracula",
+            "title": "Dracula",
+            "authorName": "Bram Stoker",
+            "furthest": "chapter-3-p1",
+            "percent": 30,
+            "updatedAt": "2026-07-01T00:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "dracula": {
+          "sections": {},
+          "furthest": "chapter-9-p1",
+          "percent": 90,
+          "updatedAt": "t",
+          "title": "Dracula",
+          "authorName": "Bram Stoker"
+        }
+      }
+    },
+    {
+      "op": "merge-remote",
+      "name": "keeps the local plan tip over a remote one",
+      "input": {
+        "books": {
+          "dracula": {
+            "sections": {},
+            "furthest": "chapter-9-p1",
+            "percent": 90,
+            "tip": "local-tip",
+            "updatedAt": "t"
+          }
+        },
+        "remote": [
+          {
+            "path": "dracula",
+            "title": "Dracula",
+            "authorName": "Bram Stoker",
+            "furthest": "chapter-3-p1",
+            "percent": 30,
+            "updatedAt": "2026-07-01T00:00:00Z",
+            "tip": "remote-tip"
+          }
+        ]
+      },
+      "expected": {
+        "dracula": {
+          "sections": {},
+          "furthest": "chapter-9-p1",
+          "percent": 90,
+          "tip": "local-tip",
+          "updatedAt": "t",
+          "title": "Dracula",
+          "authorName": "Bram Stoker"
+        }
+      }
+    },
+    {
+      "op": "merge-remote",
+      "name": "learns a remote tip when it has none",
+      "input": {
+        "books": {
+          "dracula": {
+            "sections": {},
+            "furthest": "chapter-9-p1",
+            "percent": 90,
+            "updatedAt": "t"
+          }
+        },
+        "remote": [
+          {
+            "path": "dracula",
+            "title": "Dracula",
+            "authorName": "Bram Stoker",
+            "furthest": "chapter-3-p1",
+            "percent": 30,
+            "updatedAt": "2026-07-01T00:00:00Z",
+            "tip": "remote-tip"
+          }
+        ]
+      },
+      "expected": {
+        "dracula": {
+          "sections": {},
+          "furthest": "chapter-9-p1",
+          "percent": 90,
+          "updatedAt": "t",
+          "title": "Dracula",
+          "authorName": "Bram Stoker",
+          "tip": "remote-tip"
+        }
+      }
+    },
+    {
+      "op": "merge-remote",
+      "name": "does not resurrect a remote tip after a local clear",
+      "input": {
+        "books": {
+          "dracula": {
+            "sections": {},
+            "furthest": "chapter-9-p1",
+            "percent": 90,
+            "tip": null,
+            "updatedAt": "2026-07-02T00:00:00Z"
+          }
+        },
+        "remote": [
+          {
+            "path": "dracula",
+            "title": "Dracula",
+            "authorName": "Bram Stoker",
+            "furthest": "chapter-3-p1",
+            "percent": 30,
+            "updatedAt": "2026-07-01T00:00:00Z",
+            "tip": "remote-tip"
+          }
+        ]
+      },
+      "expected": {
+        "dracula": {
+          "sections": {},
+          "furthest": "chapter-9-p1",
+          "percent": 90,
+          "tip": null,
+          "updatedAt": "2026-07-02T00:00:00Z",
+          "title": "Dracula",
+          "authorName": "Bram Stoker"
+        }
+      }
+    },
+    {
+      "op": "merge-remote",
+      "name": "does not resurrect a remote tip while adopting a further position",
+      "input": {
+        "books": {
+          "dracula": {
+            "sections": {},
+            "furthest": "chapter-9-p1",
+            "percent": 90,
+            "title": "Dracula",
+            "authorName": "Bram Stoker",
+            "tip": null,
+            "updatedAt": "2026-07-02T00:00:00Z"
+          }
+        },
+        "remote": [
+          {
+            "path": "dracula",
+            "title": "Dracula",
+            "authorName": "Bram Stoker",
+            "furthest": "chapter-10-p1",
+            "percent": 95,
+            "updatedAt": "2026-07-01T00:00:00Z",
+            "tip": "remote-tip"
+          }
+        ]
+      },
+      "expected": {
+        "dracula": {
+          "sections": {},
+          "furthest": "chapter-10-p1",
+          "percent": 95,
+          "title": "Dracula",
+          "authorName": "Bram Stoker",
+          "tip": null,
+          "updatedAt": "2026-07-01T00:00:00Z"
+        }
+      },
+      "note": "The second half of the reference test's clear case: the store here is what the first merge produced."
+    },
+    {
+      "op": "merge-remote",
+      "name": "learns a plan the server gained after the local clear",
+      "input": {
+        "books": {
+          "dracula": {
+            "sections": {},
+            "furthest": "chapter-9-p1",
+            "percent": 90,
+            "tip": null,
+            "updatedAt": "2026-07-02T00:00:00Z"
+          }
+        },
+        "remote": [
+          {
+            "path": "dracula",
+            "title": "Dracula",
+            "authorName": "Bram Stoker",
+            "furthest": "chapter-3-p1",
+            "percent": 30,
+            "updatedAt": "2026-07-03T00:00:00Z",
+            "tip": "phone-tip"
+          }
+        ]
+      },
+      "expected": {
+        "dracula": {
+          "sections": {},
+          "furthest": "chapter-9-p1",
+          "percent": 90,
+          "tip": "phone-tip",
+          "updatedAt": "2026-07-02T00:00:00Z",
+          "title": "Dracula",
+          "authorName": "Bram Stoker"
+        }
+      }
+    },
+    {
+      "op": "merge-remote",
+      "name": "keeps the clear when the server copy is only as old as it",
+      "input": {
+        "books": {
+          "dracula": {
+            "sections": {},
+            "furthest": "chapter-9-p1",
+            "percent": 90,
+            "tip": null,
+            "updatedAt": "2026-07-01T00:00:00Z"
+          }
+        },
+        "remote": [
+          {
+            "path": "dracula",
+            "title": "Dracula",
+            "authorName": "Bram Stoker",
+            "furthest": "chapter-3-p1",
+            "percent": 30,
+            "updatedAt": "2026-07-01T00:00:00Z",
+            "tip": "remote-tip"
+          }
+        ]
+      },
+      "expected": {
+        "dracula": {
+          "sections": {},
+          "furthest": "chapter-9-p1",
+          "percent": 90,
+          "tip": null,
+          "updatedAt": "2026-07-01T00:00:00Z",
+          "title": "Dracula",
+          "authorName": "Bram Stoker"
+        }
+      }
+    },
+    {
+      "op": "merge-remote",
+      "name": "still prefers a live local tip to a newer remote one",
+      "input": {
+        "books": {
+          "dracula": {
+            "sections": {},
+            "furthest": "chapter-9-p1",
+            "percent": 90,
+            "tip": "local-tip",
+            "updatedAt": "2026-07-01T00:00:00Z"
+          }
+        },
+        "remote": [
+          {
+            "path": "dracula",
+            "title": "Dracula",
+            "authorName": "Bram Stoker",
+            "furthest": "chapter-3-p1",
+            "percent": 30,
+            "updatedAt": "2026-07-09T00:00:00Z",
+            "tip": "remote-tip"
+          }
+        ]
+      },
+      "expected": {
+        "dracula": {
+          "sections": {},
+          "furthest": "chapter-9-p1",
+          "percent": 90,
+          "tip": "local-tip",
+          "updatedAt": "2026-07-01T00:00:00Z",
+          "title": "Dracula",
+          "authorName": "Bram Stoker"
+        }
+      }
+    },
+    {
+      "op": "save-progress",
+      "name": "round-trips a position, stamping updatedAt",
+      "input": {
+        "books": {},
+        "slug": "dracula",
+        "record": {
+          "sections": {},
+          "furthest": "chapter-2-p14",
+          "percent": 12,
+          "updatedAt": ""
+        }
+      },
+      "expected": {
+        "dracula": {
+          "sections": {},
+          "furthest": "chapter-2-p14",
+          "percent": 12,
+          "updatedAt": {
+            "$any": true
+          }
+        }
+      }
+    },
+    {
+      "op": "save-progress",
+      "name": "a tip survives a position save from a reader that mounted first",
+      "input": {
+        "books": {
+          "dracula": {
+            "sections": {},
+            "tip": "tip-after-mount",
+            "updatedAt": "2026-07-01T00:00:00Z"
+          }
+        },
+        "slug": "dracula",
+        "record": {
+          "sections": {},
+          "furthest": "chapter-2-p1",
+          "percent": 20,
+          "updatedAt": ""
+        }
+      },
+      "expected": {
+        "dracula": {
+          "sections": {},
+          "furthest": "chapter-2-p1",
+          "percent": 20,
+          "updatedAt": {
+            "$any": true
+          },
+          "tip": "tip-after-mount"
+        }
+      },
+      "note": "The reference test takes the snapshot before the tip is written; here the store already holds the tip and the record is the stale snapshot."
+    },
+    {
+      "op": "save-progress",
+      "name": "does not undo a tip clear with a stale reader snapshot",
+      "input": {
+        "books": {
+          "dracula": {
+            "sections": {},
+            "furthest": "chapter-1-p1",
+            "tip": null,
+            "updatedAt": "2026-07-02T00:00:00Z"
+          }
+        },
+        "slug": "dracula",
+        "record": {
+          "sections": {},
+          "furthest": "chapter-2-p1",
+          "tip": "old-tip",
+          "updatedAt": "2026-07-01T00:00:00Z"
+        }
+      },
+      "expected": {
+        "dracula": {
+          "sections": {},
+          "furthest": "chapter-2-p1",
+          "tip": null,
+          "updatedAt": {
+            "$any": true
+          }
+        }
+      },
+      "note": "The stale snapshot still carries the tip it was loaded with; the store's explicit null was written after it."
+    },
+    {
+      "op": "save-progress",
+      "name": "keeps the record's own tip when the store never knew one",
+      "input": {
+        "books": {},
+        "slug": "dracula",
+        "record": {
+          "sections": {},
+          "furthest": "chapter-2-p1",
+          "percent": 20,
+          "tip": "snapshot-tip",
+          "updatedAt": ""
+        }
+      },
+      "expected": {
+        "dracula": {
+          "sections": {},
+          "furthest": "chapter-2-p1",
+          "percent": 20,
+          "tip": "snapshot-tip",
+          "updatedAt": {
+            "$any": true
+          }
+        }
+      },
+      "note": "Extra case, derived by running the reference implementation: ownership only defends a tip the store already holds."
+    },
+    {
+      "op": "save-mark-tip",
+      "name": "records a tip and the tale's name for the index",
+      "input": {
+        "books": {},
+        "slug": "dracula",
+        "tip": "tip-1",
+        "meta": {
+          "title": "Dracula",
+          "authorName": "Bram Stoker"
+        }
+      },
+      "expected": {
+        "dracula": {
+          "sections": {},
+          "updatedAt": {
+            "$any": true
+          },
+          "tip": "tip-1",
+          "title": "Dracula",
+          "authorName": "Bram Stoker"
+        }
+      }
+    },
+    {
+      "op": "save-mark-tip",
+      "name": "clears a tip with null, leaving the position alone",
+      "input": {
+        "books": {
+          "dracula": {
+            "sections": {},
+            "furthest": "chapter-2-p1",
+            "tip": "tip-1",
+            "updatedAt": "2026-07-01T00:00:00Z"
+          }
+        },
+        "slug": "dracula",
+        "tip": null
+      },
+      "expected": {
+        "dracula": {
+          "sections": {},
+          "furthest": "chapter-2-p1",
+          "tip": null,
+          "updatedAt": {
+            "$any": true
+          }
+        }
+      }
+    },
+    {
+      "op": "save-mark-tip",
+      "name": "never overwrites a title the book already knows",
+      "input": {
+        "books": {
+          "dracula": {
+            "sections": {},
+            "title": "Dracula",
+            "updatedAt": "2026-07-01T00:00:00Z"
+          }
+        },
+        "slug": "dracula",
+        "tip": "tip-1",
+        "meta": {
+          "title": "Wrong Name"
+        }
+      },
+      "expected": {
+        "dracula": {
+          "sections": {},
+          "title": "Dracula",
+          "updatedAt": {
+            "$any": true
+          },
+          "tip": "tip-1"
+        }
+      }
+    },
+    {
+      "op": "save-mark-tip",
+      "name": "does not record an unknown byline",
+      "input": {
+        "books": {},
+        "slug": "dracula",
+        "tip": "tip-1",
+        "meta": {
+          "title": "Dracula",
+          "authorName": null
+        }
+      },
+      "expected": {
+        "dracula": {
+          "sections": {},
+          "updatedAt": {
+            "$any": true
+          },
+          "tip": "tip-1",
+          "title": "Dracula"
+        }
+      },
+      "note": "Extra case, derived by running the reference implementation: a null authorName in the meta is 'we don't know', not a recorded anonymous byline."
+    },
+    {
+      "op": "clear-progress",
+      "name": "clears one book without touching the rest",
+      "input": {
+        "books": {
+          "dracula": {
+            "sections": {},
+            "furthest": "a-p1",
+            "updatedAt": "t"
+          },
+          "frankenstein": {
+            "sections": {},
+            "furthest": "b-p1",
+            "updatedAt": "t"
+          }
+        },
+        "slug": "dracula"
+      },
+      "expected": {
+        "frankenstein": {
+          "sections": {},
+          "furthest": "b-p1",
+          "updatedAt": "t"
+        }
+      }
+    },
+    {
+      "op": "clear-progress",
+      "name": "clearing a book with no record changes nothing",
+      "input": {
+        "books": {
+          "frankenstein": {
+            "sections": {},
+            "furthest": "b-p1",
+            "updatedAt": "t"
+          }
+        },
+        "slug": "dracula"
+      },
+      "expected": {
+        "frankenstein": {
+          "sections": {},
+          "furthest": "b-p1",
+          "updatedAt": "t"
+        }
+      },
+      "note": "Extra case, derived by running the reference implementation: removal is per-key and quiet."
+    },
+    {
+      "op": "has-progress",
+      "name": "is false for a fresh record",
+      "input": {
+        "record": {
+          "sections": {},
+          "updatedAt": ""
+        }
+      },
+      "expected": false
+    },
+    {
+      "op": "has-progress",
+      "name": "is true with a furthest mark",
+      "input": {
+        "record": {
+          "sections": {},
+          "furthest": "a-p1",
+          "updatedAt": ""
+        }
+      },
+      "expected": true
+    },
+    {
+      "op": "has-progress",
+      "name": "is true with legacy section reads",
+      "input": {
+        "record": {
+          "sections": {
+            "intro": true
+          },
+          "updatedAt": ""
+        }
+      },
+      "expected": true
+    },
+    {
+      "op": "has-progress",
+      "name": "is false for a record holding only a plan tip",
+      "input": {
+        "record": {
+          "sections": {},
+          "tip": "tip-1",
+          "updatedAt": ""
+        }
+      },
+      "expected": false,
+      "note": "Extra case, derived by running the reference implementation: a tip is not a reading position."
+    }
+  ]
+}

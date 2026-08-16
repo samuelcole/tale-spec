@@ -1,0 +1,1330 @@
+{
+  "area": "timeline",
+  "version": 1,
+  "cases": [
+    {
+      "op": "section-starts",
+      "name": "is the running sum of the runtimes before each section",
+      "input": {
+        "sections": [
+          {
+            "secs": 10
+          },
+          {
+            "secs": 5
+          },
+          {
+            "secs": 20
+          }
+        ]
+      },
+      "expected": [
+        0,
+        10,
+        15
+      ]
+    },
+    {
+      "op": "section-starts",
+      "name": "starts the only section of a book at zero",
+      "input": {
+        "sections": [
+          {
+            "secs": 42
+          }
+        ]
+      },
+      "expected": [
+        0
+      ]
+    },
+    {
+      "op": "section-starts",
+      "name": "has no starts for a book with no sections",
+      "input": {
+        "sections": []
+      },
+      "expected": []
+    },
+    {
+      "op": "audio-timeline-time",
+      "name": "normalizes player seek precision at a paragraph boundary",
+      "input": {
+        "sectionStart": 11896,
+        "currentTime": 730.299999
+      },
+      "expected": 12626.3
+    },
+    {
+      "op": "audio-timeline-time",
+      "name": "leaves a time already on the millisecond alone",
+      "input": {
+        "sectionStart": 0,
+        "currentTime": 12.5
+      },
+      "expected": 12.5,
+      "note": "Extra case: the first section starts at zero, so its media time is the whole-book time."
+    },
+    {
+      "op": "audio-timeline-time",
+      "name": "discards precision finer than a millisecond",
+      "input": {
+        "sectionStart": 1,
+        "currentTime": 0.0004
+      },
+      "expected": 1,
+      "note": "Extra case: rounding is to the millisecond, so sub-millisecond media time vanishes."
+    },
+    {
+      "op": "floor-index",
+      "name": "finds the largest index at or below t",
+      "input": {
+        "sorted": [
+          0,
+          10,
+          15,
+          40
+        ],
+        "t": 12
+      },
+      "expected": 1
+    },
+    {
+      "op": "floor-index",
+      "name": "an exact hit lands on itself",
+      "input": {
+        "sorted": [
+          0,
+          10,
+          15,
+          40
+        ],
+        "t": 15
+      },
+      "expected": 2
+    },
+    {
+      "op": "floor-index",
+      "name": "past the last value it is the last index",
+      "input": {
+        "sorted": [
+          0,
+          10,
+          15,
+          40
+        ],
+        "t": 999
+      },
+      "expected": 3
+    },
+    {
+      "op": "floor-index",
+      "name": "is -1 before the first value",
+      "input": {
+        "sorted": [
+          0,
+          10,
+          15,
+          40
+        ],
+        "t": -0.5
+      },
+      "expected": -1
+    },
+    {
+      "op": "floor-index",
+      "name": "is -1 for an empty array",
+      "input": {
+        "sorted": [],
+        "t": 5
+      },
+      "expected": -1
+    },
+    {
+      "op": "floor-index",
+      "name": "single-element array, before its value",
+      "input": {
+        "sorted": [
+          7
+        ],
+        "t": 6
+      },
+      "expected": -1
+    },
+    {
+      "op": "floor-index",
+      "name": "single-element array, exactly on its value",
+      "input": {
+        "sorted": [
+          7
+        ],
+        "t": 7
+      },
+      "expected": 0
+    },
+    {
+      "op": "floor-index",
+      "name": "a normalized boundary seek stays in its own paragraph",
+      "input": {
+        "sorted": [
+          12574.9,
+          12626.3,
+          12709.6
+        ],
+        "t": 12626.3
+      },
+      "expected": 1,
+      "note": "The paired half of the seek-normalization case: the rounded whole-book time selects the paragraph whose begin it equals, not the one before it."
+    },
+    {
+      "op": "active-phrase-at",
+      "name": "identifies the phrase and interpolates time inside it",
+      "input": {
+        "phraseBegins": [
+          10,
+          14,
+          20,
+          30,
+          36
+        ],
+        "paraBegin": 10,
+        "nextParaBegin": 30,
+        "t": 17
+      },
+      "expected": {
+        "absoluteIndex": 1,
+        "relativeIndex": 1,
+        "total": 3,
+        "within": 0.5
+      }
+    },
+    {
+      "op": "active-phrase-at",
+      "name": "has no active phrase before the paragraph begins",
+      "input": {
+        "phraseBegins": [
+          10,
+          14,
+          20,
+          30,
+          36
+        ],
+        "paraBegin": 10,
+        "nextParaBegin": 30,
+        "t": 9
+      },
+      "expected": null
+    },
+    {
+      "op": "active-phrase-at",
+      "name": "has no active phrase for a paragraph with no rows",
+      "input": {
+        "phraseBegins": [
+          10,
+          14,
+          20,
+          30,
+          36
+        ],
+        "paraBegin": 40,
+        "nextParaBegin": 50,
+        "t": 45
+      },
+      "expected": null
+    },
+    {
+      "op": "active-phrase-at",
+      "name": "a phrase is active exactly at its own begin",
+      "input": {
+        "phraseBegins": [
+          10,
+          14,
+          20,
+          30,
+          36
+        ],
+        "paraBegin": 10,
+        "nextParaBegin": 30,
+        "t": 14
+      },
+      "expected": {
+        "absoluteIndex": 1,
+        "relativeIndex": 1,
+        "total": 3,
+        "within": 0
+      },
+      "note": "Extra case: the forward epsilon makes a phrase begun at its begin time, with zero progress into it."
+    },
+    {
+      "op": "active-phrase-at",
+      "name": "is null inside the window but before the first phrase",
+      "input": {
+        "phraseBegins": [
+          10,
+          14,
+          20,
+          30,
+          36
+        ],
+        "paraBegin": 12,
+        "nextParaBegin": 30,
+        "t": 13
+      },
+      "expected": null,
+      "note": "Extra case: t sits in the paragraph's window, but no phrase of the paragraph has begun yet."
+    },
+    {
+      "op": "active-phrase-at",
+      "name": "t past the paragraph clamps to its last phrase",
+      "input": {
+        "phraseBegins": [
+          10,
+          14,
+          20,
+          30,
+          36
+        ],
+        "paraBegin": 10,
+        "nextParaBegin": 30,
+        "t": 35
+      },
+      "expected": {
+        "absoluteIndex": 2,
+        "relativeIndex": 2,
+        "total": 3,
+        "within": 1
+      },
+      "note": "Extra case: a t beyond the paragraph's end still resolves to the paragraph's last phrase, fully progressed."
+    },
+    {
+      "op": "active-phrase-at",
+      "name": "the open-ended last paragraph has no progress within its phrase",
+      "input": {
+        "phraseBegins": [
+          10,
+          14,
+          20,
+          30,
+          36
+        ],
+        "paraBegin": 30,
+        "nextParaBegin": "Infinity",
+        "t": 37
+      },
+      "expected": {
+        "absoluteIndex": 4,
+        "relativeIndex": 1,
+        "total": 2,
+        "within": 0
+      },
+      "note": "Extra case: with no finite next boundary there is nothing to interpolate toward, so `within` is 0."
+    },
+    {
+      "op": "phrase-progress",
+      "name": "the first phrase already fills one third",
+      "input": {
+        "phraseBegins": [
+          5,
+          8,
+          17,
+          20,
+          23,
+          29,
+          32,
+          35
+        ],
+        "paraBegin": 17,
+        "nextParaBegin": 29,
+        "t": 17
+      },
+      "expected": 0.3333333333333333
+    },
+    {
+      "op": "phrase-progress",
+      "name": "the second phrase fills two thirds",
+      "input": {
+        "phraseBegins": [
+          5,
+          8,
+          17,
+          20,
+          23,
+          29,
+          32,
+          35
+        ],
+        "paraBegin": 17,
+        "nextParaBegin": 29,
+        "t": 20
+      },
+      "expected": 0.6666666666666666
+    },
+    {
+      "op": "phrase-progress",
+      "name": "the last phrase fills the paragraph",
+      "input": {
+        "phraseBegins": [
+          5,
+          8,
+          17,
+          20,
+          23,
+          29,
+          32,
+          35
+        ],
+        "paraBegin": 17,
+        "nextParaBegin": 29,
+        "t": 23
+      },
+      "expected": 1
+    },
+    {
+      "op": "phrase-progress",
+      "name": "holds full for the rest of the paragraph",
+      "input": {
+        "phraseBegins": [
+          5,
+          8,
+          17,
+          20,
+          23,
+          29,
+          32,
+          35
+        ],
+        "paraBegin": 17,
+        "nextParaBegin": 29,
+        "t": 28
+      },
+      "expected": 1
+    },
+    {
+      "op": "phrase-progress",
+      "name": "a two-phrase paragraph is half full on its first phrase",
+      "input": {
+        "phraseBegins": [
+          5,
+          8,
+          17,
+          20,
+          23,
+          29,
+          32,
+          35
+        ],
+        "paraBegin": 5,
+        "nextParaBegin": 17,
+        "t": 5
+      },
+      "expected": 0.5
+    },
+    {
+      "op": "phrase-progress",
+      "name": "a two-phrase paragraph is full on its second phrase",
+      "input": {
+        "phraseBegins": [
+          5,
+          8,
+          17,
+          20,
+          23,
+          29,
+          32,
+          35
+        ],
+        "paraBegin": 5,
+        "nextParaBegin": 17,
+        "t": 8
+      },
+      "expected": 1
+    },
+    {
+      "op": "phrase-progress",
+      "name": "the open-ended last paragraph steps from its first phrase",
+      "input": {
+        "phraseBegins": [
+          5,
+          8,
+          17,
+          20,
+          23,
+          29,
+          32,
+          35
+        ],
+        "paraBegin": 29,
+        "nextParaBegin": "Infinity",
+        "t": 29
+      },
+      "expected": 0.3333333333333333
+    },
+    {
+      "op": "phrase-progress",
+      "name": "the open-ended last paragraph fills on its last phrase",
+      "input": {
+        "phraseBegins": [
+          5,
+          8,
+          17,
+          20,
+          23,
+          29,
+          32,
+          35
+        ],
+        "paraBegin": 29,
+        "nextParaBegin": "Infinity",
+        "t": 35
+      },
+      "expected": 1
+    },
+    {
+      "op": "phrase-progress",
+      "name": "is zero before the paragraph's first phrase is spoken",
+      "input": {
+        "phraseBegins": [
+          5,
+          8,
+          17,
+          20,
+          23,
+          29,
+          32,
+          35
+        ],
+        "paraBegin": 17,
+        "nextParaBegin": 29,
+        "t": 16
+      },
+      "expected": 0
+    },
+    {
+      "op": "phrase-progress",
+      "name": "is zero for a paragraph the narrator skipped",
+      "input": {
+        "phraseBegins": [
+          5,
+          8,
+          17,
+          20,
+          23,
+          29,
+          32,
+          35
+        ],
+        "paraBegin": 10,
+        "nextParaBegin": 12,
+        "t": 11
+      },
+      "expected": 0
+    },
+    {
+      "op": "continuous-phrase-progress",
+      "name": "is zero exactly at the paragraph's begin",
+      "input": {
+        "phraseBegins": [
+          10,
+          14,
+          20,
+          30,
+          36
+        ],
+        "paraBegin": 10,
+        "nextParaBegin": 30,
+        "t": 10
+      },
+      "expected": 0
+    },
+    {
+      "op": "continuous-phrase-progress",
+      "name": "interpolates within the current phrase",
+      "input": {
+        "phraseBegins": [
+          10,
+          14,
+          20,
+          30,
+          36
+        ],
+        "paraBegin": 10,
+        "nextParaBegin": 30,
+        "t": 12
+      },
+      "expected": 0.16666666666666666
+    },
+    {
+      "op": "continuous-phrase-progress",
+      "name": "is exactly the phrase fraction on a phrase begin",
+      "input": {
+        "phraseBegins": [
+          10,
+          14,
+          20,
+          30,
+          36
+        ],
+        "paraBegin": 10,
+        "nextParaBegin": 30,
+        "t": 17
+      },
+      "expected": 0.5
+    },
+    {
+      "op": "continuous-phrase-progress",
+      "name": "reaches one at the paragraph's end",
+      "input": {
+        "phraseBegins": [
+          10,
+          14,
+          20,
+          30,
+          36
+        ],
+        "paraBegin": 10,
+        "nextParaBegin": 30,
+        "t": 30
+      },
+      "expected": 1
+    },
+    {
+      "op": "continuous-phrase-progress",
+      "name": "returns zero when a paragraph has no phrase boundaries",
+      "input": {
+        "phraseBegins": [
+          10,
+          14,
+          20,
+          30,
+          36
+        ],
+        "paraBegin": 40,
+        "nextParaBegin": 50,
+        "t": 45
+      },
+      "expected": 0
+    },
+    {
+      "op": "begin-of-anchor",
+      "name": "answers an aligned paragraph's begin, zero included",
+      "input": {
+        "paras": [
+          [
+            "letter-1-p1",
+            0
+          ],
+          [
+            "letter-1-p2",
+            12.5
+          ]
+        ],
+        "anchor": "letter-1-p1"
+      },
+      "expected": 0
+    },
+    {
+      "op": "begin-of-anchor",
+      "name": "answers a later aligned paragraph's begin",
+      "input": {
+        "paras": [
+          [
+            "letter-1-p1",
+            0
+          ],
+          [
+            "letter-1-p2",
+            12.5
+          ]
+        ],
+        "anchor": "letter-1-p2"
+      },
+      "expected": 12.5
+    },
+    {
+      "op": "begin-of-anchor",
+      "name": "is null for a paragraph the narration skipped",
+      "input": {
+        "paras": [
+          [
+            "letter-1-p1",
+            0
+          ],
+          [
+            "letter-1-p2",
+            12.5
+          ]
+        ],
+        "anchor": "letter-1-p9"
+      },
+      "expected": null
+    },
+    {
+      "op": "begin-of-anchor",
+      "name": "is null when there is no alignment at all",
+      "input": {
+        "paras": [],
+        "anchor": "anything"
+      },
+      "expected": null
+    },
+    {
+      "op": "begin-at-or-after-anchor",
+      "name": "starts exactly on an aligned anchor",
+      "input": {
+        "paras": [
+          [
+            "p1",
+            10
+          ],
+          [
+            "p3",
+            30
+          ]
+        ],
+        "orderedAnchors": [
+          "p1",
+          "p2",
+          "p3",
+          "p4"
+        ],
+        "anchor": "p1"
+      },
+      "expected": 10
+    },
+    {
+      "op": "begin-at-or-after-anchor",
+      "name": "moves an unaligned anchor to the next narrated paragraph",
+      "input": {
+        "paras": [
+          [
+            "p1",
+            10
+          ],
+          [
+            "p3",
+            30
+          ]
+        ],
+        "orderedAnchors": [
+          "p1",
+          "p2",
+          "p3",
+          "p4"
+        ],
+        "anchor": "p2"
+      },
+      "expected": 30
+    },
+    {
+      "op": "begin-at-or-after-anchor",
+      "name": "is null for an anchor outside the document order",
+      "input": {
+        "paras": [
+          [
+            "p1",
+            10
+          ],
+          [
+            "p3",
+            30
+          ]
+        ],
+        "orderedAnchors": [
+          "p1",
+          "p2",
+          "p3",
+          "p4"
+        ],
+        "anchor": "missing"
+      },
+      "expected": null
+    },
+    {
+      "op": "begin-at-or-after-anchor",
+      "name": "is null when no narration follows the anchor",
+      "input": {
+        "paras": [
+          [
+            "p1",
+            10
+          ],
+          [
+            "p3",
+            30
+          ]
+        ],
+        "orderedAnchors": [
+          "p1",
+          "p2",
+          "p3",
+          "p4"
+        ],
+        "anchor": "p4"
+      },
+      "expected": null
+    },
+    {
+      "op": "word-index-at-phrase",
+      "name": "the start of a phrase selects its first word",
+      "input": {
+        "phraseIndex": 0,
+        "within": 0,
+        "phraseEnds": [
+          4,
+          9
+        ]
+      },
+      "expected": 0
+    },
+    {
+      "op": "word-index-at-phrase",
+      "name": "halfway through a phrase selects its middle word",
+      "input": {
+        "phraseIndex": 0,
+        "within": 0.5,
+        "phraseEnds": [
+          4,
+          9
+        ]
+      },
+      "expected": 2
+    },
+    {
+      "op": "word-index-at-phrase",
+      "name": "the end of a phrase stays on its last word",
+      "input": {
+        "phraseIndex": 0,
+        "within": 1,
+        "phraseEnds": [
+          4,
+          9
+        ]
+      },
+      "expected": 3
+    },
+    {
+      "op": "word-index-at-phrase",
+      "name": "a later phrase counts from its own word span",
+      "input": {
+        "phraseIndex": 1,
+        "within": 0.5,
+        "phraseEnds": [
+          4,
+          9
+        ]
+      },
+      "expected": 6
+    },
+    {
+      "op": "word-index-at-phrase",
+      "name": "is null when the paragraph has no word geometry",
+      "input": {
+        "phraseIndex": 0,
+        "within": 0.5,
+        "phraseEnds": []
+      },
+      "expected": null,
+      "note": "Extra case: a paragraph with no phrases has no word to select."
+    },
+    {
+      "op": "word-index-at-phrase",
+      "name": "clamps a phrase index past the last phrase",
+      "input": {
+        "phraseIndex": 7,
+        "within": 0,
+        "phraseEnds": [
+          4,
+          9
+        ]
+      },
+      "expected": 4,
+      "note": "Extra case: the phrase index is clamped into range before the word span is read."
+    },
+    {
+      "op": "time-at-word-index",
+      "name": "the paragraph's first word is its begin",
+      "input": {
+        "phraseBegins": [
+          10,
+          14,
+          20
+        ],
+        "phraseIndexes": [
+          0,
+          1,
+          2
+        ],
+        "paraBegin": 10,
+        "nextParaBegin": 26,
+        "phraseEnds": [
+          4,
+          8,
+          12
+        ],
+        "wordIndex": 0
+      },
+      "expected": 10
+    },
+    {
+      "op": "time-at-word-index",
+      "name": "a word inside a phrase interpolates across it",
+      "input": {
+        "phraseBegins": [
+          10,
+          14,
+          20
+        ],
+        "phraseIndexes": [
+          0,
+          1,
+          2
+        ],
+        "paraBegin": 10,
+        "nextParaBegin": 26,
+        "phraseEnds": [
+          4,
+          8,
+          12
+        ],
+        "wordIndex": 6
+      },
+      "expected": 17
+    },
+    {
+      "op": "time-at-word-index",
+      "name": "a word in an unnarrated phrase moves to the next narration",
+      "input": {
+        "phraseBegins": [
+          10,
+          20
+        ],
+        "phraseIndexes": [
+          0,
+          2
+        ],
+        "paraBegin": 10,
+        "nextParaBegin": 30,
+        "phraseEnds": [
+          4,
+          8,
+          12
+        ],
+        "wordIndex": 5
+      },
+      "expected": 20
+    },
+    {
+      "op": "time-at-word-index",
+      "name": "is null when the paragraph has no narrated phrases",
+      "input": {
+        "phraseBegins": [
+          10,
+          14,
+          20
+        ],
+        "phraseIndexes": [
+          0,
+          1,
+          2
+        ],
+        "paraBegin": 40,
+        "nextParaBegin": 50,
+        "phraseEnds": [
+          4,
+          8,
+          12
+        ],
+        "wordIndex": 0
+      },
+      "expected": null,
+      "note": "Extra case: a paragraph the narration skipped has no time to seek to."
+    },
+    {
+      "op": "time-at-word-index",
+      "name": "a missing phrase index falls back to document order",
+      "input": {
+        "phraseBegins": [
+          10,
+          14,
+          20
+        ],
+        "phraseIndexes": [],
+        "paraBegin": 10,
+        "nextParaBegin": 26,
+        "phraseEnds": [
+          4,
+          8,
+          12
+        ],
+        "wordIndex": 6
+      },
+      "expected": 17,
+      "note": "Extra case: with no recorded phrase index, a phrase is assumed to sit at its position within the paragraph."
+    },
+    {
+      "op": "time-at-word-index",
+      "name": "a word past the paragraph clamps to its last word",
+      "input": {
+        "phraseBegins": [
+          10,
+          14,
+          20
+        ],
+        "phraseIndexes": [
+          0,
+          1,
+          2
+        ],
+        "paraBegin": 10,
+        "nextParaBegin": 26,
+        "phraseEnds": [
+          4,
+          8,
+          12
+        ],
+        "wordIndex": 99
+      },
+      "expected": 24.5,
+      "note": "Extra case: a word index beyond the paragraph's last word resolves to the last word's time."
+    },
+    {
+      "op": "phrase-word-ends",
+      "name": "cuts on punctuation and holds through an abbreviation",
+      "input": {
+        "text": "Alpha beta gamma delta, epsilon zeta eta theta. Dr. Seward came quickly, then opened the door."
+      },
+      "expected": [
+        4,
+        8,
+        12,
+        16
+      ],
+      "note": "\"Dr.\" is an abbreviation, so its period does not cut; the four phrases are four words each."
+    },
+    {
+      "op": "phrase-word-ends",
+      "name": "merges a short opening fragment forward",
+      "input": {
+        "text": "One, two three four five."
+      },
+      "expected": [
+        5
+      ],
+      "note": "A one-word opening fragment is below the four-word minimum, so it joins the phrase after it."
+    },
+    {
+      "op": "phrase-word-ends",
+      "name": "cuts a real French paragraph as French",
+      "input": {
+        "text": "Longtemps, je me suis couché de bonne heure. Parfois, à peine ma bougie éteinte, mes yeux se fermaient si vite que je n’avais pas le temps de me dire : « Je m’endors. »",
+        "language": "fr"
+      },
+      "expected": [
+        9,
+        14,
+        31
+      ]
+    },
+    {
+      "op": "phrase-word-ends",
+      "name": "cuts the same French paragraph as English",
+      "input": {
+        "text": "Longtemps, je me suis couché de bonne heure. Parfois, à peine ma bougie éteinte, mes yeux se fermaient si vite que je n’avais pas le temps de me dire : « Je m’endors. »",
+        "language": "en"
+      },
+      "expected": [
+        9,
+        13,
+        30
+      ],
+      "note": "The two cuts of this paragraph differ by exactly one word from the second phrase on: \"à\" counts as a word under the French fold and vanishes under the English delete, and every later phrase inherits the offset."
+    },
+    {
+      "op": "phrase-word-ends",
+      "name": "folds a French book's accents into the alphabet",
+      "input": {
+        "text": "Il était une fois, à Paris, un homme très âgé.",
+        "language": "fr"
+      },
+      "expected": [
+        6,
+        10
+      ],
+      "note": "il · etait · une · fois · a · paris ‖ un · homme · tres · age"
+    },
+    {
+      "op": "phrase-word-ends",
+      "name": "folds the typographic apostrophe and the ligatures",
+      "input": {
+        "text": "L’esprit du cœur, et l’âme naïve, æther.",
+        "language": "fr"
+      },
+      "expected": [
+        7
+      ],
+      "note": "l'esprit · du · coeur · et · l'ame · naive · aether — the typographic apostrophe is the apostrophe, and œ/æ spell themselves out."
+    },
+    {
+      "op": "phrase-word-ends",
+      "name": "guillemets and a bare exclamation are not words",
+      "input": {
+        "text": "« Bonjour ! » dit-elle à l’enfant, très doucement, puis elle sortit.",
+        "language": "fr"
+      },
+      "expected": [
+        9
+      ],
+      "note": "bonjour · ditelle · a · l'enfant · tres · doucement · puis · elle · sortit"
+    },
+    {
+      "op": "phrase-word-ends",
+      "name": "a French title does not cut the phrase in half",
+      "input": {
+        "text": "Mme. Dupont arriva; Mlle. Leroy la suivait de près.",
+        "language": "fr"
+      },
+      "expected": [
+        9
+      ],
+      "note": "\"Mlle.\" is a French abbreviation, so the whole line is one phrase: mme · dupont · arriva · mlle · leroy · la · suivait · de · pres"
+    },
+    {
+      "op": "phrase-word-ends",
+      "name": "a region-tagged language reduces to its primary subtag",
+      "input": {
+        "text": "Il était une fois, à Paris, un homme très âgé.",
+        "language": "fr-FR"
+      },
+      "expected": [
+        6,
+        10
+      ]
+    },
+    {
+      "op": "phrase-word-ends",
+      "name": "a language tag is matched case-insensitively",
+      "input": {
+        "text": "Il était une fois, à Paris, un homme très âgé.",
+        "language": "FR"
+      },
+      "expected": [
+        6,
+        10
+      ]
+    },
+    {
+      "op": "phrase-word-ends",
+      "name": "an unlisted language folds",
+      "input": {
+        "text": "Il était une fois, à Paris, un homme très âgé.",
+        "language": "de"
+      },
+      "expected": [
+        6,
+        10
+      ]
+    },
+    {
+      "op": "phrase-word-ends",
+      "name": "an unlisted language keeps the English abbreviations",
+      "input": {
+        "text": "Mme. Dupont arriva; Mlle. Leroy la suivait de près.",
+        "language": "de"
+      },
+      "expected": [
+        4,
+        9
+      ],
+      "note": "Folding is what the acoustics need; a missing abbreviation costs one extra phrase boundary, a missing fold costs the word itself."
+    },
+    {
+      "op": "phrase-word-ends",
+      "name": "English deletes rather than folds",
+      "input": {
+        "text": "Il était une fois, à Paris, un homme très âgé.",
+        "language": "en"
+      },
+      "expected": [
+        5,
+        9
+      ],
+      "note": "\"à\" is not a word to the English rule at all; \"très\" is \"trs\" and \"âgé\" is \"g\"."
+    },
+    {
+      "op": "phrase-word-ends",
+      "name": "English is the default when no language is given",
+      "input": {
+        "text": "Il était une fois, à Paris, un homme très âgé."
+      },
+      "expected": [
+        5,
+        9
+      ]
+    },
+    {
+      "op": "phrase-word-ends",
+      "name": "a French title is not an English abbreviation",
+      "input": {
+        "text": "Mme. Dupont arriva; Mlle. Leroy la suivait de près.",
+        "language": "en"
+      },
+      "expected": [
+        4,
+        9
+      ]
+    },
+    {
+      "op": "phrase-word-ends",
+      "name": "English drops the typographic apostrophe",
+      "input": {
+        "text": "« Bonjour ! » dit-elle à l’enfant, très doucement, puis elle sortit.",
+        "language": "en"
+      },
+      "expected": [
+        8
+      ],
+      "note": "The apostrophe is deleted rather than folded, so l’enfant becomes \"lenfant\" — one word, where French reads two."
+    },
+    {
+      "op": "phrase-word-ends",
+      "name": "an English book saying à la carte counts nine words",
+      "input": {
+        "text": "A la carte à la carte naïve café stands here."
+      },
+      "expected": [
+        9
+      ]
+    },
+    {
+      "op": "phrase-word-ends",
+      "name": "the same line read as French counts ten",
+      "input": {
+        "text": "A la carte à la carte naïve café stands here.",
+        "language": "fr"
+      },
+      "expected": [
+        10
+      ]
+    },
+    {
+      "op": "phrase-word-ends",
+      "name": "an empty language tag is read as English",
+      "input": {
+        "text": "Il était une fois, à Paris, un homme très âgé.",
+        "language": ""
+      },
+      "expected": [
+        5,
+        9
+      ],
+      "note": "Extra case: an empty tag neither folds nor selects a language-specific abbreviation set, so it behaves exactly as English."
+    },
+    {
+      "op": "phrase-word-ends",
+      "name": "a short fragment joins the phrase before it",
+      "input": {
+        "text": "Alpha beta gamma delta, oh my, epsilon zeta eta theta."
+      },
+      "expected": [
+        6,
+        10
+      ],
+      "note": "Extra case: the two-word fragment between the commas is below the minimum, so it is appended to the phrase before it rather than standing alone."
+    },
+    {
+      "op": "phrase-word-ends",
+      "name": "a single-letter initial does not cut, a comma always does",
+      "input": {
+        "text": "Mr. H. Rider Haggard wrote it, and then he left. The night was very long indeed."
+      },
+      "expected": [
+        6,
+        10,
+        16
+      ],
+      "note": "Extra case: \"Mr.\" is an abbreviation and \"H.\" has a single-letter core, so neither period cuts; the comma after \"it\" cuts regardless, because the abbreviation guard covers only . ? ! and ;."
+    },
+    {
+      "op": "phrase-word-ends",
+      "name": "whitespace-only text is one empty phrase",
+      "input": {
+        "text": "   "
+      },
+      "expected": [
+        0
+      ],
+      "note": "Extra case: nothing tokenizes, so the fallback single phrase holds no words and its cumulative end is 0."
+    },
+    {
+      "op": "is-aligned-word",
+      "name": "an accented single letter is not a word by default",
+      "input": {
+        "token": "à"
+      },
+      "expected": false
+    },
+    {
+      "op": "is-aligned-word",
+      "name": "an accented single letter is not an English word",
+      "input": {
+        "token": "à",
+        "language": "en"
+      },
+      "expected": false
+    },
+    {
+      "op": "is-aligned-word",
+      "name": "an accented single letter is a French word",
+      "input": {
+        "token": "à",
+        "language": "fr"
+      },
+      "expected": true
+    },
+    {
+      "op": "is-aligned-word",
+      "name": "a ligature word survives the French fold",
+      "input": {
+        "token": "œuvre",
+        "language": "fr"
+      },
+      "expected": true
+    },
+    {
+      "op": "is-aligned-word",
+      "name": "a ligature word survives the English strip",
+      "input": {
+        "token": "œuvre"
+      },
+      "expected": true,
+      "note": "English deletes the ligature rather than spelling it out, leaving \"uvre\" — still a word, just a different one."
+    },
+    {
+      "op": "is-aligned-word",
+      "name": "a guillemet is not a word",
+      "input": {
+        "token": "«",
+        "language": "fr"
+      },
+      "expected": false
+    },
+    {
+      "op": "is-aligned-word",
+      "name": "an em dash is not a word",
+      "input": {
+        "token": "—",
+        "language": "fr"
+      },
+      "expected": false
+    },
+    {
+      "op": "is-aligned-word",
+      "name": "a number is not a word",
+      "input": {
+        "token": "1893"
+      },
+      "expected": false,
+      "note": "Extra case: digits are outside the alphabet in every language, so nothing survives."
+    }
+  ]
+}
