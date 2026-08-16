@@ -75,9 +75,11 @@ Deep structural equality, with:
   seconds, and a `Z` or `±hh:mm` offset — that parses as a real instant.
   The contract is the shape *plus* validity, not "whatever parses": a
   runner must reject values its platform's lenient date parser would accept
-  (locale dates, bare numbers). Used where an implementation stamps a clock
-  the spec doesn't fix; an implementation that stops stamping fails. It
-  never matches absence.
+  (locale dates, bare numbers) **and** calendar-impossible dates a parser
+  would quietly normalize — a February 30th rolled forward into March is
+  not an instant, whatever the parser returns. Used where an implementation
+  stamps a clock the spec doesn't fix; an implementation that stops
+  stamping fails. It never matches absence.
 - **Arrays**: same length, elements compared in order under these rules.
 
 ## The runner
