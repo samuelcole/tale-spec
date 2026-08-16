@@ -39,7 +39,9 @@ One JSON document per tale:
 - `kind` is `"heading"` (with `level`: 2 or 3), `"paragraph"`, or
   `"divider"` — a scene break. A divider has no id and no `runs`; it
   renders as the scene-divider rule in `spec/presentation.md`, and the
-  paragraph after it sits flush.
+  paragraph after it sits flush. A divider inside a blockquote carries
+  `quote: true` like a paragraph would: the rule centers within the
+  quote's inset box, not the full measure.
 - `quote: true` marks a paragraph inside a blockquote. `header: true`
   marks a bridgehead — a paragraph inside *any* header, a chapter's or a
   letter's, rendered in the header's quiet voice (see

@@ -70,8 +70,10 @@ What novels do, and what the source markup assumes:
   ink shifts to `secondary`. Nested quotes inset a further 1 em.
   Paragraphs inside a quote follow the same indent-if-after-paragraph rule
   among their quote siblings.
-- Scene divider (`hr`): a 1 px rule in `rule`, 4 rem wide, centered, with
-  2.5 em above and below.
+- Scene divider (`hr`): a 1 px rule in `rule`, 4 rem wide, centered
+  *within its container*, with 2.5 em above and below — inside a
+  blockquote the container is the quote's inset box, so a quoted scene
+  break sits centered in the quote, not the page.
 
 ## Chapter marks — navigation, not prose
 
