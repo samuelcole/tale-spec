@@ -6,6 +6,13 @@ timeline math. One spec, many implementations — each platform implements
 these rules in its own language and proves it with the same vectors, run by
 its own native test runner.
 
+The stance behind the suite: **every platform ships the same product.**
+Same semantics, same payload, same presentation — a reader moving between
+the web and a native app is holding the same book. What a platform keeps
+for itself is its native chrome: scroll physics, selection UI, system
+furniture, the things that should feel like the device. Anything
+product-defining lives here, once, instead of forking per platform.
+
 ## What's here
 
 - **`spec/`** — the normative prose. Each document states the rules of one
@@ -21,6 +28,13 @@ its own native test runner.
   - [`spec/timeline.md`](spec/timeline.md) — the whole-book audio timeline:
     section starts, phrase lookup, and the word cut that keeps a highlight
     on the word being spoken.
+  - [`spec/payload.md`](spec/payload.md) — the shape of a tale as a client
+    receives it: flat anchored blocks, styled runs. Draft; becomes the
+    content API's response contract.
+  - [`spec/presentation.md`](spec/presentation.md) — the book column as a
+    contract: the three voices, the paper-and-ink palette, paragraph
+    geometry, and the chrome line native platforms may cross. Prose-only,
+    no vectors yet.
 - **`vectors/`** — the executable cases, one JSON file per area. The vectors
   are the spec: where prose and vector disagree, the vector is the bug report
   and one of them must change under the versioning policy below.
@@ -42,9 +56,10 @@ implementation must read. The map, and each repo's relationship to the spec:
   and the server behind every client. The *reference implementation*: these
   vectors were extracted from it, and it runs them as consumer zero
   (`test/conformance.test.ts` over a vendored copy of `vectors/`). It is
-  also where the contracts this suite deliberately excludes live
-  single-sourced: anchor ids and the content payload are generated
-  server-side and only ever *received* by clients.
+  also where the generation this suite deliberately excludes lives
+  single-sourced: anchor ids and payload content are produced server-side
+  and only ever *received* by clients — the payload's *shape* is specified
+  here (`spec/payload.md`), its content never is.
 - **`tale-ios`**, **`tale-android`** (planned) — native readers, one per
   platform, no shared UI runtime. Each starts with a harness in its own
   native test runner (Swift Testing, JUnit) walking these vectors — green
@@ -74,9 +89,9 @@ change are two products.
 ## What's deliberately absent
 
 - **Anchor identifier generation.** Clients receive anchor ids with the
-  content; they never generate them. A reading system with two anchor
-  generators has two contracts, so the generator stays server-side and out of
-  scope here.
+  content (in the payload of `spec/payload.md`); they never generate them.
+  A reading system with two anchor generators has two contracts, so the
+  generator stays server-side and out of scope here.
 - **Event-driven behavior** — which scrolls may advance progress (the intent
   gate), and how narration and a live scroll arbitrate. Those rules are
   planned as event-trace vectors; until then they are not covered by this
