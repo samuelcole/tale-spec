@@ -55,9 +55,14 @@ implementation must read. The map, and each repo's relationship to the spec:
   too — sync maps and clients must cut identically or highlights drift.
 
 **How a consumer pins.** Each implementation vendors `vectors/` verbatim —
-a plain copy, byte-identical, with formatters kept away from the copies so
-the next sync is still a plain copy — and records the tale-spec commit it
-synced from. A sync is a copy plus a test run, nothing else.
+byte-identical, with formatters kept away from the copies — and records the
+tale-spec commit it synced from in a pin file. Automate both halves: the
+reference consumer's `spec:sync` re-vendors at a commit, rewrites its pin,
+and runs its suite, and its every test run re-verifies the vendored bytes
+against the pin whenever this repository is reachable — so drift cannot be
+silent. (Not a submodule, deliberately: a private submodule sits in build
+and deploy clone paths that cannot authenticate to it, and it would still
+be the same pin with worse ergonomics.)
 
 **How a spec change rolls out.** Additive cases: consumers pick them up at
 their next sync and may newly fail; fix the implementation, not the vector.
