@@ -1,0 +1,6 @@
+{
+  "name": "tale-spec",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Conformance suite for tale's reading semantics: normative spec prose plus language-neutral JSON vectors."
+}
