@@ -33,6 +33,39 @@ implementation, and compares the result under the rules in
 [`spec/harness.md`](spec/harness.md). Nothing here requires a shared runtime,
 a specific language, or this repository's code — there is no code.
 
+## The constellation
+
+tale is several repositories, and this one is the hub — the only thing every
+implementation must read. The map, and each repo's relationship to the spec:
+
+- **`tale`** — the product: the web reader at [tale.fyi](https://tale.fyi)
+  and the server behind every client. The *reference implementation*: these
+  vectors were extracted from it, and it runs them as consumer zero
+  (`test/conformance.test.ts` over a vendored copy of `vectors/`). It is
+  also where the contracts this suite deliberately excludes live
+  single-sourced: anchor ids and the content payload are generated
+  server-side and only ever *received* by clients.
+- **`tale-ios`**, **`tale-android`** (planned) — native readers, one per
+  platform, no shared UI runtime. Each starts with a harness in its own
+  native test runner (Swift Testing, JUnit) walking these vectors — green
+  before any screen exists.
+- **`tale-align`** — the forced-alignment tool that produces audio sync
+  maps (public, on npm). Independent of this suite except where it matters
+  most: the word cut in [`spec/timeline.md`](spec/timeline.md) binds it
+  too — sync maps and clients must cut identically or highlights drift.
+
+**How a consumer pins.** Each implementation vendors `vectors/` verbatim —
+a plain copy, byte-identical, with formatters kept away from the copies so
+the next sync is still a plain copy — and records the tale-spec commit it
+synced from. A sync is a copy plus a test run, nothing else.
+
+**How a spec change rolls out.** Additive cases: consumers pick them up at
+their next sync and may newly fail; fix the implementation, not the vector.
+A changed expected value: version bump and migration note first (see
+below), then every consumer syncs and adapts in one deliberate pass —
+never piecemeal, because two consumers on different sides of a semantic
+change are two products.
+
 ## What's deliberately absent
 
 - **Anchor identifier generation.** Clients receive anchor ids with the
