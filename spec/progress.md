@@ -75,9 +75,16 @@ Schema v1 is the whole record map inside a version envelope:
 
 Loading yields an empty store — no error, no partial recovery — unless the
 persisted text parses to an object whose `version` is exactly `1` and which
-carries a `books` map. Corrupt text, a version this implementation does not
-know, and nothing ever persisted all load the same way: empty. A future
-version is discarded rather than guessed at.
+carries a `books` **map**: an object, never an array, a string, or null,
+which are malformed stores rather than variants of one. Corrupt text, a
+version this implementation does not know, a `books` that is not a map, and
+nothing ever persisted all load the same way: empty. A future version is
+discarded rather than guessed at.
+
+The envelope spells the map `books`, and only the envelope: the word
+predates the decision that a book *is* a tale, and the spelling is frozen
+in the storage of every reader who ever opened one. Everywhere else in this
+area — op inputs, results, prose — the map is `tales`.
 
 A write that cannot persist (storage full, storage unavailable) must not
 throw into the reading path. Reading still works; the progress just won't
@@ -188,6 +195,17 @@ The second pass does not re-enter the first: a mixed-case spelling of a key
 that the moves table would have moved lands on its lowercase twin and stays
 there.
 
+**Order is defined, and it is not the map's.** Both passes fold their
+source keys in code-point order, and a moves entry's destination resolves
+through the table *transitively*: a destination that is itself a moved key
+follows its own entry — entries are forever, so a tale that moved twice has
+two, and a reader from either era lands at the end of the chain. Resolution
+stops rather than looping when entries cycle, and an entry that resolves to
+its own source is skipped. The title that fills in is the one on the
+record's own source entry. A map's iteration order is never part of the
+contract — two implementations with differently-ordered dictionaries must
+fold identically, which the paired chain vectors enforce.
+
 Case folding applies to keys only. **Plan tips are exempt** — a tip is an
 opaque immutable address and its case is part of it.
 
@@ -251,16 +269,18 @@ opened, not a place they got to.
 | op | input | result |
 | --- | --- | --- |
 | `load` | `raw` — the persisted text; absent means nothing was ever persisted | the record map |
-| `migrate-books` | `books`, `moves` — old key → `{to, title}` | the record map after both folding passes |
-| `merge-remote` | `books`, `remote` — array of server records | the record map after the merge |
-| `save-progress` | `books`, `slug`, `record` | the record map after the save |
-| `save-mark-tip` | `books`, `slug`, `tip` — string or `null`, `meta?` — `{title?, authorName?}` | the record map after the save |
-| `clear-progress` | `books`, `slug` | the record map with that key removed |
+| `migrate-tales` | `tales`, `moves` — old key → `{to, title}` | the record map after both folding passes |
+| `merge-remote` | `tales`, `remote` — array of server records | the record map after the merge |
+| `save-progress` | `tales`, `slug`, `record` | the record map after the save |
+| `save-mark-tip` | `tales`, `slug`, `tip` — string or `null`, `meta?` — `{title?, authorName?}` | the record map after the save |
+| `clear-progress` | `tales`, `slug` | the record map with that key removed |
 | `has-progress` | `record` | boolean |
 
-The saves stamp `updatedAt` from the clock, so vectors carry the wildcard
-`{"$any": true}` in that one field of the record they wrote; every other
-field is compared exactly. Absent and `null` are distinct throughout — see
+The saves stamp `updatedAt` from the clock, so vectors carry the stamp
+marker `{"$instant": true}` in that one field of the record they wrote —
+the result must be a string that parses as an ISO-8601 instant, so an
+implementation that stops stamping fails; every other field is compared
+exactly. Absent and `null` are distinct throughout — see
 [`harness.md`](harness.md) for the encoding.
 
 Vector fixtures use generic paths and titles. The merge never inspects the

@@ -60,10 +60,28 @@
       }
     },
     {
-      "op": "migrate-books",
+      "op": "load",
+      "name": "starts fresh when books is an array, not a map",
+      "input": {
+        "raw": "{\"version\":1,\"books\":[]}"
+      },
+      "expected": {},
+      "note": "Extra case, derived by running the reference implementation: the envelope's map must be a map — anything else is a malformed store and loads empty."
+    },
+    {
+      "op": "load",
+      "name": "starts fresh when books is a string, not a map",
+      "input": {
+        "raw": "{\"version\":1,\"books\":\"oops\"}"
+      },
+      "expected": {},
+      "note": "Extra case, derived by running the reference implementation: the envelope's map must be a map — anything else is a malformed store and loads empty."
+    },
+    {
+      "op": "migrate-tales",
       "name": "carries progress from a tale's old URL to its new one, with a title",
       "input": {
-        "books": {
+        "tales": {
           "old-road": {
             "sections": {},
             "furthest": "beginning-p9",
@@ -88,10 +106,10 @@
       "note": "Verified against the reference implementation with its own deployment moves table, then renamed to a neutral fixture; the merge never inspects key content, so every position, percent, timestamp and tip is unchanged."
     },
     {
-      "op": "migrate-books",
+      "op": "migrate-tales",
       "name": "keeps whatever already lives at the new key",
       "input": {
-        "books": {
+        "tales": {
           "old-road": {
             "sections": {},
             "furthest": "beginning-p2",
@@ -121,10 +139,10 @@
       "note": "Verified against the reference implementation with its own deployment moves table, then renamed to a neutral fixture; the merge never inspects key content, so every position, percent, timestamp and tip is unchanged."
     },
     {
-      "op": "migrate-books",
+      "op": "migrate-tales",
       "name": "keeps the deeper position when the old URL is the further one",
       "input": {
-        "books": {
+        "tales": {
           "old-road": {
             "sections": {},
             "furthest": "beginning-p400",
@@ -157,10 +175,10 @@
       "note": "Verified against the reference implementation with its own deployment moves table, then renamed to a neutral fixture; the merge never inspects key content, so every position, percent, timestamp and tip is unchanged."
     },
     {
-      "op": "migrate-books",
+      "op": "migrate-tales",
       "name": "does not re-enter the moves table after folding case",
       "input": {
-        "books": {
+        "tales": {
           "Old-Road": {
             "sections": {},
             "furthest": "beginning-p9",
@@ -184,10 +202,10 @@
       "note": "Extra case, derived by running the reference implementation: the moves pass matches keys exactly and runs first, so a mixed-case spelling of a moved key lands on its lowercase twin and stays there. Verified against the reference implementation with its own deployment moves table, then renamed to a neutral fixture; the merge never inspects key content, so every position, percent, timestamp and tip is unchanged."
     },
     {
-      "op": "migrate-books",
+      "op": "migrate-tales",
       "name": "folds a key written under a mixed-case URL into its lowercase twin",
       "input": {
-        "books": {
+        "tales": {
           "@Rider/New-Road": {
             "sections": {},
             "furthest": "beginning-p9",
@@ -205,10 +223,10 @@
       }
     },
     {
-      "op": "migrate-books",
+      "op": "migrate-tales",
       "name": "keeps the lowercase position when both casings have one",
       "input": {
-        "books": {
+        "tales": {
           "Dracula": {
             "sections": {},
             "furthest": "chapter-1-p2",
@@ -234,10 +252,10 @@
       }
     },
     {
-      "op": "migrate-books",
+      "op": "migrate-tales",
       "name": "keeps a further mixed-case position over a newer lowercase one",
       "input": {
-        "books": {
+        "tales": {
           "Dracula": {
             "sections": {
               "intro": true
@@ -274,10 +292,10 @@
       }
     },
     {
-      "op": "migrate-books",
+      "op": "migrate-tales",
       "name": "takes a byline from the losing record when the winner has none",
       "input": {
-        "books": {
+        "tales": {
           "Dracula": {
             "sections": {},
             "furthest": "chapter-8-p4",
@@ -309,10 +327,10 @@
       "note": "Extra case, derived by running the reference implementation: a null byline counts as absent when title and authorName fill in."
     },
     {
-      "op": "migrate-books",
+      "op": "migrate-tales",
       "name": "uses recency to break a level-position tie",
       "input": {
-        "books": {
+        "tales": {
           "Dracula": {
             "sections": {},
             "furthest": "chapter-3-p1",
@@ -338,10 +356,10 @@
       }
     },
     {
-      "op": "migrate-books",
+      "op": "migrate-tales",
       "name": "keeps a legacy position with no percent and a newer plan tip",
       "input": {
-        "books": {
+        "tales": {
           "Dracula": {
             "sections": {},
             "furthest": "chapter-7-p2",
@@ -365,10 +383,10 @@
       }
     },
     {
-      "op": "migrate-books",
+      "op": "migrate-tales",
       "name": "keeps an older tip when the newer casing never knew it",
       "input": {
-        "books": {
+        "tales": {
           "Dracula": {
             "sections": {},
             "furthest": "chapter-8-p4",
@@ -396,10 +414,10 @@
       }
     },
     {
-      "op": "migrate-books",
+      "op": "migrate-tales",
       "name": "keeps the furthest position without resurrecting a cleared tip",
       "input": {
-        "books": {
+        "tales": {
           "Dracula": {
             "sections": {},
             "furthest": "chapter-8-p4",
@@ -428,10 +446,147 @@
       }
     },
     {
+      "op": "migrate-tales",
+      "name": "a chained move lands at its final destination",
+      "input": {
+        "tales": {
+          "old-road": {
+            "sections": {},
+            "furthest": "beginning-p9",
+            "updatedAt": "t"
+          }
+        },
+        "moves": {
+          "old-road": {
+            "to": "middle-road",
+            "title": "the long road home"
+          },
+          "middle-road": {
+            "to": "@rider/new-road",
+            "title": "the long road home"
+          }
+        }
+      },
+      "expected": {
+        "@rider/new-road": {
+          "sections": {},
+          "furthest": "beginning-p9",
+          "updatedAt": "t",
+          "title": "the long road home"
+        }
+      },
+      "note": "A destination that is itself a moved key resolves through the table: entries are forever, so a tale that moved twice has two, and a reader from either era lands at the end of the chain."
+    },
+    {
+      "op": "migrate-tales",
+      "name": "the chain lands the same place however the table is spelled",
+      "input": {
+        "tales": {
+          "old-road": {
+            "sections": {},
+            "furthest": "beginning-p9",
+            "updatedAt": "t"
+          }
+        },
+        "moves": {
+          "middle-road": {
+            "to": "@rider/new-road",
+            "title": "the long road home"
+          },
+          "old-road": {
+            "to": "middle-road",
+            "title": "the long road home"
+          }
+        }
+      },
+      "expected": {
+        "@rider/new-road": {
+          "sections": {},
+          "furthest": "beginning-p9",
+          "updatedAt": "t",
+          "title": "the long road home"
+        }
+      },
+      "note": "The same table with its entries spelled in the opposite order. A map's iteration order is not part of the contract — sources fold in code-point order and destinations resolve transitively, so an implementation whose answer depends on its dictionary's ordering fails one of this pair."
+    },
+    {
+      "op": "migrate-tales",
+      "name": "a chain merges the records it passes through",
+      "input": {
+        "tales": {
+          "old-road": {
+            "sections": {},
+            "furthest": "beginning-p9",
+            "updatedAt": "t"
+          },
+          "middle-road": {
+            "sections": {},
+            "furthest": "beginning-p2",
+            "percent": 1,
+            "updatedAt": "2026-07-02T00:00:00Z"
+          }
+        },
+        "moves": {
+          "old-road": {
+            "to": "middle-road",
+            "title": "the long road home"
+          },
+          "middle-road": {
+            "to": "@rider/new-road",
+            "title": "the long road home"
+          }
+        }
+      },
+      "expected": {
+        "@rider/new-road": {
+          "sections": {},
+          "furthest": "beginning-p2",
+          "percent": 1,
+          "updatedAt": "2026-07-02T00:00:00Z",
+          "title": "the long road home"
+        }
+      },
+      "note": "Both keys hold real positions: the mid-chain record's measurable percent outranks the legacy mark's just-above-zero score, and the moves entry still fills the title."
+    },
+    {
+      "op": "migrate-tales",
+      "name": "tied case variants fold deterministically, in code-point order",
+      "input": {
+        "tales": {
+          "DRACULA": {
+            "sections": {},
+            "furthest": "chapter-2-p2",
+            "percent": 20,
+            "title": "Dracula",
+            "updatedAt": "2026-07-01T00:00:00Z"
+          },
+          "Dracula": {
+            "sections": {},
+            "furthest": "chapter-2-p9",
+            "percent": 20,
+            "authorName": "Bram Stoker",
+            "updatedAt": "2026-07-01T00:00:00Z"
+          }
+        },
+        "moves": {}
+      },
+      "expected": {
+        "dracula": {
+          "sections": {},
+          "furthest": "chapter-2-p2",
+          "percent": 20,
+          "title": "Dracula",
+          "updatedAt": "2026-07-01T00:00:00Z",
+          "authorName": "Bram Stoker"
+        }
+      },
+      "note": "Two spellings tied on position and time: sources fold in code-point order, so the earlier-sorted spelling seeds the twin and the tie resolves to it — one answer in every implementation, whatever its map ordering."
+    },
+    {
       "op": "merge-remote",
       "name": "adopts a book started on another device",
       "input": {
-        "books": {},
+        "tales": {},
         "remote": [
           {
             "path": "dracula",
@@ -458,7 +613,7 @@
       "op": "merge-remote",
       "name": "moves a position forward",
       "input": {
-        "books": {
+        "tales": {
           "dracula": {
             "sections": {},
             "furthest": "chapter-1-p1",
@@ -492,7 +647,7 @@
       "op": "merge-remote",
       "name": "never moves a position back",
       "input": {
-        "books": {
+        "tales": {
           "dracula": {
             "sections": {},
             "furthest": "chapter-3-p1",
@@ -529,7 +684,7 @@
       "op": "merge-remote",
       "name": "lets a level local copy learn its name without moving",
       "input": {
-        "books": {
+        "tales": {
           "dracula": {
             "sections": {},
             "furthest": "chapter-9-p1",
@@ -563,7 +718,7 @@
       "op": "merge-remote",
       "name": "keeps the local plan tip over a remote one",
       "input": {
-        "books": {
+        "tales": {
           "dracula": {
             "sections": {},
             "furthest": "chapter-9-p1",
@@ -600,7 +755,7 @@
       "op": "merge-remote",
       "name": "learns a remote tip when it has none",
       "input": {
-        "books": {
+        "tales": {
           "dracula": {
             "sections": {},
             "furthest": "chapter-9-p1",
@@ -636,7 +791,7 @@
       "op": "merge-remote",
       "name": "does not resurrect a remote tip after a local clear",
       "input": {
-        "books": {
+        "tales": {
           "dracula": {
             "sections": {},
             "furthest": "chapter-9-p1",
@@ -673,7 +828,7 @@
       "op": "merge-remote",
       "name": "does not resurrect a remote tip while adopting a further position",
       "input": {
-        "books": {
+        "tales": {
           "dracula": {
             "sections": {},
             "furthest": "chapter-9-p1",
@@ -713,7 +868,7 @@
       "op": "merge-remote",
       "name": "learns a plan the server gained after the local clear",
       "input": {
-        "books": {
+        "tales": {
           "dracula": {
             "sections": {},
             "furthest": "chapter-9-p1",
@@ -750,7 +905,7 @@
       "op": "merge-remote",
       "name": "keeps the clear when the server copy is only as old as it",
       "input": {
-        "books": {
+        "tales": {
           "dracula": {
             "sections": {},
             "furthest": "chapter-9-p1",
@@ -787,7 +942,7 @@
       "op": "merge-remote",
       "name": "still prefers a live local tip to a newer remote one",
       "input": {
-        "books": {
+        "tales": {
           "dracula": {
             "sections": {},
             "furthest": "chapter-9-p1",
@@ -824,7 +979,7 @@
       "op": "save-progress",
       "name": "round-trips a position, stamping updatedAt",
       "input": {
-        "books": {},
+        "tales": {},
         "slug": "dracula",
         "record": {
           "sections": {},
@@ -839,7 +994,7 @@
           "furthest": "chapter-2-p14",
           "percent": 12,
           "updatedAt": {
-            "$any": true
+            "$instant": true
           }
         }
       }
@@ -848,7 +1003,7 @@
       "op": "save-progress",
       "name": "a tip survives a position save from a reader that mounted first",
       "input": {
-        "books": {
+        "tales": {
           "dracula": {
             "sections": {},
             "tip": "tip-after-mount",
@@ -869,7 +1024,7 @@
           "furthest": "chapter-2-p1",
           "percent": 20,
           "updatedAt": {
-            "$any": true
+            "$instant": true
           },
           "tip": "tip-after-mount"
         }
@@ -880,7 +1035,7 @@
       "op": "save-progress",
       "name": "does not undo a tip clear with a stale reader snapshot",
       "input": {
-        "books": {
+        "tales": {
           "dracula": {
             "sections": {},
             "furthest": "chapter-1-p1",
@@ -902,7 +1057,7 @@
           "furthest": "chapter-2-p1",
           "tip": null,
           "updatedAt": {
-            "$any": true
+            "$instant": true
           }
         }
       },
@@ -912,7 +1067,7 @@
       "op": "save-progress",
       "name": "keeps the record's own tip when the store never knew one",
       "input": {
-        "books": {},
+        "tales": {},
         "slug": "dracula",
         "record": {
           "sections": {},
@@ -929,7 +1084,7 @@
           "percent": 20,
           "tip": "snapshot-tip",
           "updatedAt": {
-            "$any": true
+            "$instant": true
           }
         }
       },
@@ -939,7 +1094,7 @@
       "op": "save-mark-tip",
       "name": "records a tip and the tale's name for the index",
       "input": {
-        "books": {},
+        "tales": {},
         "slug": "dracula",
         "tip": "tip-1",
         "meta": {
@@ -951,7 +1106,7 @@
         "dracula": {
           "sections": {},
           "updatedAt": {
-            "$any": true
+            "$instant": true
           },
           "tip": "tip-1",
           "title": "Dracula",
@@ -963,7 +1118,7 @@
       "op": "save-mark-tip",
       "name": "clears a tip with null, leaving the position alone",
       "input": {
-        "books": {
+        "tales": {
           "dracula": {
             "sections": {},
             "furthest": "chapter-2-p1",
@@ -980,7 +1135,7 @@
           "furthest": "chapter-2-p1",
           "tip": null,
           "updatedAt": {
-            "$any": true
+            "$instant": true
           }
         }
       }
@@ -989,7 +1144,7 @@
       "op": "save-mark-tip",
       "name": "never overwrites a title the book already knows",
       "input": {
-        "books": {
+        "tales": {
           "dracula": {
             "sections": {},
             "title": "Dracula",
@@ -1007,7 +1162,7 @@
           "sections": {},
           "title": "Dracula",
           "updatedAt": {
-            "$any": true
+            "$instant": true
           },
           "tip": "tip-1"
         }
@@ -1017,7 +1172,7 @@
       "op": "save-mark-tip",
       "name": "does not record an unknown byline",
       "input": {
-        "books": {},
+        "tales": {},
         "slug": "dracula",
         "tip": "tip-1",
         "meta": {
@@ -1029,7 +1184,7 @@
         "dracula": {
           "sections": {},
           "updatedAt": {
-            "$any": true
+            "$instant": true
           },
           "tip": "tip-1",
           "title": "Dracula"
@@ -1041,7 +1196,7 @@
       "op": "clear-progress",
       "name": "clears one book without touching the rest",
       "input": {
-        "books": {
+        "tales": {
           "dracula": {
             "sections": {},
             "furthest": "a-p1",
@@ -1067,7 +1222,7 @@
       "op": "clear-progress",
       "name": "clearing a book with no record changes nothing",
       "input": {
-        "books": {
+        "tales": {
           "frankenstein": {
             "sections": {},
             "furthest": "b-p1",

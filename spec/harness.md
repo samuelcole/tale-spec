@@ -70,9 +70,11 @@ Deep structural equality, with:
   expected `null` must be an explicit null. Adapters for languages that
   can't make the distinction in a given structure must document the
   mapping they chose and apply it consistently.
-- **The wildcard** `{"$any": true}`: matches any *present* value. Used where
-  an implementation stamps a clock or other environment value the spec
-  doesn't fix. It never matches absence.
+- **The stamp marker** `{"$instant": true}`: matches a present *string that
+  parses as an ISO-8601 instant*. Used where an implementation stamps a
+  clock the spec doesn't fix — the marker still requires a real stamp, so an
+  implementation that stops stamping (or stamps garbage) fails. It never
+  matches absence.
 - **Arrays**: same length, elements compared in order under these rules.
 
 ## The runner
