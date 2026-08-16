@@ -20,9 +20,9 @@ One JSON document per tale:
       "runs": [{ "text": "I" }] },
     { "id": "chapter-1-p1", "kind": "paragraph", "header": true,
       "runs": [{ "text": "Jonathan Harker’s Journal." }] },
-    { "id": "chapter-1-p3", "kind": "paragraph", "quote": true,
+    { "id": "chapter-1-p3", "kind": "paragraph", "quote": 1, "quoteStart": true,
       "runs": [{ "text": "3 May. Bistritz.", "italic": true },
-               { "text": "⁠—Left Munich at 8:35 p.m., …" }] }
+               { "text": "﻿—Left Munich at 8:35 p.m., …" }] }
   ]
 }
 ```
@@ -39,20 +39,29 @@ One JSON document per tale:
 - `kind` is `"heading"` (with `level`: 2 or 3), `"paragraph"`, or
   `"divider"` — a scene break. A divider has no id and no `runs`; it
   renders as the scene-divider rule in `spec/presentation.md`, and the
-  paragraph after it sits flush. A divider inside a blockquote carries
-  `quote: true` like a paragraph would: the rule centers within the
-  quote's inset box, not the full measure.
-- `quote: true` marks a paragraph inside a blockquote. `header: true`
-  marks a bridgehead — a paragraph inside *any* header, a chapter's or a
-  letter's, rendered in the header's quiet voice (see
+  paragraph after it sits flush. A quoted divider carries `quote` like a
+  paragraph would: the rule centers within its quote box, not the full
+  measure.
+- `quote` is the blockquote nesting depth: an integer ≥ 1, absent when
+  the block is not quoted. Depth is real structure — a letter quoted
+  inside a journal entry sits at depth 2 — and each level insets further
+  (see `spec/presentation.md`).
+- `quoteStart: true` marks the first block of its innermost blockquote,
+  absent otherwise. It is the boundary that keeps adjacent quotes from
+  fusing: a new quote opens with a gap and a flush first line even when
+  its neighbour is quoted at the same depth — depth alone cannot see
+  that seam.
+- `header: true` marks a bridgehead — a paragraph inside *any* header, a
+  chapter's or a letter's, rendered in the header's quiet voice (see
   `spec/presentation.md`); a letter header inside a quote carries both
-  flags and keeps the quote's inset. Both are absent when false.
+  `quote` and `header` and keeps the quote's inset. Absent when false.
 - `runs` carry text with minimal inline style: optional `italic` and
   `bold`, absent when false. Adjacent runs with identical styling are
   merged; no empty runs.
 - Line breaks within a paragraph are `"\n"` inside a run. Entities are
-  decoded. Exotic whitespace — no-break space, word joiner — is preserved
-  exactly: it is typography, not noise.
+  decoded. Exotic whitespace is preserved exactly: it is typography, not
+  noise. (In Standard Ebooks text the invisible joiner before an em dash
+  is U+FEFF, the zero-width no-break space — not the U+2060 word joiner.)
 - Unknown fields: a client ignores fields it doesn't recognize; a client
   encountering an unknown `kind` fails loudly rather than skipping content
   silently — an unknown kind means the payload is newer than the client,

@@ -64,12 +64,14 @@ What novels do, and what the source markup assumes:
 - Zero vertical space between successive body paragraphs.
 - A paragraph *following another paragraph* gets a **1.35 em** first-line
   indent. An indent marks continuation, so a paragraph that follows a
-  heading/header block, a blockquote, or a scene divider sits **flush**.
-  The first paragraph of a section is flush.
-- Blockquote: 1 em above and below, inset **1.5 em** from the leading edge,
-  ink shifts to `secondary`. Nested quotes inset a further 1 em.
-  Paragraphs inside a quote follow the same indent-if-after-paragraph rule
-  among their quote siblings.
+  heading/header block, a blockquote, or a scene divider sits **flush** —
+  as does the first paragraph of a section or of a blockquote.
+- Blockquote: 1 em above and below, inset **1.5 em** from the leading
+  edge, ink shifts to `secondary`. Nested quotes inset a further 1 em per
+  level. Paragraphs follow the indent-if-after-paragraph rule among
+  siblings of the same quote. Every quote boundary — opening, closing, or
+  one quote directly following another — costs a single 1 em gap (margins
+  collapse, they never stack), and the first block of a quote sits flush.
 - Scene divider (`hr`): a 1 px rule in `rule`, 4 rem wide, centered
   *within its container*, with 2.5 em above and below — inside a
   blockquote the container is the quote's inset box, so a quoted scene
