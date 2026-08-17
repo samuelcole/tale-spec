@@ -327,22 +327,25 @@ A short paragraph is followed by its own top edge; a tall one is followed by
 the point inside it that is currently being spoken, which is why the tall
 band is both higher and wider.
 
-## What this area does not cover
+## Stateful behavior
 
-Event-driven behavior. Every operation here is a pure function of geometry
-and stored numbers; nothing here says *when* to call them. In particular:
+Every operation here is a pure function of geometry and stored numbers; this
+area does not say *when* to call them. The event-driven user-intent gate is
+specified in [`spec/intent.md`](intent.md). It is the only machine that may
+feed scroll positions into `advance-reading-progress`; fragment seeks,
+restores, reflows, find-in-page, and narration follow-scroll never count as
+reading.
 
-- **The intent gate** — which scrolls may advance progress at all. A
-  reading layer only calls `advance-reading-progress` for scrolling that
-  follows real reader input; fragment seeks, restores, and find-in-page
-  produce scroll events that must never count as reading. That gate is what
-  makes opening on a mark safe.
+Three stateful machines remain outside this area:
+
+- **Narration arbitration** — how narration and an intent-approved reader
+  position hand selection back and forth. Its later event traces consume the
+  intent gate's result rather than defining another gate.
 - **Restoring a position** against a platform that applies its own scroll
   offset after the page has already seeked, and retiring that restore the
   moment the reader takes control.
 - **Confirming a destructive action** — the two-press arm-then-fire on
   actions that discard a mark.
 
-These are stateful event machines rather than functions of an input, and
-they are planned as event-trace vectors. Until those exist, they are not
-covered by this suite.
+Those three machines are planned as event-trace vectors. Until those vectors
+exist, they are not covered by this suite.

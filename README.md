@@ -35,6 +35,8 @@ product-defining lives here, once, instead of forking per platform.
     contract: the three voices, the paper-and-ink palette, paragraph
     geometry, and the chrome line native platforms may cross. Prose-only,
     no vectors yet.
+  - [`spec/intent.md`](spec/intent.md) — the user-intent event gate: which
+    position changes may advance local progress.
 - **`vectors/`** — the executable cases, one JSON file per area. The vectors
   are the spec: where prose and vector disagree, the vector is the bug report
   and one of them must change under the versioning policy below.
@@ -92,10 +94,15 @@ change are two products.
   content (in the payload of `spec/payload.md`); they never generate them.
   A reading system with two anchor generators has two contracts, so the
   generator stays server-side and out of scope here.
-- **Event-driven behavior** — which scrolls may advance progress (the intent
-  gate), and how narration and a live scroll arbitrate. Those rules are
-  planned as event-trace vectors; until then they are not covered by this
-  suite.
+- **Narration arbitration** — how narration and an intent-approved reader
+  position hand control back and forth is planned as a later event-trace area.
+  The raw user-intent gate is covered by
+  [`spec/intent.md`](spec/intent.md); the later area consumes its result rather
+  than defining a second gate.
+- **Restore retirement** — how a reading layer retires its own restore when a
+  platform later applies a competing restored scroll offset.
+- **Destructive confirmation** — the two-press arm-then-fire machine for
+  actions that discard a mark.
 
 ## Versioning
 
