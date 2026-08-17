@@ -58,6 +58,75 @@ graceful degradation.
   shouting over it. Kerning on; common and contextual ligatures on.
 - Ink on paper (palette below): body text is `primary` on `paper`.
 
+## The cover — what a book opens on
+
+A book page opens on a cover, in the same column the prose is set in, and
+every line of it is **centered**. A title page has been centered for five
+hundred years; flushed left it stops being a title page and starts being a
+list row. This is the part of the cover that is portable, so it is the part
+this document fixes.
+
+Three lines, in the **book face** — the tale's own face, so a tale set in
+mono has a mono cover. The cover is the book introducing itself, so it
+speaks in the book's voice rather than the machine's or a person's. The
+words themselves come from the payload (`spec/payload.md`); the sentence
+they are set into is this document's.
+
+- **Title** — book face, weight **500**, letter-spacing **0.01 em**, color
+  `primary`; **24 px** below 640 px viewport width, **32 px** at 640 px and
+  above. **8 px** below it.
+- **Byline** — book face, **15 px, weight 300**, color `muted`. The stored
+  byline whole: "Bram Stoker", or "Fyodor Dostoevsky, translated by
+  Constance Garnett". Where a platform has an author's shelf, the author's
+  name is a door to it and the ", translated by …" tail is not; where it
+  has none, the line is plain text. **4 px** below it.
+- **Attribution** — book face, **12 px, weight 300**, color `muted`. Below.
+
+### The attribution
+
+Where the text came from and who read it aloud, in one line built from two
+halves joined by ` · ` (U+00B7, spaced) when both are present:
+
+```
+text from <edition> · read by <readers> for <host>
+```
+
+- **`text from <edition>`** names the edition the text was set from —
+  "Standard Ebooks", "Project Gutenberg" — and `<edition>` is a door to
+  that edition's own page. Absent when the tale has no such source.
+- **`read by <readers> for <host>`** names the narration. One or two
+  narrators are named and conjoined ("Karen Savage and Tom Weiss"); three
+  or more collapse to the word **volunteers**, and naming everyone is the
+  colophon's job at the end of the book. `<host>` — "LibriVox" — is a door
+  to the recording. Absent when the tale has no narration.
+- Neither half: no line at all, and no gap left where it would have been.
+
+Only the two proper names are doors, not the words around them, and a door
+is drawn here the way every door on the page is drawn: no underline of its
+own, a **1 px rule in `rule`** along its baseline edge, going to `primary`
+when the reader reaches for it.
+
+This line is not decoration and it is not the colophon's alone. Most
+readers never reach the end of a book, so the people whose work made this
+one readable are credited where every reader actually looks. A client that
+has the strings and does not show them is not shipping the same product.
+A client that does not have them invents nothing: crediting the wrong
+source is worse than crediting none.
+
+### What a cover may differ in
+
+- **How tall it is, and where in that height the three lines sit.** The
+  reference cover fills at least 70% of the viewport and centers its lines
+  within that block; a native cover may size and place itself differently.
+  `spec/scenarios/open-and-read.md` says the same thing from the other
+  side — it asserts that a book opens at its cover and asserts nothing
+  about what fits below it.
+- **What else a platform hangs there.** The reference cover also carries a
+  masthead (the way home, for a reader who arrived from a search) and a
+  scroll hint; an app with a back gesture and a scroll indicator needs
+  neither. Whatever a platform adds sits outside the three lines and does
+  not change them.
+
 ## Paragraphs — indents, not gaps
 
 What novels do, and what the source markup assumes:
