@@ -331,21 +331,20 @@ band is both higher and wider.
 
 Every operation here is a pure function of geometry and stored numbers; this
 area does not say *when* to call them. The event-driven user-intent gate is
-specified in [`spec/intent.md`](intent.md). It is the only machine that may
-feed scroll positions into `advance-reading-progress`; fragment seeks,
-restores, reflows, find-in-page, and narration follow-scroll never count as
-reading.
+specified in [`spec/intent.md`](intent.md); it is the only machine that may
+feed scroll positions into `advance-reading-progress`. Narration then consumes
+that gate's approved reader positions through the stateful arbitration traces
+in [`spec/follow-scroll.md`](follow-scroll.md). Fragment seeks, restores,
+reflows, find-in-page, and narration follow-scroll never become approved reader
+positions and never count as reading.
 
-Three stateful machines remain outside this area:
+Two stateful machines remain outside this area:
 
-- **Narration arbitration** — how narration and an intent-approved reader
-  position hand selection back and forth. Its later event traces consume the
-  intent gate's result rather than defining another gate.
 - **Restoring a position** against a platform that applies its own scroll
   offset after the page has already seeked, and retiring that restore the
   moment the reader takes control.
 - **Confirming a destructive action** — the two-press arm-then-fire on
   actions that discard a mark.
 
-Those three machines are planned as event-trace vectors. Until those vectors
+Those two machines are planned as event-trace vectors. Until those vectors
 exist, they are not covered by this suite.
