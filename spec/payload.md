@@ -15,6 +15,12 @@ One JSON document per tale:
   "slug": "dracula",
   "title": "Dracula",
   "author": "Bram Stoker",
+  "credit": {
+    "text": { "from": "Standard Ebooks",
+              "url": "https://standardebooks.org/ebooks/bram-stoker/dracula" },
+    "audio": { "readBy": "volunteers", "from": "LibriVox",
+               "url": "https://archive.org/details/dracula_librivox" }
+  },
   "blocks": [
     { "id": "chapter-1", "kind": "heading", "level": 2,
       "runs": [{ "text": "I" }] },
@@ -31,6 +37,15 @@ One JSON document per tale:
 
 - `blocks` is **flat, in document order**. No nesting; structure that
   matters to rendering becomes attributes.
+- `credit` carries the cover's attribution — where the text was set from
+  and who read it aloud (`spec/presentation.md`, "The cover"). `text` and
+  `audio` are each optional, and `credit` itself is absent when neither
+  applies. `text.from` names the edition and `text.url` is its page;
+  `audio.readBy` is the narrators **as the line says them** — one or two
+  names conjoined, three or more already collapsed to "volunteers", so the
+  rule lives on one side of the wire and every client credits identically
+  — `audio.from` names the host and `audio.url` is the recording. A client
+  renders what it is given and invents no attribution of its own.
 - `id` is the anchor identifier, **verbatim from the server**: a heading
   carries its section's id, a paragraph its own. Clients never generate,
   normalize, or repair an id — an id is a shareable URL fragment, and a
