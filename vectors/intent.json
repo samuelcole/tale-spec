@@ -1,0 +1,159 @@
+{
+  "area": "intent",
+  "version": 1,
+  "cases": [
+    {
+      "op": "apply-intent-trace",
+      "name": "a drag and its deceleration advance progress",
+      "input": {
+        "total": 10,
+        "progress": { "furthest": -1, "percent": 0 },
+        "events": [
+          { "atMs": 0, "kind": "input", "input": "drag" },
+          { "atMs": 120, "kind": "scroll", "source": "user", "current": 2, "anchor": 1 },
+          { "atMs": 700, "kind": "input", "input": "deceleration" },
+          { "atMs": 900, "kind": "scroll", "source": "user", "current": 5, "anchor": 4 }
+        ]
+      },
+      "expected": {
+        "progress": { "furthest": 4, "percent": 56 },
+        "accepted": [1, 3]
+      }
+    },
+    {
+      "op": "apply-intent-trace",
+      "name": "the exact one-second boundary is expired",
+      "input": {
+        "total": 10,
+        "progress": { "furthest": -1, "percent": 0 },
+        "events": [
+          { "atMs": 0, "kind": "input", "input": "wheel" },
+          { "atMs": 999, "kind": "scroll", "source": "user", "current": 1, "anchor": 1 },
+          { "atMs": 1000, "kind": "scroll", "source": "user", "current": 3, "anchor": 3 }
+        ]
+      },
+      "expected": {
+        "progress": { "furthest": 1, "percent": 20 },
+        "accepted": [1]
+      }
+    },
+    {
+      "op": "apply-intent-trace",
+      "name": "resume movement never counts even after input",
+      "input": {
+        "total": 10,
+        "progress": { "furthest": 2, "percent": 30 },
+        "events": [
+          { "atMs": 0, "kind": "input", "input": "key" },
+          { "atMs": 100, "kind": "scroll", "source": "resume", "current": 8, "anchor": 8 }
+        ]
+      },
+      "expected": {
+        "progress": { "furthest": 2, "percent": 30 },
+        "accepted": []
+      }
+    },
+    {
+      "op": "apply-intent-trace",
+      "name": "anchor seek is not reading",
+      "input": {
+        "total": 10,
+        "progress": { "furthest": 1, "percent": 20 },
+        "events": [
+          { "atMs": 0, "kind": "scroll", "source": "anchor-seek", "current": 7, "anchor": 7 },
+          { "atMs": 1400, "kind": "scroll", "source": "user", "current": 8, "anchor": 8 }
+        ]
+      },
+      "expected": {
+        "progress": { "furthest": 1, "percent": 20 },
+        "accepted": []
+      }
+    },
+    {
+      "op": "apply-intent-trace",
+      "name": "a same-document link suppresses its fragment scroll",
+      "input": {
+        "total": 10,
+        "progress": { "furthest": 1, "percent": 20 },
+        "events": [
+          { "atMs": 0, "kind": "input", "input": "touch" },
+          { "atMs": 50, "kind": "link-click" },
+          { "atMs": 60, "kind": "scroll", "source": "browser-fragment", "current": 8, "anchor": 8 },
+          { "atMs": 500, "kind": "scroll", "source": "user", "current": 9, "anchor": 9 }
+        ]
+      },
+      "expected": {
+        "progress": { "furthest": 1, "percent": 20 },
+        "accepted": []
+      }
+    },
+    {
+      "op": "apply-intent-trace",
+      "name": "endnote hop and return do not move the mark",
+      "input": {
+        "total": 10,
+        "progress": { "furthest": 3, "percent": 40 },
+        "events": [
+          { "atMs": 0, "kind": "input", "input": "mouse" },
+          { "atMs": 10, "kind": "link-click" },
+          { "atMs": 20, "kind": "scroll", "source": "endnote-hop", "current": 9, "anchor": 9 },
+          { "atMs": 100, "kind": "scroll", "source": "browser-fragment", "current": 3, "anchor": 3 }
+        ]
+      },
+      "expected": {
+        "progress": { "furthest": 3, "percent": 40 },
+        "accepted": []
+      }
+    },
+    {
+      "op": "apply-intent-trace",
+      "name": "follow-scroll is positioning only",
+      "input": {
+        "total": 10,
+        "progress": { "furthest": 2, "percent": 30 },
+        "events": [
+          { "atMs": 0, "kind": "scroll", "source": "follow-scroll", "current": 6, "anchor": 6 },
+          { "atMs": 100, "kind": "scroll", "source": "follow-scroll", "current": 7, "anchor": 7 }
+        ]
+      },
+      "expected": {
+        "progress": { "furthest": 2, "percent": 30 },
+        "accepted": []
+      }
+    },
+    {
+      "op": "apply-intent-trace",
+      "name": "a new genuine input reopens the gate",
+      "input": {
+        "total": 10,
+        "progress": { "furthest": 1, "percent": 20 },
+        "events": [
+          { "atMs": 0, "kind": "input", "input": "wheel" },
+          { "atMs": 1000, "kind": "scroll", "source": "user", "current": 4, "anchor": 4 },
+          { "atMs": 1001, "kind": "input", "input": "drag" },
+          { "atMs": 1500, "kind": "scroll", "source": "user", "current": 6, "anchor": 5 }
+        ]
+      },
+      "expected": {
+        "progress": { "furthest": 5, "percent": 67 },
+        "accepted": [3]
+      }
+    },
+    {
+      "op": "apply-intent-trace",
+      "name": "restoration and find-in-page never count",
+      "input": {
+        "total": 4,
+        "progress": { "furthest": -1, "percent": 0 },
+        "events": [
+          { "atMs": 0, "kind": "scroll", "source": "restoration", "current": 2, "anchor": 2 },
+          { "atMs": 10, "kind": "scroll", "source": "find-in-page", "current": 3, "anchor": 3 }
+        ]
+      },
+      "expected": {
+        "progress": { "furthest": -1, "percent": 0 },
+        "accepted": []
+      }
+    }
+  ]
+}
