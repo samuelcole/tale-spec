@@ -41,8 +41,9 @@ Units are CSS pixels; 1 px = 1 pt (iOS) = 1 dp (Android).
   human-written notes outside the prose).
 
 All three are SIL OFL; native clients bundle them. A platform where a face
-fails to load renders a fallback serif/mono — but a conforming client
-treats a missing bundled face as a defect, not a graceful degradation.
+fails to load renders a fallback serif/mono — but an implementation of this
+presentation contract treats a missing bundled face as a defect, not a graceful
+degradation.
 
 ## The page
 

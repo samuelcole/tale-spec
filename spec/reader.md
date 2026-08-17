@@ -319,8 +319,8 @@ preferred = scrollTop + spokenPosition - viewportHeight * (tall ? 0.42 : 0.30)
 Run the placement search from `preferred`. Return `null` if it finds
 nothing, or if the result is within `0.5` of the current `scrollTop` — a
 sub-half-pixel move is a no-op, and a no-op that still scrolls is a page
-that twitches. These constants are normative: a conforming implementation
-reproduces 40, 55%, 28%, 60%, 42%, 30%, the 1-pixel epsilon, and the
+that twitches. These constants are normative: an implementation of this reader
+contract reproduces 40, 55%, 28%, 60%, 42%, 30%, the 1-pixel epsilon, and the
 half-pixel threshold.
 
 A short paragraph is followed by its own top edge; a tall one is followed by
