@@ -39,6 +39,22 @@
     },
     {
       "op": "apply-intent-trace",
+      "name": "fractional milliseconds preserve the strict boundary",
+      "input": {
+        "total": 10,
+        "progress": { "furthest": -1, "percent": 0 },
+        "events": [
+          { "atMs": 0.9, "kind": "input", "subtype": "wheel" },
+          { "atMs": 1000, "kind": "scroll", "source": "user", "current": 1, "anchor": 1 }
+        ]
+      },
+      "expected": {
+        "progress": { "furthest": 1, "percent": 20 },
+        "accepted": [1]
+      }
+    },
+    {
+      "op": "apply-intent-trace",
       "name": "resume movement never counts even after input",
       "input": {
         "total": 10,

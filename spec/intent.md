@@ -23,7 +23,9 @@ The operation `apply-intent-trace` takes this input shape:
 `total` is the positive paragraph count.  The initial and result `progress`
 object is `{furthest, percent}`, where `furthest` is a zero-based paragraph
 index or `-1`, and `percent` is an integer from 0 through 100.  Every event has
-an `atMs` timestamp, relative to the start of the trace.  A `scroll` event's
+an `atMs` timestamp, relative to the start of the trace.  It is a finite,
+non-negative JSON number; fractional milliseconds are valid and must not be
+rounded or truncated by an adapter.  A `scroll` event's
 `current` and `anchor` are zero-based paragraph indexes; its percent is derived
 from `current` using the reader area's rules.  The result shape is
 `{progress, accepted}`, where `accepted` contains indexes into the original
