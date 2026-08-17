@@ -46,6 +46,12 @@ the foundation carve-out are in [`AGENTS.md`](AGENTS.md).
     no vectors yet.
   - [`spec/intent.md`](spec/intent.md) — the user-intent event gate: which
     position changes may advance local progress.
+  - [`spec/scenarios/`](spec/scenarios/) — the surface scenarios: portable,
+    prose descriptions of a reader's session, stated as user-observable setup,
+    actions, and outcomes. The authoritative conformance lane.
+    [`README.md`](spec/scenarios/README.md) states what a platform adapter may
+    translate and what it may not weaken; the first scenario is
+    [`open-and-read.md`](spec/scenarios/open-and-read.md).
 - **`vectors/`** — shared semantic unit fixtures, one JSON file per area. Where
   prose and vector disagree, the vector is the bug report and one of them must
   change under the versioning policy below. They make pure operations portable;
