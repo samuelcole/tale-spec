@@ -94,7 +94,7 @@ change are two products.
   content (in the payload of `spec/payload.md`); they never generate them.
   A reading system with two anchor generators has two contracts, so the
   generator stays server-side and out of scope here.
-- **Narration arbitration** — how narration and an already accepted reader
+- **Narration arbitration** — how narration and an intent-approved reader
   position hand control back and forth is planned as a later event-trace area.
   The raw user-intent gate is covered by
   [`spec/intent.md`](spec/intent.md); the later area consumes its result rather

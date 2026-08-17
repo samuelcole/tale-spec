@@ -17,7 +17,8 @@
       },
       "expected": {
         "progress": { "furthestIndex": 4, "percent": 60 },
-        "accepted": [1, 3],
+        "approved": [1, 3],
+        "progressWrites": [1, 3],
         "gate": { "state": "touched", "lastInputAtMs": 700 }
       }
     },
@@ -35,7 +36,8 @@
       },
       "expected": {
         "progress": { "furthestIndex": 1, "percent": 20 },
-        "accepted": [1],
+        "approved": [1],
+        "progressWrites": [1],
         "gate": { "state": "touched", "lastInputAtMs": 0 }
       }
     },
@@ -52,7 +54,8 @@
       },
       "expected": {
         "progress": { "furthestIndex": 1, "percent": 20 },
-        "accepted": [1],
+        "approved": [1],
+        "progressWrites": [1],
         "gate": { "state": "touched", "lastInputAtMs": 0.4 }
       }
     },
@@ -69,7 +72,8 @@
       },
       "expected": {
         "progress": { "furthestIndex": 2, "percent": 30 },
-        "accepted": [],
+        "approved": [],
+        "progressWrites": [],
         "gate": { "state": "touched", "lastInputAtMs": 0 }
       }
     },
@@ -86,7 +90,8 @@
       },
       "expected": {
         "progress": { "furthestIndex": 1, "percent": 20 },
-        "accepted": [],
+        "approved": [],
+        "progressWrites": [],
         "gate": { "state": "untouched" }
       }
     },
@@ -105,7 +110,8 @@
       },
       "expected": {
         "progress": { "furthestIndex": 1, "percent": 20 },
-        "accepted": [],
+        "approved": [],
+        "progressWrites": [],
         "gate": { "state": "touched", "lastInputAtMs": -950 }
       }
     },
@@ -122,7 +128,8 @@
       },
       "expected": {
         "progress": { "furthestIndex": -1, "percent": 0 },
-        "accepted": [],
+        "approved": [],
+        "progressWrites": [],
         "gate": { "state": "touched", "lastInputAtMs": -950 }
       }
     },
@@ -141,7 +148,8 @@
       },
       "expected": {
         "progress": { "furthestIndex": 3, "percent": 40 },
-        "accepted": [],
+        "approved": [],
+        "progressWrites": [],
         "gate": { "state": "touched", "lastInputAtMs": -990 }
       }
     },
@@ -158,7 +166,8 @@
       },
       "expected": {
         "progress": { "furthestIndex": 2, "percent": 30 },
-        "accepted": [],
+        "approved": [],
+        "progressWrites": [],
         "gate": { "state": "untouched" }
       }
     },
@@ -177,7 +186,8 @@
       },
       "expected": {
         "progress": { "furthestIndex": 5, "percent": 70 },
-        "accepted": [3],
+        "approved": [3],
+        "progressWrites": [3],
         "gate": { "state": "touched", "lastInputAtMs": 1001 }
       }
     },
@@ -194,7 +204,8 @@
       },
       "expected": {
         "progress": { "furthestIndex": -1, "percent": 0 },
-        "accepted": [],
+        "approved": [],
+        "progressWrites": [],
         "gate": { "state": "untouched" }
       }
     },
@@ -211,7 +222,8 @@
       },
       "expected": {
         "progress": { "furthestIndex": 5, "percent": 60 },
-        "accepted": [1],
+        "approved": [1],
+        "progressWrites": [1],
         "gate": { "state": "touched", "lastInputAtMs": 0 }
       }
     },
@@ -228,7 +240,8 @@
       },
       "expected": {
         "progress": { "furthestIndex": 6, "percent": 70 },
-        "accepted": [1],
+        "approved": [1],
+        "progressWrites": [1],
         "gate": { "state": "touched", "lastInputAtMs": 0 }
       }
     },
@@ -246,7 +259,8 @@
       },
       "expected": {
         "progress": { "furthestIndex": 6, "percent": 80 },
-        "accepted": [2],
+        "approved": [1, 2],
+        "progressWrites": [2],
         "gate": { "state": "touched", "lastInputAtMs": 0 }
       }
     },
@@ -264,7 +278,8 @@
       },
       "expected": {
         "progress": { "furthestIndex": 2, "percent": 30 },
-        "accepted": [2],
+        "approved": [2],
+        "progressWrites": [2],
         "gate": { "state": "touched", "lastInputAtMs": 0 }
       }
     },
@@ -281,7 +296,8 @@
       },
       "expected": {
         "progress": { "furthestIndex": 8, "percent": 100 },
-        "accepted": [1],
+        "approved": [1],
+        "progressWrites": [1],
         "gate": { "state": "touched", "lastInputAtMs": 0 }
       }
     },
@@ -298,7 +314,8 @@
       },
       "expected": {
         "progress": { "furthestIndex": 4, "percent": 80 },
-        "accepted": [1],
+        "approved": [1],
+        "progressWrites": [1],
         "gate": { "state": "touched", "lastInputAtMs": 0 }
       }
     },
@@ -315,7 +332,8 @@
       },
       "expected": {
         "progress": { "furthestIndex": 0, "percent": 33 },
-        "accepted": [1],
+        "approved": [1],
+        "progressWrites": [1],
         "gate": { "state": "touched", "lastInputAtMs": 0 }
       }
     },
@@ -332,7 +350,8 @@
       },
       "expected": {
         "progress": { "furthestIndex": 1, "percent": 67 },
-        "accepted": [1],
+        "approved": [1],
+        "progressWrites": [1],
         "gate": { "state": "touched", "lastInputAtMs": 0 }
       }
     },
@@ -349,7 +368,8 @@
       },
       "expected": {
         "progress": { "furthestIndex": 2, "percent": 100 },
-        "accepted": [1],
+        "approved": [1],
+        "progressWrites": [1],
         "gate": { "state": "touched", "lastInputAtMs": 0 }
       }
     },
@@ -366,13 +386,32 @@
       },
       "expected": {
         "progress": { "furthestIndex": 2, "percent": 100 },
-        "accepted": [1],
+        "approved": [1],
+        "progressWrites": [1],
         "gate": { "state": "touched", "lastInputAtMs": 0 }
       }
     },
     {
       "op": "apply-intent-trace",
-      "name": "trace timestamps determine causality while accepted keeps array indexes",
+      "name": "a same-position reader scroll is approved without a progress write",
+      "input": {
+        "total": 10,
+        "progress": { "furthestIndex": 5, "percent": 60 },
+        "events": [
+          { "atMs": 0, "kind": "input", "subtype": "touch" },
+          { "atMs": 100, "kind": "scroll", "source": "user", "current": 5, "anchor": 5 }
+        ]
+      },
+      "expected": {
+        "progress": { "furthestIndex": 5, "percent": 60 },
+        "approved": [1],
+        "progressWrites": [],
+        "gate": { "state": "touched", "lastInputAtMs": 0 }
+      }
+    },
+    {
+      "op": "apply-intent-trace",
+      "name": "trace timestamps determine causality while result lists keep array indexes",
       "input": {
         "total": 10,
         "progress": { "furthestIndex": -1, "percent": 0 },
@@ -383,7 +422,8 @@
       },
       "expected": {
         "progress": { "furthestIndex": 2, "percent": 30 },
-        "accepted": [0],
+        "approved": [0],
+        "progressWrites": [0],
         "gate": { "state": "touched", "lastInputAtMs": 0 }
       }
     },
@@ -408,6 +448,18 @@
         "events": [
           { "atMs": 0, "kind": "input", "subtype": "pointer" },
           { "atMs": 100, "kind": "scroll", "source": "user", "current": 5, "anchor": 5 }
+        ]
+      },
+      "expected": { "error": "invalid-input" }
+    },
+    {
+      "op": "apply-intent-trace",
+      "name": "an unknown event kind fails closed",
+      "input": {
+        "total": 10,
+        "progress": { "furthestIndex": -1, "percent": 0 },
+        "events": [
+          { "atMs": 0, "kind": "future-event" }
         ]
       },
       "expected": { "error": "invalid-input" }

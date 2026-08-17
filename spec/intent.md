@@ -9,7 +9,7 @@ be folded into the reader area's progress mark. Its executable contract is
 
 | op | input | result |
 | --- | --- | --- |
-| `apply-intent-trace` | `total`, `progress`, `events` | `{progress, accepted, gate}` or `{error}` |
+| `apply-intent-trace` | `total`, `progress`, `events` | `{progress, approved, progressWrites, gate}` or `{error}` |
 
 `total` is the positive paragraph count. `progress` is
 `{furthestIndex, percent}`: `furthestIndex` is the reader area's inclusive,
@@ -24,8 +24,8 @@ timestamp relative to the start of the trace. It is a finite, non-negative
 JSON number; fractional milliseconds are valid and must not be rounded or
 truncated by an adapter. Events are applied in ascending `atMs` order, stable
 by their array order when timestamps tie. This keeps callback delivery order
-from changing causality while `accepted` still reports original array indexes.
-Event fields are:
+from changing causality while the result lists still report original array
+indexes. Event fields are:
 
 | kind | required fields | meaning |
 | --- | --- | --- |
@@ -41,8 +41,11 @@ reader area's percent cap and monotonic fold remain in force.
 A successful result contains:
 
 - `progress` — the final `{furthestIndex, percent}` record;
-- `accepted` — indexes into the original `events` array for scrolls that
-  advanced either progress field; and
+- `approved` — indexes into the original `events` array for `user` scrolls
+  that arrived inside an open intent window, including backward and
+  same-position monotonic progress no-ops;
+- `progressWrites` — the subset of `approved` whose progress fold advanced
+  either field and therefore requires a stored progress write; and
 - `gate` — `{state: "untouched"}` before any genuine interaction, or
   `{state: "touched", lastInputAtMs}` afterwards. `lastInputAtMs` is the
   exact timestamp used for expiry and may be negative after a link click.
@@ -105,9 +108,10 @@ percent'       = max(percent, percent-of(current, total))
 ```
 
 `percent-of` is the reader area's 1-based, nearest-integer calculation with
-halves up and a cap at 100. The event is appended to `accepted` when either
-field moves. The other field is preserved. If neither moves, the event is a
-monotonic no-op and is not accepted.
+halves up and a cap at 100. Every eligible event is appended to `approved`
+before the fold. It is also appended to `progressWrites` when either field
+moves; the other field is preserved. If neither moves, the event remains an
+approved reader position but produces no progress write.
 
 This split matters at the end of a page: `current` can finish the percentage
 while `anchor` is `-1` or remains behind an earlier high-water mark. It also
@@ -117,17 +121,21 @@ past the new paragraph count and the percent must still cap at 100.
 ## Ownership boundary
 
 This area is the only gate from native scroll callbacks to reading progress.
-A downstream narration-arbitration machine consumes an already accepted
-reader position and its resulting progress write; it does not enumerate
-genuine input subtypes, decide whether a raw scroll is manual, or repeat the
-numeric progress fold. Conversely, a narration-driven page movement enters
-this operation as source `follow-scroll` and cannot earn reading progress.
+A downstream narration-arbitration machine consumes each event named by
+`approved`, whether or not the same index appears in `progressWrites`. That
+distinction is load-bearing: a backward or same-paragraph genuine scroll can
+suppress follow-scroll, preserve media time, or seek narration without moving
+the monotonic mark. The downstream machine does not enumerate genuine input
+subtypes, decide whether a raw scroll is manual, or repeat the numeric progress
+fold. Conversely, a narration-driven page movement enters this operation as
+source `follow-scroll` and cannot earn reading progress.
 
 The follow-scroll area being developed after this one therefore needs a
-post-gate event name such as `accepted-reader-scroll`, not a second
-`manual-scroll` gate. Its anchor-id high-water state may describe the shared
-progress record for arbitration output, but it must consume the write produced
-here rather than independently deciding that a scroll earned it.
+post-gate event name such as `approved-reader-position`, not a second
+`manual-scroll` gate. It consumes the selected position for every `approved`
+index and the optional stored-progress effect identified by `progressWrites`;
+it never decides again whether the position was genuine or whether the numeric
+fold earned a write.
 
 No DOM, UIKit, gesture recognizer, scroll physics, or animation detail belongs
 in this contract. A platform adapter translates its native callbacks into

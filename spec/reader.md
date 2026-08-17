@@ -338,7 +338,7 @@ reading.
 
 Three stateful machines remain outside this area:
 
-- **Narration arbitration** — how narration and an already accepted reader
+- **Narration arbitration** — how narration and an intent-approved reader
   position hand selection back and forth. Its later event traces consume the
   intent gate's result rather than defining another gate.
 - **Restoring a position** against a platform that applies its own scroll
