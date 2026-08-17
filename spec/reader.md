@@ -346,5 +346,4 @@ Two stateful machines remain outside this area:
 - **Confirming a destructive action** — the two-press arm-then-fire on
   actions that discard a mark.
 
-Those two machines are planned as event-trace vectors. Until those vectors
-exist, they are not covered by this suite.
+Those two machines are not yet covered by vectors.
