@@ -1,0 +1,173 @@
+{
+  "area": "follow-scroll",
+  "version": 1,
+  "cases": [
+    {
+      "op": "trace",
+      "name": "play starts at the selected paragraph and pauses exactly there",
+      "input": {
+        "paragraphs": [
+          { "anchor": "s1-p1", "section": "s1", "begin": 0 },
+          { "anchor": "s1-p2", "section": "s1", "begin": 12 }
+        ],
+        "initial": {
+          "selected": "s1-p1",
+          "mediaTime": 0,
+          "playing": false,
+          "furthest": null
+        },
+        "events": [
+          ["play", {}],
+          ["pause", {}]
+        ]
+      },
+      "expected": {
+        "steps": [
+          { "selected": "s1-p1", "mediaTime": 0, "playing": true, "furthest": null },
+          { "selected": "s1-p1", "mediaTime": 0, "playing": false, "furthest": null }
+        ],
+        "writes": []
+      }
+    },
+    {
+      "op": "trace",
+      "name": "pause and same-paragraph play preserve the exact media time",
+      "input": {
+        "paragraphs": [
+          { "anchor": "s1-p1", "section": "s1", "begin": 0 },
+          { "anchor": "s1-p2", "section": "s1", "begin": 12 }
+        ],
+        "initial": {
+          "selected": "s1-p1",
+          "mediaTime": 7.35,
+          "playing": true,
+          "furthest": "s1-p1"
+        },
+        "events": [
+          ["pause", {}],
+          ["play", {}]
+        ]
+      },
+      "expected": {
+        "steps": [
+          { "selected": "s1-p1", "mediaTime": 7.35, "playing": false, "furthest": "s1-p1" },
+          { "selected": "s1-p1", "mediaTime": 7.35, "playing": true, "furthest": "s1-p1" }
+        ],
+        "writes": []
+      }
+    },
+    {
+      "op": "trace",
+      "name": "manual scroll wins and pauses narration at the selected paragraph",
+      "input": {
+        "paragraphs": [
+          { "anchor": "s1-p1", "section": "s1", "begin": 0 },
+          { "anchor": "s1-p2", "section": "s1", "begin": 12 },
+          { "anchor": "s2-p1", "section": "s2", "begin": 40 }
+        ],
+        "initial": {
+          "selected": "s1-p1",
+          "mediaTime": 8.2,
+          "playing": true,
+          "furthest": "s1-p1"
+        },
+        "events": [
+          ["follow-scroll", { "paragraph": "s1-p2", "mediaTime": 14.1 }],
+          ["manual-scroll", { "paragraph": "s2-p1" }]
+        ]
+      },
+      "expected": {
+        "steps": [
+          { "selected": "s1-p2", "mediaTime": 14.1, "playing": true, "furthest": "s1-p1" },
+          { "selected": "s2-p1", "mediaTime": 40, "playing": false, "furthest": "s1-p1" }
+        ],
+        "writes": []
+      }
+    },
+    {
+      "op": "trace",
+      "name": "follow-scroll preserves media time while continuous playback rolls sections",
+      "input": {
+        "paragraphs": [
+          { "anchor": "s1-p1", "section": "s1", "begin": 0 },
+          { "anchor": "s1-p2", "section": "s1", "begin": 12 },
+          { "anchor": "s2-p1", "section": "s2", "begin": 30 },
+          { "anchor": "s2-p2", "section": "s2", "begin": 42 }
+        ],
+        "initial": {
+          "selected": "s1-p2",
+          "mediaTime": 18.5,
+          "playing": true,
+          "furthest": "s1-p1"
+        },
+        "events": [
+          ["follow-scroll", { "paragraph": "s1-p2", "mediaTime": 18.5 }],
+          ["section-rollover", { "paragraph": "s2-p1", "mediaTime": 30 }]
+        ]
+      },
+      "expected": {
+        "steps": [
+          { "selected": "s1-p2", "mediaTime": 18.5, "playing": true, "furthest": "s1-p1" },
+          { "selected": "s2-p1", "mediaTime": 30, "playing": true, "furthest": "s1-p2" }
+        ],
+        "writes": ["s1-p2"]
+      }
+    },
+    {
+      "op": "trace",
+      "name": "pausing after a rollover does not credit the next section",
+      "input": {
+        "paragraphs": [
+          { "anchor": "s1-p1", "section": "s1", "begin": 0 },
+          { "anchor": "s2-p1", "section": "s2", "begin": 20 },
+          { "anchor": "s2-p2", "section": "s2", "begin": 35 }
+        ],
+        "initial": {
+          "selected": "s1-p1",
+          "mediaTime": 19.9,
+          "playing": true,
+          "furthest": "s1-p1"
+        },
+        "events": [
+          ["section-rollover", { "paragraph": "s2-p1", "mediaTime": 20 }],
+          ["pause", {}],
+          ["follow-scroll", { "paragraph": "s2-p2", "mediaTime": 35 }]
+        ]
+      },
+      "expected": {
+        "steps": [
+          { "selected": "s2-p1", "mediaTime": 20, "playing": true, "furthest": "s1-p1" },
+          { "selected": "s2-p1", "mediaTime": 20, "playing": false, "furthest": "s1-p1" },
+          { "selected": "s2-p1", "mediaTime": 20, "playing": false, "furthest": "s1-p1" }
+        ],
+        "writes": []
+      }
+    },
+    {
+      "op": "trace",
+      "name": "end of book credits and stops on the final paragraph",
+      "input": {
+        "paragraphs": [
+          { "anchor": "s1-p1", "section": "s1", "begin": 0 },
+          { "anchor": "s2-p1", "section": "s2", "begin": 20 },
+          { "anchor": "s2-p2", "section": "s2", "begin": 35 }
+        ],
+        "initial": {
+          "selected": "s2-p1",
+          "mediaTime": 34.8,
+          "playing": true,
+          "furthest": "s1-p1"
+        },
+        "events": [
+          ["end-of-book", { "paragraph": "s2-p2", "mediaTime": 48.25 }]
+        ]
+      },
+      "expected": {
+        "steps": [
+          { "selected": "s2-p2", "mediaTime": 48.25, "playing": false, "furthest": "s2-p2" }
+        ],
+        "writes": ["s2-p2"]
+      }
+    }
+  ]
+}

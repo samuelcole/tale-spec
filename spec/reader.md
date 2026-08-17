@@ -330,7 +330,10 @@ band is both higher and wider.
 ## What this area does not cover
 
 Event-driven behavior. Every operation here is a pure function of geometry
-and stored numbers; nothing here says *when* to call them. In particular:
+and stored numbers; nothing here says *when* to call them. The stateful
+follow-scroll arbitration traces live in
+[`spec/follow-scroll.md`](follow-scroll.md). In particular, this area does
+not define:
 
 - **The intent gate** — which scrolls may advance progress at all. A
   reading layer only calls `advance-reading-progress` for scrolling that

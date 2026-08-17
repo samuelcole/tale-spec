@@ -28,6 +28,8 @@ product-defining lives here, once, instead of forking per platform.
   - [`spec/timeline.md`](spec/timeline.md) — the whole-book audio timeline:
     section starts, phrase lookup, and the word cut that keeps a highlight
     on the word being spoken.
+  - [`spec/follow-scroll.md`](spec/follow-scroll.md) — event traces for
+    reader intent and narration follow-scroll arbitration.
   - [`spec/payload.md`](spec/payload.md) — the shape of a tale as a client
     receives it: flat anchored blocks, styled runs. Draft; becomes the
     content API's response contract.
@@ -92,10 +94,10 @@ change are two products.
   content (in the payload of `spec/payload.md`); they never generate them.
   A reading system with two anchor generators has two contracts, so the
   generator stays server-side and out of scope here.
-- **Event-driven behavior** — which scrolls may advance progress (the intent
-  gate), and how narration and a live scroll arbitrate. Those rules are
-  planned as event-trace vectors; until then they are not covered by this
-  suite.
+- **Event-driven behavior in the pure reader area** — which scrolls may advance
+  progress and how narration and a live scroll arbitrate are stateful traces,
+  so they live in the separate [`spec/follow-scroll.md`](spec/follow-scroll.md)
+  area rather than in `spec/reader.md`.
 
 ## Versioning
 
