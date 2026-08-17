@@ -31,7 +31,8 @@ Each file in `vectors/` is one contract area:
 
 - `area` — the area name; matches the file name (`vectors/<area>.json`).
 - `version` — integer, the area's contract version (see the README's
-  versioning policy).
+  versioning policy). Runners must fail on a version they don't declare
+  support for; see below.
 - `cases[]` — every case has:
   - `op` — kebab-case operation name. The area's spec document enumerates
     its operations, their input fields, and their result shape. Runners
@@ -99,6 +100,20 @@ A semantic runner:
 3. Reports each failure with the file, `op`, `name`, expected, and actual.
 4. Fails the whole run on any unknown `area` file it has no adapter for, or
    any unknown `op` — silence is how contracts rot.
+5. Fails the whole run when a file's `version` is not the exact version its
+   adapter declares for that area.
+
+An adapter declares one integer per area — not a range, not a set, not a
+maximum. A bump means an expected value changed, so no adapter can implement
+two versions of an area at once, and anything wider would offer a way to go
+green by widening the declaration instead of migrating the implementation.
+Exact equality in both directions is deliberate: a vendored file ahead of the
+adapter and one behind it are the same event, a pin and an implementation that
+disagree. The failure names the area, the `version` found in the file, and the
+version the adapter declares, so it reads as *you owe a migration under the
+README's versioning policy* rather than as an unexplained red. A version bump
+is the gravest change this contract has; it is the one a runner must not be
+able to pass through in silence.
 
 Passing this runner proves only that the exercised operations match these
 shared fixtures. Report it as semantic or unit coverage, never as a client
