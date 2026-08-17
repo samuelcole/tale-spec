@@ -59,7 +59,11 @@ behavior removed entirely:
 
 - **A reload** keeps the same history entry, and the browser reapplies its own
   scroll offset to it. The page lands in roughly the right place whether or
-  not the product resumed anything.
+  not the product resumed anything. Note that the product itself *does* resume
+  on a reload — `may-auto-continue` in [`spec/reader.md`](../reader.md) only
+  declines on a back/forward navigation — so this scenario is deliberately
+  stricter than the behavior it tests. A test that cannot tell resuming from
+  not resuming is not evidence of either.
 - **A back or forward navigation** carries the platform's own restored
   position, and the reference reader deliberately declines to resume on one
   for exactly that reason (`may-auto-continue` in
