@@ -16,8 +16,11 @@ of the position events it accepted.
 
 The event kinds are deliberately platform-neutral:
 
-- `input` with `kind` `drag`, `deceleration`, `wheel`, `touch`, or `key` is
-  genuine reader input and opens (or refreshes) the intent window.
+- `input` with `subtype` `drag`, `deceleration`, `wheel`, `touch`, or
+  `keyboard` is genuine reader input and opens (or refreshes) the intent
+  window.  `pointer` is intentionally not a separate subtype: a platform's
+  mouse or trackpad callback is translated to `drag` or `wheel`, while a
+  touch callback is translated to `touch`.
 - `scroll` with `source` `user` is a position produced by that genuine input.
 - `scroll` with any other source (`resume`, `anchor-seek`, `endnote-hop`,
   `follow-scroll`, `find-in-page`, `restoration`, or `browser-fragment`) is
@@ -34,5 +37,4 @@ accepted event that moves neither field is still reported as not accepted.
 
 No DOM, UIKit, gesture recognizer, scroll physics, or animation detail belongs
 in this contract.  A platform adapter translates its native callbacks into
-these event kinds and runs the same traces.
-
+these event kinds and subtypes and runs the same traces.

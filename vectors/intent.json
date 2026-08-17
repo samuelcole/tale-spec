@@ -9,14 +9,14 @@
         "total": 10,
         "progress": { "furthest": -1, "percent": 0 },
         "events": [
-          { "atMs": 0, "kind": "input", "input": "drag" },
+          { "atMs": 0, "kind": "input", "subtype": "drag" },
           { "atMs": 120, "kind": "scroll", "source": "user", "current": 2, "anchor": 1 },
-          { "atMs": 700, "kind": "input", "input": "deceleration" },
+          { "atMs": 700, "kind": "input", "subtype": "deceleration" },
           { "atMs": 900, "kind": "scroll", "source": "user", "current": 5, "anchor": 4 }
         ]
       },
       "expected": {
-        "progress": { "furthest": 4, "percent": 56 },
+        "progress": { "furthest": 4, "percent": 60 },
         "accepted": [1, 3]
       }
     },
@@ -27,7 +27,7 @@
         "total": 10,
         "progress": { "furthest": -1, "percent": 0 },
         "events": [
-          { "atMs": 0, "kind": "input", "input": "wheel" },
+          { "atMs": 0, "kind": "input", "subtype": "wheel" },
           { "atMs": 999, "kind": "scroll", "source": "user", "current": 1, "anchor": 1 },
           { "atMs": 1000, "kind": "scroll", "source": "user", "current": 3, "anchor": 3 }
         ]
@@ -44,7 +44,7 @@
         "total": 10,
         "progress": { "furthest": 2, "percent": 30 },
         "events": [
-          { "atMs": 0, "kind": "input", "input": "key" },
+          { "atMs": 0, "kind": "input", "subtype": "keyboard" },
           { "atMs": 100, "kind": "scroll", "source": "resume", "current": 8, "anchor": 8 }
         ]
       },
@@ -76,7 +76,7 @@
         "total": 10,
         "progress": { "furthest": 1, "percent": 20 },
         "events": [
-          { "atMs": 0, "kind": "input", "input": "touch" },
+          { "atMs": 0, "kind": "input", "subtype": "touch" },
           { "atMs": 50, "kind": "link-click" },
           { "atMs": 60, "kind": "scroll", "source": "browser-fragment", "current": 8, "anchor": 8 },
           { "atMs": 500, "kind": "scroll", "source": "user", "current": 9, "anchor": 9 }
@@ -94,7 +94,7 @@
         "total": 10,
         "progress": { "furthest": 3, "percent": 40 },
         "events": [
-          { "atMs": 0, "kind": "input", "input": "mouse" },
+          { "atMs": 0, "kind": "input", "subtype": "drag" },
           { "atMs": 10, "kind": "link-click" },
           { "atMs": 20, "kind": "scroll", "source": "endnote-hop", "current": 9, "anchor": 9 },
           { "atMs": 100, "kind": "scroll", "source": "browser-fragment", "current": 3, "anchor": 3 }
@@ -128,14 +128,14 @@
         "total": 10,
         "progress": { "furthest": 1, "percent": 20 },
         "events": [
-          { "atMs": 0, "kind": "input", "input": "wheel" },
+          { "atMs": 0, "kind": "input", "subtype": "wheel" },
           { "atMs": 1000, "kind": "scroll", "source": "user", "current": 4, "anchor": 4 },
-          { "atMs": 1001, "kind": "input", "input": "drag" },
+          { "atMs": 1001, "kind": "input", "subtype": "drag" },
           { "atMs": 1500, "kind": "scroll", "source": "user", "current": 6, "anchor": 5 }
         ]
       },
       "expected": {
-        "progress": { "furthest": 5, "percent": 67 },
+        "progress": { "furthest": 5, "percent": 70 },
         "accepted": [3]
       }
     },
@@ -153,6 +153,55 @@
       "expected": {
         "progress": { "furthest": -1, "percent": 0 },
         "accepted": []
+      }
+    },
+    {
+      "op": "apply-intent-trace",
+      "name": "touch input opens the gate for a user scroll",
+      "input": {
+        "total": 10,
+        "progress": { "furthest": -1, "percent": 0 },
+        "events": [
+          { "atMs": 0, "kind": "input", "subtype": "touch" },
+          { "atMs": 200, "kind": "scroll", "source": "user", "current": 5, "anchor": 5 }
+        ]
+      },
+      "expected": {
+        "progress": { "furthest": 5, "percent": 60 },
+        "accepted": [1]
+      }
+    },
+    {
+      "op": "apply-intent-trace",
+      "name": "keyboard input opens the gate for a user scroll",
+      "input": {
+        "total": 10,
+        "progress": { "furthest": -1, "percent": 0 },
+        "events": [
+          { "atMs": 0, "kind": "input", "subtype": "keyboard" },
+          { "atMs": 999, "kind": "scroll", "source": "user", "current": 6, "anchor": 6 }
+        ]
+      },
+      "expected": {
+        "progress": { "furthest": 6, "percent": 70 },
+        "accepted": [1]
+      }
+    },
+    {
+      "op": "apply-intent-trace",
+      "name": "an older position is a monotonic no-op",
+      "input": {
+        "total": 10,
+        "progress": { "furthest": 5, "percent": 60 },
+        "events": [
+          { "atMs": 0, "kind": "input", "subtype": "wheel" },
+          { "atMs": 100, "kind": "scroll", "source": "user", "current": 2, "anchor": 2 },
+          { "atMs": 200, "kind": "scroll", "source": "user", "current": 7, "anchor": 6 }
+        ]
+      },
+      "expected": {
+        "progress": { "furthest": 6, "percent": 80 },
+        "accepted": [2]
       }
     }
   ]
