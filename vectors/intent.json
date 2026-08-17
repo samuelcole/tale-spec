@@ -7,17 +7,18 @@
       "name": "a drag and its deceleration advance progress",
       "input": {
         "total": 10,
-        "progress": { "furthest": -1, "percent": 0 },
+        "progress": { "furthestIndex": -1, "percent": 0 },
         "events": [
           { "atMs": 0, "kind": "input", "subtype": "drag" },
           { "atMs": 120, "kind": "scroll", "source": "user", "current": 2, "anchor": 1 },
           { "atMs": 700, "kind": "input", "subtype": "deceleration" },
-          { "atMs": 900, "kind": "scroll", "source": "user", "current": 5, "anchor": 4 }
+          { "atMs": 1200, "kind": "scroll", "source": "user", "current": 5, "anchor": 4 }
         ]
       },
       "expected": {
-        "progress": { "furthest": 4, "percent": 60 },
-        "accepted": [1, 3]
+        "progress": { "furthestIndex": 4, "percent": 60 },
+        "accepted": [1, 3],
+        "gate": { "state": "touched", "lastInputAtMs": 700 }
       }
     },
     {
@@ -25,7 +26,7 @@
       "name": "the exact one-second boundary is expired",
       "input": {
         "total": 10,
-        "progress": { "furthest": -1, "percent": 0 },
+        "progress": { "furthestIndex": -1, "percent": 0 },
         "events": [
           { "atMs": 0, "kind": "input", "subtype": "wheel" },
           { "atMs": 999, "kind": "scroll", "source": "user", "current": 1, "anchor": 1 },
@@ -33,8 +34,9 @@
         ]
       },
       "expected": {
-        "progress": { "furthest": 1, "percent": 20 },
-        "accepted": [1]
+        "progress": { "furthestIndex": 1, "percent": 20 },
+        "accepted": [1],
+        "gate": { "state": "touched", "lastInputAtMs": 0 }
       }
     },
     {
@@ -42,15 +44,16 @@
       "name": "fractional milliseconds preserve the strict boundary",
       "input": {
         "total": 10,
-        "progress": { "furthest": -1, "percent": 0 },
+        "progress": { "furthestIndex": -1, "percent": 0 },
         "events": [
-          { "atMs": 0.9, "kind": "input", "subtype": "wheel" },
+          { "atMs": 0.4, "kind": "input", "subtype": "wheel" },
           { "atMs": 1000, "kind": "scroll", "source": "user", "current": 1, "anchor": 1 }
         ]
       },
       "expected": {
-        "progress": { "furthest": 1, "percent": 20 },
-        "accepted": [1]
+        "progress": { "furthestIndex": 1, "percent": 20 },
+        "accepted": [1],
+        "gate": { "state": "touched", "lastInputAtMs": 0.4 }
       }
     },
     {
@@ -58,15 +61,16 @@
       "name": "resume movement never counts even after input",
       "input": {
         "total": 10,
-        "progress": { "furthest": 2, "percent": 30 },
+        "progress": { "furthestIndex": 2, "percent": 30 },
         "events": [
           { "atMs": 0, "kind": "input", "subtype": "keyboard" },
           { "atMs": 100, "kind": "scroll", "source": "resume", "current": 8, "anchor": 8 }
         ]
       },
       "expected": {
-        "progress": { "furthest": 2, "percent": 30 },
-        "accepted": []
+        "progress": { "furthestIndex": 2, "percent": 30 },
+        "accepted": [],
+        "gate": { "state": "touched", "lastInputAtMs": 0 }
       }
     },
     {
@@ -74,23 +78,24 @@
       "name": "anchor seek is not reading",
       "input": {
         "total": 10,
-        "progress": { "furthest": 1, "percent": 20 },
+        "progress": { "furthestIndex": 1, "percent": 20 },
         "events": [
           { "atMs": 0, "kind": "scroll", "source": "anchor-seek", "current": 7, "anchor": 7 },
           { "atMs": 1400, "kind": "scroll", "source": "user", "current": 8, "anchor": 8 }
         ]
       },
       "expected": {
-        "progress": { "furthest": 1, "percent": 20 },
-        "accepted": []
+        "progress": { "furthestIndex": 1, "percent": 20 },
+        "accepted": [],
+        "gate": { "state": "untouched" }
       }
     },
     {
       "op": "apply-intent-trace",
-      "name": "a same-document link suppresses its fragment scroll",
+      "name": "a same-document link expires an open window but stays touched",
       "input": {
         "total": 10,
-        "progress": { "furthest": 1, "percent": 20 },
+        "progress": { "furthestIndex": 1, "percent": 20 },
         "events": [
           { "atMs": 0, "kind": "input", "subtype": "touch" },
           { "atMs": 50, "kind": "link-click" },
@@ -99,8 +104,26 @@
         ]
       },
       "expected": {
-        "progress": { "furthest": 1, "percent": 20 },
-        "accepted": []
+        "progress": { "furthestIndex": 1, "percent": 20 },
+        "accepted": [],
+        "gate": { "state": "touched", "lastInputAtMs": -950 }
+      }
+    },
+    {
+      "op": "apply-intent-trace",
+      "name": "a link click never opens the intent window",
+      "input": {
+        "total": 10,
+        "progress": { "furthestIndex": -1, "percent": 0 },
+        "events": [
+          { "atMs": 50, "kind": "link-click" },
+          { "atMs": 500, "kind": "scroll", "source": "user", "current": 4, "anchor": 4 }
+        ]
+      },
+      "expected": {
+        "progress": { "furthestIndex": -1, "percent": 0 },
+        "accepted": [],
+        "gate": { "state": "touched", "lastInputAtMs": -950 }
       }
     },
     {
@@ -108,7 +131,7 @@
       "name": "endnote hop and return do not move the mark",
       "input": {
         "total": 10,
-        "progress": { "furthest": 3, "percent": 40 },
+        "progress": { "furthestIndex": 3, "percent": 40 },
         "events": [
           { "atMs": 0, "kind": "input", "subtype": "drag" },
           { "atMs": 10, "kind": "link-click" },
@@ -117,24 +140,26 @@
         ]
       },
       "expected": {
-        "progress": { "furthest": 3, "percent": 40 },
-        "accepted": []
+        "progress": { "furthestIndex": 3, "percent": 40 },
+        "accepted": [],
+        "gate": { "state": "touched", "lastInputAtMs": -990 }
       }
     },
     {
       "op": "apply-intent-trace",
-      "name": "follow-scroll is positioning only",
+      "name": "follow scroll is positioning only",
       "input": {
         "total": 10,
-        "progress": { "furthest": 2, "percent": 30 },
+        "progress": { "furthestIndex": 2, "percent": 30 },
         "events": [
           { "atMs": 0, "kind": "scroll", "source": "follow-scroll", "current": 6, "anchor": 6 },
           { "atMs": 100, "kind": "scroll", "source": "follow-scroll", "current": 7, "anchor": 7 }
         ]
       },
       "expected": {
-        "progress": { "furthest": 2, "percent": 30 },
-        "accepted": []
+        "progress": { "furthestIndex": 2, "percent": 30 },
+        "accepted": [],
+        "gate": { "state": "untouched" }
       }
     },
     {
@@ -142,7 +167,7 @@
       "name": "a new genuine input reopens the gate",
       "input": {
         "total": 10,
-        "progress": { "furthest": 1, "percent": 20 },
+        "progress": { "furthestIndex": 1, "percent": 20 },
         "events": [
           { "atMs": 0, "kind": "input", "subtype": "wheel" },
           { "atMs": 1000, "kind": "scroll", "source": "user", "current": 4, "anchor": 4 },
@@ -151,24 +176,26 @@
         ]
       },
       "expected": {
-        "progress": { "furthest": 5, "percent": 70 },
-        "accepted": [3]
+        "progress": { "furthestIndex": 5, "percent": 70 },
+        "accepted": [3],
+        "gate": { "state": "touched", "lastInputAtMs": 1001 }
       }
     },
     {
       "op": "apply-intent-trace",
-      "name": "restoration and find-in-page never count",
+      "name": "restoration and find in page never count",
       "input": {
         "total": 4,
-        "progress": { "furthest": -1, "percent": 0 },
+        "progress": { "furthestIndex": -1, "percent": 0 },
         "events": [
           { "atMs": 0, "kind": "scroll", "source": "restoration", "current": 2, "anchor": 2 },
           { "atMs": 10, "kind": "scroll", "source": "find-in-page", "current": 3, "anchor": 3 }
         ]
       },
       "expected": {
-        "progress": { "furthest": -1, "percent": 0 },
-        "accepted": []
+        "progress": { "furthestIndex": -1, "percent": 0 },
+        "accepted": [],
+        "gate": { "state": "untouched" }
       }
     },
     {
@@ -176,15 +203,16 @@
       "name": "touch input opens the gate for a user scroll",
       "input": {
         "total": 10,
-        "progress": { "furthest": -1, "percent": 0 },
+        "progress": { "furthestIndex": -1, "percent": 0 },
         "events": [
           { "atMs": 0, "kind": "input", "subtype": "touch" },
           { "atMs": 200, "kind": "scroll", "source": "user", "current": 5, "anchor": 5 }
         ]
       },
       "expected": {
-        "progress": { "furthest": 5, "percent": 60 },
-        "accepted": [1]
+        "progress": { "furthestIndex": 5, "percent": 60 },
+        "accepted": [1],
+        "gate": { "state": "touched", "lastInputAtMs": 0 }
       }
     },
     {
@@ -192,15 +220,16 @@
       "name": "keyboard input opens the gate for a user scroll",
       "input": {
         "total": 10,
-        "progress": { "furthest": -1, "percent": 0 },
+        "progress": { "furthestIndex": -1, "percent": 0 },
         "events": [
           { "atMs": 0, "kind": "input", "subtype": "keyboard" },
           { "atMs": 999, "kind": "scroll", "source": "user", "current": 6, "anchor": 6 }
         ]
       },
       "expected": {
-        "progress": { "furthest": 6, "percent": 70 },
-        "accepted": [1]
+        "progress": { "furthestIndex": 6, "percent": 70 },
+        "accepted": [1],
+        "gate": { "state": "touched", "lastInputAtMs": 0 }
       }
     },
     {
@@ -208,7 +237,7 @@
       "name": "an older position is a monotonic no-op",
       "input": {
         "total": 10,
-        "progress": { "furthest": 5, "percent": 60 },
+        "progress": { "furthestIndex": 5, "percent": 60 },
         "events": [
           { "atMs": 0, "kind": "input", "subtype": "wheel" },
           { "atMs": 100, "kind": "scroll", "source": "user", "current": 2, "anchor": 2 },
@@ -216,9 +245,172 @@
         ]
       },
       "expected": {
-        "progress": { "furthest": 6, "percent": 80 },
-        "accepted": [2]
+        "progress": { "furthestIndex": 6, "percent": 80 },
+        "accepted": [2],
+        "gate": { "state": "touched", "lastInputAtMs": 0 }
       }
+    },
+    {
+      "op": "apply-intent-trace",
+      "name": "programmatic reflow preserves an open input window",
+      "input": {
+        "total": 10,
+        "progress": { "furthestIndex": -1, "percent": 0 },
+        "events": [
+          { "atMs": 0, "kind": "input", "subtype": "drag" },
+          { "atMs": 100, "kind": "scroll", "source": "reflow", "current": 8, "anchor": 8 },
+          { "atMs": 900, "kind": "scroll", "source": "user", "current": 2, "anchor": 2 }
+        ]
+      },
+      "expected": {
+        "progress": { "furthestIndex": 2, "percent": 30 },
+        "accepted": [2],
+        "gate": { "state": "touched", "lastInputAtMs": 0 }
+      }
+    },
+    {
+      "op": "apply-intent-trace",
+      "name": "at end percent can advance while an earlier high water index holds",
+      "input": {
+        "total": 10,
+        "progress": { "furthestIndex": 8, "percent": 90 },
+        "events": [
+          { "atMs": 0, "kind": "input", "subtype": "wheel" },
+          { "atMs": 100, "kind": "scroll", "source": "user", "current": 9, "anchor": -1 }
+        ]
+      },
+      "expected": {
+        "progress": { "furthestIndex": 8, "percent": 100 },
+        "accepted": [1],
+        "gate": { "state": "touched", "lastInputAtMs": 0 }
+      }
+    },
+    {
+      "op": "apply-intent-trace",
+      "name": "furthest index can advance while an earlier percent holds",
+      "input": {
+        "total": 10,
+        "progress": { "furthestIndex": 2, "percent": 80 },
+        "events": [
+          { "atMs": 0, "kind": "input", "subtype": "touch" },
+          { "atMs": 100, "kind": "scroll", "source": "user", "current": 5, "anchor": 4 }
+        ]
+      },
+      "expected": {
+        "progress": { "furthestIndex": 4, "percent": 80 },
+        "accepted": [1],
+        "gate": { "state": "touched", "lastInputAtMs": 0 }
+      }
+    },
+    {
+      "op": "apply-intent-trace",
+      "name": "three paragraphs round the first position down",
+      "input": {
+        "total": 3,
+        "progress": { "furthestIndex": -1, "percent": 0 },
+        "events": [
+          { "atMs": 0, "kind": "input", "subtype": "wheel" },
+          { "atMs": 100, "kind": "scroll", "source": "user", "current": 0, "anchor": 0 }
+        ]
+      },
+      "expected": {
+        "progress": { "furthestIndex": 0, "percent": 33 },
+        "accepted": [1],
+        "gate": { "state": "touched", "lastInputAtMs": 0 }
+      }
+    },
+    {
+      "op": "apply-intent-trace",
+      "name": "three paragraphs round the second position up",
+      "input": {
+        "total": 3,
+        "progress": { "furthestIndex": 0, "percent": 33 },
+        "events": [
+          { "atMs": 0, "kind": "input", "subtype": "wheel" },
+          { "atMs": 100, "kind": "scroll", "source": "user", "current": 1, "anchor": 1 }
+        ]
+      },
+      "expected": {
+        "progress": { "furthestIndex": 1, "percent": 67 },
+        "accepted": [1],
+        "gate": { "state": "touched", "lastInputAtMs": 0 }
+      }
+    },
+    {
+      "op": "apply-intent-trace",
+      "name": "the final index is the whole three paragraph tale",
+      "input": {
+        "total": 3,
+        "progress": { "furthestIndex": 1, "percent": 67 },
+        "events": [
+          { "atMs": 0, "kind": "input", "subtype": "wheel" },
+          { "atMs": 100, "kind": "scroll", "source": "user", "current": 2, "anchor": 2 }
+        ]
+      },
+      "expected": {
+        "progress": { "furthestIndex": 2, "percent": 100 },
+        "accepted": [1],
+        "gate": { "state": "touched", "lastInputAtMs": 0 }
+      }
+    },
+    {
+      "op": "apply-intent-trace",
+      "name": "an index past shortened text still caps at one hundred",
+      "input": {
+        "total": 3,
+        "progress": { "furthestIndex": 2, "percent": 99 },
+        "events": [
+          { "atMs": 0, "kind": "input", "subtype": "wheel" },
+          { "atMs": 100, "kind": "scroll", "source": "user", "current": 3, "anchor": 2 }
+        ]
+      },
+      "expected": {
+        "progress": { "furthestIndex": 2, "percent": 100 },
+        "accepted": [1],
+        "gate": { "state": "touched", "lastInputAtMs": 0 }
+      }
+    },
+    {
+      "op": "apply-intent-trace",
+      "name": "trace timestamps determine causality while accepted keeps array indexes",
+      "input": {
+        "total": 10,
+        "progress": { "furthestIndex": -1, "percent": 0 },
+        "events": [
+          { "atMs": 500, "kind": "scroll", "source": "user", "current": 2, "anchor": 2 },
+          { "atMs": 0, "kind": "input", "subtype": "wheel" }
+        ]
+      },
+      "expected": {
+        "progress": { "furthestIndex": 2, "percent": 30 },
+        "accepted": [0],
+        "gate": { "state": "touched", "lastInputAtMs": 0 }
+      }
+    },
+    {
+      "op": "apply-intent-trace",
+      "name": "an unknown scroll source fails closed",
+      "input": {
+        "total": 10,
+        "progress": { "furthestIndex": -1, "percent": 0 },
+        "events": [
+          { "atMs": 0, "kind": "scroll", "source": "future-source", "current": 5, "anchor": 5 }
+        ]
+      },
+      "expected": { "error": "invalid-input" }
+    },
+    {
+      "op": "apply-intent-trace",
+      "name": "an unknown input subtype fails closed",
+      "input": {
+        "total": 10,
+        "progress": { "furthestIndex": -1, "percent": 0 },
+        "events": [
+          { "atMs": 0, "kind": "input", "subtype": "pointer" },
+          { "atMs": 100, "kind": "scroll", "source": "user", "current": 5, "anchor": 5 }
+        ]
+      },
+      "expected": { "error": "invalid-input" }
     }
   ]
 }

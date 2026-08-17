@@ -94,9 +94,15 @@ change are two products.
   content (in the payload of `spec/payload.md`); they never generate them.
   A reading system with two anchor generators has two contracts, so the
   generator stays server-side and out of scope here.
-- **Narration arbitration** — how narration and a live scroll arbitrate is
-  planned as event-trace vectors in a later area. The user-intent gate is
-  covered by [`spec/intent.md`](spec/intent.md).
+- **Narration arbitration** — how narration and an already accepted reader
+  position hand control back and forth is planned as a later event-trace area.
+  The raw user-intent gate is covered by
+  [`spec/intent.md`](spec/intent.md); the later area consumes its result rather
+  than defining a second gate.
+- **Restore retirement** — how a reading layer retires its own restore when a
+  platform later applies a competing restored scroll offset.
+- **Destructive confirmation** — the two-press arm-then-fire machine for
+  actions that discard a mark.
 
 ## Versioning
 
