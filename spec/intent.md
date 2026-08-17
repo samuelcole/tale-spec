@@ -7,12 +7,27 @@ contract is [`vectors/intent.json`](../vectors/intent.json).
 
 ## Trace format
 
-The operation `apply-intent-trace` takes an initial `progress` and an ordered
-array of `events`.  Every event has an `atMs` timestamp, relative to the start
-of the trace.  A position event also has `current` and `anchor`, zero-based
-paragraph indexes, and `percent` is derived from `current` using the reader
-area's rules.  The runner returns the final progress and the zero-based indexes
-of the position events it accepted.
+The operation `apply-intent-trace` takes this input shape:
+
+```json
+{
+  "total": 10,
+  "progress": { "furthest": 3, "percent": 40 },
+  "events": [
+    { "atMs": 0, "kind": "input", "subtype": "touch" },
+    { "atMs": 100, "kind": "scroll", "source": "user", "current": 4, "anchor": 4 }
+  ]
+}
+```
+
+`total` is the positive paragraph count.  The initial and result `progress`
+object is `{furthest, percent}`, where `furthest` is a zero-based paragraph
+index or `-1`, and `percent` is an integer from 0 through 100.  Every event has
+an `atMs` timestamp, relative to the start of the trace.  A `scroll` event's
+`current` and `anchor` are zero-based paragraph indexes; its percent is derived
+from `current` using the reader area's rules.  The result shape is
+`{progress, accepted}`, where `accepted` contains indexes into the original
+`events` array, not ordinals among the position events.
 
 The event kinds are deliberately platform-neutral:
 
