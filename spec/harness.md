@@ -1,7 +1,14 @@
-# The harness contract
+# The semantic-vector harness
 
 What a vector file contains, how a case's result is compared, and what a
-conforming test runner does. This document is normative for every area.
+semantic fixture runner does. This document is normative for every vector area.
+
+This is an implementation-unit-test contract. Loading these vectors through a
+thin adapter, even one that imports production library code, does **not** prove
+that a web page or native app conforms at its user-facing surface. Authoritative
+client conformance is the black-box integration process defined in
+[`AGENTS.md`](../AGENTS.md): launch the real product, act through its UI, and
+observe outcomes through that surface, including persistence through relaunch.
 
 ## Vector file schema
 
@@ -82,9 +89,9 @@ Deep structural equality, with:
   stamping fails. It never matches absence.
 - **Arrays**: same length, elements compared in order under these rules.
 
-## The runner
+## The semantic runner
 
-A conforming runner:
+A semantic runner:
 
 1. Loads every file in `vectors/`.
 2. For each case, dispatches `op` with `input` to the implementation under
@@ -92,6 +99,10 @@ A conforming runner:
 3. Reports each failure with the file, `op`, `name`, expected, and actual.
 4. Fails the whole run on any unknown `area` file it has no adapter for, or
    any unknown `op` — silence is how contracts rot.
+
+Passing this runner proves only that the exercised operations match these
+shared fixtures. Report it as semantic or unit coverage, never as a client
+conformance result or as evidence that a user-facing feature is complete.
 
 The suite has no order dependence: every case is independent, and any state
 an op reads (a progress store, a timeline) is part of that case's `input`.
