@@ -78,22 +78,33 @@ or a force-kill that skips the platform's exit path is out of scope.
 
 **1. Open the book at its address.**
 
-The first screen shows the start of the book: its title and its opening line.
-No text is dimmed, because none has been read. If a platform's cover pushes
-the opening line off the first screen, that is a real difference between the
-products and is resolved here — not relaxed in an adapter.
+The book opens at its cover: the book's title is on screen, the page sits at
+its start, and the reader has to move it themselves to begin reading. No text
+is dimmed, because none has been read, and nothing has moved the page on the
+reader's behalf.
 
-**2. Scroll forward through several screens of text and stop.**
+This is the contract, not a layout accident. `next-unread-index` in
+[`spec/reader.md`](../reader.md) returns `null` for a book with no saved
+position, and `null` means *open at the cover*. Whether the opening line of the
+prose also fits on that first screen is a consequence of viewport height and
+the cover's own geometry — the reference cover scales with the viewport, so the
+opening line clears the fold on a tall window, misses it on a short one, and
+never makes it on a phone. **An adapter asserts the cover, and asserts nothing
+about what fits below it.**
 
-The scroll is a real reading gesture, and the page settles without carrying on
-past where the reader let go. Call the paragraph at the top of the settled
-screen **P**. Nothing has become dimmed: text read during a session stays ink
-until the next visit.
+**2. Scroll forward from the cover, through several screens of text, and stop.**
+
+The scroll is a real reading gesture that carries the reader past the cover and
+down into the prose, and the page settles without carrying on past where they
+let go. Call the paragraph at the top of the settled screen **P**; it is well
+into the text, not the first paragraph. Nothing has become dimmed: text read
+during a session stays ink until the next visit.
 
 **3. End the session, then open the book again at its address.**
 
-- The reader is not returned to the start: the opening line is above the
-  screen.
+- The book does not open at its cover. That is what separates a resumed book
+  from a fresh one, and it is the landmark to check — not the position of the
+  opening line, which step 1 does not fix.
 - The paragraph at the top of the screen is the one immediately after **P**.
   The mark is inclusive — it names the last paragraph read *through* — so
   reading resumes at its successor, with nothing re-read and nothing skipped.
@@ -130,6 +141,11 @@ opens the intent window; step 4 is what that rule looks like to a person.
   and byline recorded for it, and the percent it renders are untested. No area
   specifies a progress indicator yet, so this scenario asserts nothing about
   one.
+- **Cover geometry.** How tall a cover is, and therefore whether any prose
+  shares its first screen, is layout rather than contract, and no area
+  specifies it. Step 1 asserts that the book opens at the cover and nothing
+  about what sits below it; a scenario that wanted to fix that would need
+  `spec/presentation.md` to fix it first.
 - **Abnormal exits.** See the session boundary.
 - **The device matrix.** Which viewports, orientations, and appearances this
   runs in is declared per platform, not here.
