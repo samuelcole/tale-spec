@@ -6,7 +6,8 @@
       "op": "trace",
       "name": "play starts at the selected paragraph and pauses exactly there",
       "input": {
-        "paragraphs": [
+        "orderedAnchors": ["s1-p1", "s1-p2"],
+        "alignedParagraphs": [
           { "anchor": "s1-p1", "section": "s1", "begin": 0 },
           { "anchor": "s1-p2", "section": "s1", "begin": 12 }
         ],
@@ -34,7 +35,8 @@
       "op": "trace",
       "name": "pause and same-paragraph play preserve the exact media time",
       "input": {
-        "paragraphs": [
+        "orderedAnchors": ["s1-p1", "s1-p2"],
+        "alignedParagraphs": [
           { "anchor": "s1-p1", "section": "s1", "begin": 0 },
           { "anchor": "s1-p2", "section": "s1", "begin": 12 }
         ],
@@ -62,7 +64,8 @@
       "op": "trace",
       "name": "play on a newly selected paragraph seeks to its begin",
       "input": {
-        "paragraphs": [
+        "orderedAnchors": ["s1-p1", "s1-p2"],
+        "alignedParagraphs": [
           { "anchor": "s1-p1", "section": "s1", "begin": 0 },
           { "anchor": "s1-p2", "section": "s1", "begin": 12 }
         ],
@@ -88,7 +91,8 @@
       "op": "trace",
       "name": "genuine changed-paragraph scroll advances reading then pauses and seeks",
       "input": {
-        "paragraphs": [
+        "orderedAnchors": ["s1-p1", "s1-p2", "s2-p1"],
+        "alignedParagraphs": [
           { "anchor": "s1-p1", "section": "s1", "begin": 0 },
           { "anchor": "s1-p2", "section": "s1", "begin": 12 },
           { "anchor": "s2-p1", "section": "s2", "begin": 40 }
@@ -117,7 +121,8 @@
       "op": "trace",
       "name": "backward manual scroll never lowers the reading mark",
       "input": {
-        "paragraphs": [
+        "orderedAnchors": ["s1-p1", "s1-p2", "s2-p1"],
+        "alignedParagraphs": [
           { "anchor": "s1-p1", "section": "s1", "begin": 0 },
           { "anchor": "s1-p2", "section": "s1", "begin": 12 },
           { "anchor": "s2-p1", "section": "s2", "begin": 40 }
@@ -144,7 +149,8 @@
       "op": "trace",
       "name": "same-narrated-paragraph scroll keeps playing and yields follow until resume",
       "input": {
-        "paragraphs": [
+        "orderedAnchors": ["s1-p1", "s1-p2", "s1-p3"],
+        "alignedParagraphs": [
           { "anchor": "s1-p1", "section": "s1", "begin": 0 },
           { "anchor": "s1-p2", "section": "s1", "begin": 12 },
           { "anchor": "s1-p3", "section": "s1", "begin": 30 }
@@ -186,7 +192,8 @@
       "op": "trace",
       "name": "programmatic follow selects the narrated paragraph without reading progress",
       "input": {
-        "paragraphs": [
+        "orderedAnchors": ["s1-p1", "s1-p2"],
+        "alignedParagraphs": [
           { "anchor": "s1-p1", "section": "s1", "begin": 0 },
           { "anchor": "s1-p2", "section": "s1", "begin": 12 }
         ],
@@ -212,7 +219,8 @@
       "op": "trace",
       "name": "ordinary within-section crossing credits the newly entered paragraph",
       "input": {
-        "paragraphs": [
+        "orderedAnchors": ["s1-p1", "s1-p2", "s1-p3"],
+        "alignedParagraphs": [
           { "anchor": "s1-p1", "section": "s1", "begin": 0 },
           { "anchor": "s1-p2", "section": "s1", "begin": 12 },
           { "anchor": "s1-p3", "section": "s1", "begin": 30 }
@@ -243,7 +251,8 @@
       "op": "trace",
       "name": "playback seek establishes a baseline and credits no crossed paragraphs",
       "input": {
-        "paragraphs": [
+        "orderedAnchors": ["s1-p1", "s1-p2", "s2-p1"],
+        "alignedParagraphs": [
           { "anchor": "s1-p1", "section": "s1", "begin": 0 },
           { "anchor": "s1-p2", "section": "s1", "begin": 12 },
           { "anchor": "s2-p1", "section": "s2", "begin": 40 }
@@ -272,7 +281,8 @@
       "op": "trace",
       "name": "continuous section rollover credits its newly entered paragraph then follows",
       "input": {
-        "paragraphs": [
+        "orderedAnchors": ["s1-p1", "s1-p2", "s2-p1", "s2-p2"],
+        "alignedParagraphs": [
           { "anchor": "s1-p1", "section": "s1", "begin": 0 },
           { "anchor": "s1-p2", "section": "s1", "begin": 12 },
           { "anchor": "s2-p1", "section": "s2", "begin": 30 },
@@ -304,7 +314,8 @@
       "op": "trace",
       "name": "end of book stops exactly without duplicating final-paragraph credit",
       "input": {
-        "paragraphs": [
+        "orderedAnchors": ["s1-p1", "s2-p1", "s2-p2"],
+        "alignedParagraphs": [
           { "anchor": "s1-p1", "section": "s1", "begin": 0 },
           { "anchor": "s2-p1", "section": "s2", "begin": 20 },
           { "anchor": "s2-p2", "section": "s2", "begin": 35 }
@@ -330,6 +341,126 @@
         ],
         "writes": [
           { "source": "hearing", "furthest": "s2-p2" }
+        ]
+      }
+    },
+    {
+      "op": "trace",
+      "name": "unaligned reader anchors resolve forward and a trailing one has no play target",
+      "input": {
+        "orderedAnchors": ["s1-p1", "s1-p2", "s1-p3", "s1-p4"],
+        "alignedParagraphs": [
+          { "anchor": "s1-p1", "section": "s1", "begin": 0 },
+          { "anchor": "s1-p3", "section": "s1", "begin": 30 }
+        ],
+        "initial": {
+          "selected": "s1-p1",
+          "mediaTime": 5,
+          "playing": true,
+          "furthest": "s1-p1",
+          "followSuppressed": false
+        },
+        "events": [
+          ["manual-scroll", { "progressAnchor": "s1-p2" }],
+          ["play", {}],
+          ["manual-scroll", { "progressAnchor": "s1-p4" }],
+          ["play", {}]
+        ]
+      },
+      "expected": {
+        "steps": [
+          { "selected": "s1-p2", "mediaTime": 30, "playing": false, "furthest": "s1-p2", "followSuppressed": false },
+          { "selected": "s1-p2", "mediaTime": 30, "playing": true, "furthest": "s1-p2", "followSuppressed": false },
+          { "selected": "s1-p4", "mediaTime": 30, "playing": false, "furthest": "s1-p4", "followSuppressed": false },
+          { "selected": "s1-p4", "mediaTime": 30, "playing": false, "furthest": "s1-p4", "followSuppressed": false }
+        ],
+        "writes": [
+          { "source": "reading", "furthest": "s1-p2" },
+          { "source": "reading", "furthest": "s1-p4" }
+        ]
+      }
+    },
+    {
+      "op": "trace",
+      "name": "follow-scroll while paused is ignored",
+      "input": {
+        "orderedAnchors": ["s1-p1", "s1-p2"],
+        "alignedParagraphs": [
+          { "anchor": "s1-p1", "section": "s1", "begin": 0 },
+          { "anchor": "s1-p2", "section": "s1", "begin": 12 }
+        ],
+        "initial": {
+          "selected": "s1-p1",
+          "mediaTime": 14.1,
+          "playing": false,
+          "furthest": "s1-p1",
+          "followSuppressed": false
+        },
+        "events": [
+          ["follow-scroll", { "paragraph": "s1-p2" }]
+        ]
+      },
+      "expected": {
+        "steps": [
+          { "selected": "s1-p1", "mediaTime": 14.1, "playing": false, "furthest": "s1-p1", "followSuppressed": false }
+        ],
+        "writes": []
+      }
+    },
+    {
+      "op": "trace",
+      "name": "pause clears active follow suppression",
+      "input": {
+        "orderedAnchors": ["s1-p1", "s1-p2"],
+        "alignedParagraphs": [
+          { "anchor": "s1-p1", "section": "s1", "begin": 0 },
+          { "anchor": "s1-p2", "section": "s1", "begin": 12 }
+        ],
+        "initial": {
+          "selected": "s1-p1",
+          "mediaTime": 5,
+          "playing": true,
+          "furthest": "s1-p1",
+          "followSuppressed": true
+        },
+        "events": [
+          ["pause", {}]
+        ]
+      },
+      "expected": {
+        "steps": [
+          { "selected": "s1-p1", "mediaTime": 5, "playing": false, "furthest": "s1-p1", "followSuppressed": false }
+        ],
+        "writes": []
+      }
+    },
+    {
+      "op": "trace",
+      "name": "end of book can first enter and credit the final paragraph while clearing suppression",
+      "input": {
+        "orderedAnchors": ["s1-p1", "s1-p2", "s1-p3"],
+        "alignedParagraphs": [
+          { "anchor": "s1-p1", "section": "s1", "begin": 0 },
+          { "anchor": "s1-p2", "section": "s1", "begin": 12 },
+          { "anchor": "s1-p3", "section": "s1", "begin": 30 }
+        ],
+        "initial": {
+          "selected": "s1-p2",
+          "mediaTime": 29.9,
+          "playing": true,
+          "furthest": "s1-p2",
+          "followSuppressed": true
+        },
+        "events": [
+          ["end-of-book", { "mediaTime": 45 }]
+        ]
+      },
+      "expected": {
+        "steps": [
+          { "selected": "s1-p2", "mediaTime": 45, "playing": false, "furthest": "s1-p3", "followSuppressed": false }
+        ],
+        "writes": [
+          { "source": "hearing", "furthest": "s1-p3" }
         ]
       }
     }
