@@ -69,3 +69,5 @@ accidental fork.
   come back to where you stopped.
 - [`fetch-fails-honestly.md`](fetch-fails-honestly.md) — a client that cannot
   reach a book says so and gives the reader a working retry.
+- [`kept-on-open.md`](kept-on-open.md) — a book you've started is a book you
+  keep: it opens and reads offline at your place, with no button anywhere.
