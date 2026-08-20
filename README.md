@@ -37,9 +37,9 @@ the foundation carve-out are in [`AGENTS.md`](AGENTS.md).
   - [`spec/timeline.md`](spec/timeline.md) — the whole-book audio timeline:
     section starts, phrase lookup, and the word cut that keeps a highlight
     on the word being spoken.
-  - [`spec/payload.md`](spec/payload.md) — the shape of a tale as a client
-    receives it: flat anchored blocks, styled runs. Draft; becomes the
-    content API's response contract.
+  - [`spec/payload.md`](spec/payload.md) — the content API response contract:
+    the exhaustive sanitized sections shared by web and native readers,
+    version-bound narration, and content-addressed HTTP validation.
   - [`spec/presentation.md`](spec/presentation.md) — the book column as a
     contract: the three voices, the paper-and-ink palette, paragraph
     geometry, and the chrome line native platforms may cross. Prose-only,
@@ -58,11 +58,11 @@ the foundation carve-out are in [`AGENTS.md`](AGENTS.md).
   they do not prove a web page or native app behaves correctly at its
   user-facing surface.
 
-The black-box surface-scenario harness is not implemented yet. Its absence
-fails closed for user-facing feature work: that work waits for the harness and
-its intentional red result. Foundation work with no user-facing behavior may
-proceed under the carve-out in [`AGENTS.md`](AGENTS.md). Until the surface
-harness drives a client through its real UI, no client may claim conformance.
+Surface scenarios have no shared runner: each product owns a hand-written
+adapter in its native integration runner. A missing adapter still fails closed
+for that product, and foundation work with no user-facing behavior may proceed
+only under the carve-out in [`AGENTS.md`](AGENTS.md). Until an adapter drives a
+client through its real UI, that client may not claim conformance.
 
 ## How to consume it
 
