@@ -48,7 +48,7 @@ not reuse the failed result.
 
 - A book already kept on the device. Offline fallback belongs to the
   kept-on-open scenario; a saved book must not be replaced by this error.
-- A missing tale (`404`), an unsupported payload version or block kind, a
+- A missing tale (`404`), an unsupported payload version or unsafe content, a
   malformed response, or a server error. Typed failures may give those states
   different words, but this scenario fixes only an unreachable transport.
 - How long a loading state waits before the transport fails, or what progress

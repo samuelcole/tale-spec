@@ -38,7 +38,8 @@ the foundation carve-out are in [`AGENTS.md`](AGENTS.md).
     section starts, phrase lookup, and the word cut that keeps a highlight
     on the word being spoken.
   - [`spec/payload.md`](spec/payload.md) — the content API response contract:
-    flat anchored blocks, styled runs, and content-addressed HTTP validation.
+    the exhaustive sanitized sections shared by web and native readers,
+    version-bound narration, and content-addressed HTTP validation.
   - [`spec/presentation.md`](spec/presentation.md) — the book column as a
     contract: the three voices, the paper-and-ink palette, paragraph
     geometry, and the chrome line native platforms may cross. Prose-only,
