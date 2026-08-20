@@ -89,8 +89,8 @@ One JSON representation per tale:
 `contentVersion` is `sha256-<digest>`, where `<digest>` is the base64url SHA-256
 of the ordered canonical section objects. A change to text, markup, attributes,
 or anchors changes it. Metadata and credit do not: their changes are covered by
-the response `ETag`, while this identity binds narration to the exact body it
-was aligned against.
+the response `ETag`. This identity lets a client reject an independently
+cached or fetched read-along response when it names a different loaded body.
 
 ## Narration and alignment
 
@@ -119,6 +119,13 @@ timings for one body must never drive another. Audio URLs, paragraph anchors,
 phrase begins, original phrase indexes, and the language-dependent word-cut
 rule all travel from the service. Absence of `narration` is the only public
 text-only state; clients do not probe or construct an alignment URL.
+
+In schema 1, the service derives both advertised versions from the currently
+served body. Alignment persistence does not record the body revision that was
+current when the timings were produced. Producers must therefore continue to
+remove sync rows before publishing a changed body and restore them only after
+realignment; `contentVersion` protects the fetched pair from cache skew, not
+from a producer that violates that lifecycle.
 
 ## HTTP identity and validation
 
