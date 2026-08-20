@@ -1,11 +1,9 @@
 # The content payload
 
-**Status: draft.** This is the shape of a tale as a native client receives
-it. Today it is produced by an exporter and consumed by the iOS spike; it
-becomes the content API's response contract when that API ships. The shape
-is specified here so every platform decodes the same thing; the *content* —
-text and anchor ids — is generated server-side and only ever received (see
-"What's deliberately absent" in the README).
+**Status: current.** This is the content API response contract: the shape of a
+tale as a native client receives it. The *content* — text and anchor ids — is
+generated server-side and only ever received (see "What's deliberately
+absent" in the README).
 
 One JSON document per tale:
 
@@ -35,6 +33,11 @@ One JSON document per tale:
 
 ## Rules
 
+- `schema` is the integer contract version described under Versioning.
+- `slug` is the canonical reading path without its leading slash: `dracula`
+  for a curated book, `@handle/tale-slug` for a published user tale.
+- `title` is the tale's display title. `author` is its display byline, or
+  `null` when the source names none; a client does not guess one.
 - `blocks` is **flat, in document order**. No nesting; structure that
   matters to rendering becomes attributes.
 - `credit` carries the cover's attribution — where the text was set from
@@ -82,7 +85,25 @@ One JSON document per tale:
   silently — an unknown kind means the payload is newer than the client,
   not that the block is optional.
 
-## Draft gaps
+## HTTP identity and validation
+
+The payload is a subresource of the canonical reading URL:
+
+- `/dracula` → `/dracula/tale.json`
+- `/@handle/tale-slug` → `/@handle/tale-slug/tale.json`
+
+A successful response is `application/json; charset=utf-8`. Its strong `ETag`
+is `"sha256-<digest>"`, where `<digest>` is the base64url SHA-256 of the exact
+response bytes. That validator is the payload's content address: metadata,
+credit, an anchor, styling, or text changing produces a different identity.
+
+Responses say `Cache-Control: public, max-age=0, must-revalidate`. A request
+whose `If-None-Match` contains the current validator returns `304` with no
+body. Clients use those ordinary HTTP validators; they do not put a second
+speculative cache in front of them. A missing or unreadable public tale is
+`404`, never an empty successful payload.
+
+## Known schema 1 gaps
 
 Known losses in schema 1, recorded rather than papered over; each is a
 deliberate call awaiting a real need:

@@ -6,10 +6,14 @@ It is the authoritative conformance lane. `vectors/` proves that a pure
 operation computes the specified answer; a scenario proves that the shipped
 product, driven the way a person drives it, behaves the specified way.
 
-Each scenario is run by a hand-written adapter per platform — a browser spec
-against the real web reader, an XCUITest against the real app — in that
-platform's own test runner. Platform repositories own their adapters, launch
-mechanism, device matrix, and diagnostics. This directory owns the outcomes.
+Each scenario is run by a hand-written adapter in every product that performs
+the behavior — a browser spec against the real web reader, an XCUITest against
+the real app — in that platform's own test runner. Platform repositories own
+their adapters, launch mechanism, device matrix, and diagnostics. This
+directory owns the outcomes. A producer does not become a consumer merely to
+manufacture a green result: a server's HTTP payload contract is proved at its
+real HTTP boundary, while the clients that fetch it own the surface scenario
+for loading and failure.
 
 ## Prose, not a format
 
@@ -63,3 +67,5 @@ accidental fork.
 
 - [`open-and-read.md`](open-and-read.md) — open a book, read down it, leave,
   come back to where you stopped.
+- [`fetch-fails-honestly.md`](fetch-fails-honestly.md) — a client that cannot
+  reach a book says so and gives the reader a working retry.
