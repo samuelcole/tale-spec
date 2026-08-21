@@ -40,6 +40,8 @@ the foundation carve-out are in [`AGENTS.md`](AGENTS.md).
   - [`spec/payload.md`](spec/payload.md) — the content API response contract:
     the exhaustive sanitized sections shared by web and native readers,
     version-bound narration, and content-addressed HTTP validation.
+  - [`spec/follow-scroll.md`](spec/follow-scroll.md) — event traces for
+    narration arbitration after the intent gate approves a reader position.
   - [`spec/presentation.md`](spec/presentation.md) — the book column as a
     contract: the three voices, the paper-and-ink palette, paragraph
     geometry, and the chrome line native platforms may cross. Prose-only,
@@ -140,11 +142,6 @@ different sides of a semantic change are two products.
   content (in the payload of `spec/payload.md`); they never generate them.
   A reading system with two anchor generators has two contracts, so the
   generator stays server-side and out of scope here.
-- **Narration arbitration** — how narration and an intent-approved reader
-  position hand control back and forth is planned as a later event-trace area.
-  The raw user-intent gate is covered by
-  [`spec/intent.md`](spec/intent.md); the later area consumes its result rather
-  than defining a second gate.
 - **Restore retirement** — how a reading layer retires its own restore when a
   platform later applies a competing restored scroll offset.
 - **Destructive confirmation** — the two-press arm-then-fire machine for

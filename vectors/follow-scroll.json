@@ -1,0 +1,468 @@
+{
+  "area": "follow-scroll",
+  "version": 1,
+  "cases": [
+    {
+      "op": "trace",
+      "name": "play starts at the selected paragraph and pauses exactly there",
+      "input": {
+        "orderedAnchors": ["s1-p1", "s1-p2"],
+        "alignedParagraphs": [
+          { "anchor": "s1-p1", "section": "s1", "begin": 0 },
+          { "anchor": "s1-p2", "section": "s1", "begin": 12 }
+        ],
+        "initial": {
+          "selected": "s1-p1",
+          "mediaTime": 0,
+          "playing": false,
+          "furthest": null,
+          "followSuppressed": false
+        },
+        "events": [
+          ["play", {}],
+          ["pause", {}]
+        ]
+      },
+      "expected": {
+        "steps": [
+          { "selected": "s1-p1", "mediaTime": 0, "playing": true, "furthest": null, "followSuppressed": false },
+          { "selected": "s1-p1", "mediaTime": 0, "playing": false, "furthest": null, "followSuppressed": false }
+        ],
+        "writes": []
+      }
+    },
+    {
+      "op": "trace",
+      "name": "pause and same-paragraph play preserve the exact media time",
+      "input": {
+        "orderedAnchors": ["s1-p1", "s1-p2"],
+        "alignedParagraphs": [
+          { "anchor": "s1-p1", "section": "s1", "begin": 0 },
+          { "anchor": "s1-p2", "section": "s1", "begin": 12 }
+        ],
+        "initial": {
+          "selected": "s1-p1",
+          "mediaTime": 7.35,
+          "playing": true,
+          "furthest": "s1-p1",
+          "followSuppressed": false
+        },
+        "events": [
+          ["pause", {}],
+          ["play", {}]
+        ]
+      },
+      "expected": {
+        "steps": [
+          { "selected": "s1-p1", "mediaTime": 7.35, "playing": false, "furthest": "s1-p1", "followSuppressed": false },
+          { "selected": "s1-p1", "mediaTime": 7.35, "playing": true, "furthest": "s1-p1", "followSuppressed": false }
+        ],
+        "writes": []
+      }
+    },
+    {
+      "op": "trace",
+      "name": "play on a newly selected paragraph seeks to its begin",
+      "input": {
+        "orderedAnchors": ["s1-p1", "s1-p2"],
+        "alignedParagraphs": [
+          { "anchor": "s1-p1", "section": "s1", "begin": 0 },
+          { "anchor": "s1-p2", "section": "s1", "begin": 12 }
+        ],
+        "initial": {
+          "selected": "s1-p2",
+          "mediaTime": 7.35,
+          "playing": false,
+          "furthest": "s1-p1",
+          "followSuppressed": false
+        },
+        "events": [
+          ["play", {}]
+        ]
+      },
+      "expected": {
+        "steps": [
+          { "selected": "s1-p2", "mediaTime": 12, "playing": true, "furthest": "s1-p1", "followSuppressed": false }
+        ],
+        "writes": []
+      }
+    },
+    {
+      "op": "trace",
+      "name": "genuine changed-paragraph scroll advances reading then pauses and seeks",
+      "input": {
+        "orderedAnchors": ["s1-p1", "s1-p2", "s2-p1"],
+        "alignedParagraphs": [
+          { "anchor": "s1-p1", "section": "s1", "begin": 0 },
+          { "anchor": "s1-p2", "section": "s1", "begin": 12 },
+          { "anchor": "s2-p1", "section": "s2", "begin": 40 }
+        ],
+        "initial": {
+          "selected": "s1-p1",
+          "mediaTime": 8.2,
+          "playing": true,
+          "furthest": "s1-p1",
+          "followSuppressed": false
+        },
+        "events": [
+          ["approved-reader-position", { "selected": "s2-p1", "progressWrite": { "furthest": "s2-p1" } }]
+        ]
+      },
+      "expected": {
+        "steps": [
+          { "selected": "s2-p1", "mediaTime": 40, "playing": false, "furthest": "s2-p1", "followSuppressed": false }
+        ],
+        "writes": [
+          { "source": "reading", "furthest": "s2-p1" }
+        ]
+      }
+    },
+    {
+      "op": "trace",
+      "name": "approved backward position carries no progress write",
+      "input": {
+        "orderedAnchors": ["s1-p1", "s1-p2", "s2-p1"],
+        "alignedParagraphs": [
+          { "anchor": "s1-p1", "section": "s1", "begin": 0 },
+          { "anchor": "s1-p2", "section": "s1", "begin": 12 },
+          { "anchor": "s2-p1", "section": "s2", "begin": 40 }
+        ],
+        "initial": {
+          "selected": "s2-p1",
+          "mediaTime": 44,
+          "playing": true,
+          "furthest": "s2-p1",
+          "followSuppressed": false
+        },
+        "events": [
+          ["approved-reader-position", { "selected": "s1-p2", "progressWrite": null }]
+        ]
+      },
+      "expected": {
+        "steps": [
+          { "selected": "s1-p2", "mediaTime": 12, "playing": false, "furthest": "s2-p1", "followSuppressed": false }
+        ],
+        "writes": []
+      }
+    },
+    {
+      "op": "trace",
+      "name": "same-narrated-paragraph scroll keeps playing and yields follow until resume",
+      "input": {
+        "orderedAnchors": ["s1-p1", "s1-p2", "s1-p3"],
+        "alignedParagraphs": [
+          { "anchor": "s1-p1", "section": "s1", "begin": 0 },
+          { "anchor": "s1-p2", "section": "s1", "begin": 12 },
+          { "anchor": "s1-p3", "section": "s1", "begin": 30 }
+        ],
+        "initial": {
+          "selected": "s1-p2",
+          "mediaTime": 18.5,
+          "playing": true,
+          "furthest": "s1-p1",
+          "followSuppressed": false
+        },
+        "events": [
+          ["approved-reader-position", { "selected": "s1-p2", "progressWrite": { "furthest": "s1-p2" } }],
+          ["playback-crossing", { "mediaTime": 30.1 }],
+          ["follow-scroll", { "paragraph": "s1-p3" }],
+          ["resume-follow", { "quietMs": 2499 }],
+          ["follow-scroll", { "paragraph": "s1-p3" }],
+          ["resume-follow", { "quietMs": 2500 }],
+          ["follow-scroll", { "paragraph": "s1-p3" }]
+        ]
+      },
+      "expected": {
+        "steps": [
+          { "selected": "s1-p2", "mediaTime": 18.5, "playing": true, "furthest": "s1-p2", "followSuppressed": true },
+          { "selected": "s1-p2", "mediaTime": 30.1, "playing": true, "furthest": "s1-p3", "followSuppressed": true },
+          { "selected": "s1-p2", "mediaTime": 30.1, "playing": true, "furthest": "s1-p3", "followSuppressed": true },
+          { "selected": "s1-p2", "mediaTime": 30.1, "playing": true, "furthest": "s1-p3", "followSuppressed": true },
+          { "selected": "s1-p2", "mediaTime": 30.1, "playing": true, "furthest": "s1-p3", "followSuppressed": true },
+          { "selected": "s1-p2", "mediaTime": 30.1, "playing": true, "furthest": "s1-p3", "followSuppressed": false },
+          { "selected": "s1-p3", "mediaTime": 30.1, "playing": true, "furthest": "s1-p3", "followSuppressed": false }
+        ],
+        "writes": [
+          { "source": "reading", "furthest": "s1-p2" },
+          { "source": "hearing", "furthest": "s1-p3" }
+        ]
+      }
+    },
+    {
+      "op": "trace",
+      "name": "programmatic follow selects the narrated paragraph without reading progress",
+      "input": {
+        "orderedAnchors": ["s1-p1", "s1-p2"],
+        "alignedParagraphs": [
+          { "anchor": "s1-p1", "section": "s1", "begin": 0 },
+          { "anchor": "s1-p2", "section": "s1", "begin": 12 }
+        ],
+        "initial": {
+          "selected": "s1-p1",
+          "mediaTime": 14.1,
+          "playing": true,
+          "furthest": "s1-p1",
+          "followSuppressed": false
+        },
+        "events": [
+          ["follow-scroll", { "paragraph": "s1-p2" }]
+        ]
+      },
+      "expected": {
+        "steps": [
+          { "selected": "s1-p2", "mediaTime": 14.1, "playing": true, "furthest": "s1-p1", "followSuppressed": false }
+        ],
+        "writes": []
+      }
+    },
+    {
+      "op": "trace",
+      "name": "ordinary within-section crossing credits the newly entered paragraph",
+      "input": {
+        "orderedAnchors": ["s1-p1", "s1-p2", "s1-p3"],
+        "alignedParagraphs": [
+          { "anchor": "s1-p1", "section": "s1", "begin": 0 },
+          { "anchor": "s1-p2", "section": "s1", "begin": 12 },
+          { "anchor": "s1-p3", "section": "s1", "begin": 30 }
+        ],
+        "initial": {
+          "selected": "s1-p1",
+          "mediaTime": 11.9,
+          "playing": true,
+          "furthest": "s1-p1",
+          "followSuppressed": false
+        },
+        "events": [
+          ["playback-crossing", { "mediaTime": 12.1 }],
+          ["follow-scroll", { "paragraph": "s1-p2" }]
+        ]
+      },
+      "expected": {
+        "steps": [
+          { "selected": "s1-p1", "mediaTime": 12.1, "playing": true, "furthest": "s1-p2", "followSuppressed": false },
+          { "selected": "s1-p2", "mediaTime": 12.1, "playing": true, "furthest": "s1-p2", "followSuppressed": false }
+        ],
+        "writes": [
+          { "source": "hearing", "furthest": "s1-p2" }
+        ]
+      }
+    },
+    {
+      "op": "trace",
+      "name": "playback seek establishes a baseline and credits no crossed paragraphs",
+      "input": {
+        "orderedAnchors": ["s1-p1", "s1-p2", "s2-p1"],
+        "alignedParagraphs": [
+          { "anchor": "s1-p1", "section": "s1", "begin": 0 },
+          { "anchor": "s1-p2", "section": "s1", "begin": 12 },
+          { "anchor": "s2-p1", "section": "s2", "begin": 40 }
+        ],
+        "initial": {
+          "selected": "s1-p1",
+          "mediaTime": 8.2,
+          "playing": true,
+          "furthest": "s1-p1",
+          "followSuppressed": false
+        },
+        "events": [
+          ["playback-seek", { "mediaTime": 43 }],
+          ["follow-scroll", { "paragraph": "s2-p1" }]
+        ]
+      },
+      "expected": {
+        "steps": [
+          { "selected": "s1-p1", "mediaTime": 43, "playing": true, "furthest": "s1-p1", "followSuppressed": false },
+          { "selected": "s2-p1", "mediaTime": 43, "playing": true, "furthest": "s1-p1", "followSuppressed": false }
+        ],
+        "writes": []
+      }
+    },
+    {
+      "op": "trace",
+      "name": "continuous section rollover credits its newly entered paragraph then follows",
+      "input": {
+        "orderedAnchors": ["s1-p1", "s1-p2", "s2-p1", "s2-p2"],
+        "alignedParagraphs": [
+          { "anchor": "s1-p1", "section": "s1", "begin": 0 },
+          { "anchor": "s1-p2", "section": "s1", "begin": 12 },
+          { "anchor": "s2-p1", "section": "s2", "begin": 30 },
+          { "anchor": "s2-p2", "section": "s2", "begin": 42 }
+        ],
+        "initial": {
+          "selected": "s1-p2",
+          "mediaTime": 29.9,
+          "playing": true,
+          "furthest": "s1-p1",
+          "followSuppressed": false
+        },
+        "events": [
+          ["section-rollover", { "mediaTime": 30 }],
+          ["follow-scroll", { "paragraph": "s2-p1" }]
+        ]
+      },
+      "expected": {
+        "steps": [
+          { "selected": "s1-p2", "mediaTime": 30, "playing": true, "furthest": "s2-p1", "followSuppressed": false },
+          { "selected": "s2-p1", "mediaTime": 30, "playing": true, "furthest": "s2-p1", "followSuppressed": false }
+        ],
+        "writes": [
+          { "source": "hearing", "furthest": "s2-p1" }
+        ]
+      }
+    },
+    {
+      "op": "trace",
+      "name": "end of book stops exactly without duplicating final-paragraph credit",
+      "input": {
+        "orderedAnchors": ["s1-p1", "s2-p1", "s2-p2"],
+        "alignedParagraphs": [
+          { "anchor": "s1-p1", "section": "s1", "begin": 0 },
+          { "anchor": "s2-p1", "section": "s2", "begin": 20 },
+          { "anchor": "s2-p2", "section": "s2", "begin": 35 }
+        ],
+        "initial": {
+          "selected": "s2-p1",
+          "mediaTime": 34.8,
+          "playing": true,
+          "furthest": "s2-p1",
+          "followSuppressed": false
+        },
+        "events": [
+          ["playback-crossing", { "mediaTime": 35.1 }],
+          ["follow-scroll", { "paragraph": "s2-p2" }],
+          ["end-of-book", { "mediaTime": 48.25 }]
+        ]
+      },
+      "expected": {
+        "steps": [
+          { "selected": "s2-p1", "mediaTime": 35.1, "playing": true, "furthest": "s2-p2", "followSuppressed": false },
+          { "selected": "s2-p2", "mediaTime": 35.1, "playing": true, "furthest": "s2-p2", "followSuppressed": false },
+          { "selected": "s2-p2", "mediaTime": 48.25, "playing": false, "furthest": "s2-p2", "followSuppressed": false }
+        ],
+        "writes": [
+          { "source": "hearing", "furthest": "s2-p2" }
+        ]
+      }
+    },
+    {
+      "op": "trace",
+      "name": "unaligned reader anchors resolve forward and a trailing one has no play target",
+      "input": {
+        "orderedAnchors": ["s1-p1", "s1-p2", "s1-p3", "s1-p4"],
+        "alignedParagraphs": [
+          { "anchor": "s1-p1", "section": "s1", "begin": 0 },
+          { "anchor": "s1-p3", "section": "s1", "begin": 30 }
+        ],
+        "initial": {
+          "selected": "s1-p1",
+          "mediaTime": 5,
+          "playing": true,
+          "furthest": "s1-p1",
+          "followSuppressed": false
+        },
+        "events": [
+          ["approved-reader-position", { "selected": "s1-p2", "progressWrite": { "furthest": "s1-p2" } }],
+          ["play", {}],
+          ["approved-reader-position", { "selected": "s1-p4", "progressWrite": { "furthest": "s1-p4" } }],
+          ["play", {}]
+        ]
+      },
+      "expected": {
+        "steps": [
+          { "selected": "s1-p2", "mediaTime": 30, "playing": false, "furthest": "s1-p2", "followSuppressed": false },
+          { "selected": "s1-p2", "mediaTime": 30, "playing": true, "furthest": "s1-p2", "followSuppressed": false },
+          { "selected": "s1-p4", "mediaTime": 30, "playing": false, "furthest": "s1-p4", "followSuppressed": false },
+          { "selected": "s1-p4", "mediaTime": 30, "playing": false, "furthest": "s1-p4", "followSuppressed": false }
+        ],
+        "writes": [
+          { "source": "reading", "furthest": "s1-p2" },
+          { "source": "reading", "furthest": "s1-p4" }
+        ]
+      }
+    },
+    {
+      "op": "trace",
+      "name": "follow-scroll while paused is ignored",
+      "input": {
+        "orderedAnchors": ["s1-p1", "s1-p2"],
+        "alignedParagraphs": [
+          { "anchor": "s1-p1", "section": "s1", "begin": 0 },
+          { "anchor": "s1-p2", "section": "s1", "begin": 12 }
+        ],
+        "initial": {
+          "selected": "s1-p1",
+          "mediaTime": 14.1,
+          "playing": false,
+          "furthest": "s1-p1",
+          "followSuppressed": false
+        },
+        "events": [
+          ["follow-scroll", { "paragraph": "s1-p2" }]
+        ]
+      },
+      "expected": {
+        "steps": [
+          { "selected": "s1-p1", "mediaTime": 14.1, "playing": false, "furthest": "s1-p1", "followSuppressed": false }
+        ],
+        "writes": []
+      }
+    },
+    {
+      "op": "trace",
+      "name": "pause clears active follow suppression",
+      "input": {
+        "orderedAnchors": ["s1-p1", "s1-p2"],
+        "alignedParagraphs": [
+          { "anchor": "s1-p1", "section": "s1", "begin": 0 },
+          { "anchor": "s1-p2", "section": "s1", "begin": 12 }
+        ],
+        "initial": {
+          "selected": "s1-p1",
+          "mediaTime": 5,
+          "playing": true,
+          "furthest": "s1-p1",
+          "followSuppressed": true
+        },
+        "events": [
+          ["pause", {}]
+        ]
+      },
+      "expected": {
+        "steps": [
+          { "selected": "s1-p1", "mediaTime": 5, "playing": false, "furthest": "s1-p1", "followSuppressed": false }
+        ],
+        "writes": []
+      }
+    },
+    {
+      "op": "trace",
+      "name": "end of book can first enter and credit the final paragraph while clearing suppression",
+      "input": {
+        "orderedAnchors": ["s1-p1", "s1-p2", "s1-p3"],
+        "alignedParagraphs": [
+          { "anchor": "s1-p1", "section": "s1", "begin": 0 },
+          { "anchor": "s1-p2", "section": "s1", "begin": 12 },
+          { "anchor": "s1-p3", "section": "s1", "begin": 30 }
+        ],
+        "initial": {
+          "selected": "s1-p2",
+          "mediaTime": 29.9,
+          "playing": true,
+          "furthest": "s1-p2",
+          "followSuppressed": true
+        },
+        "events": [
+          ["end-of-book", { "mediaTime": 45 }]
+        ]
+      },
+      "expected": {
+        "steps": [
+          { "selected": "s1-p2", "mediaTime": 45, "playing": false, "furthest": "s1-p3", "followSuppressed": false }
+        ],
+        "writes": [
+          { "source": "hearing", "furthest": "s1-p3" }
+        ]
+      }
+    }
+  ]
+}
