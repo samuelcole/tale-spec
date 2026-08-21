@@ -105,7 +105,7 @@
           "followSuppressed": false
         },
         "events": [
-          ["manual-scroll", { "progressAnchor": "s2-p1" }]
+          ["approved-reader-position", { "selected": "s2-p1", "progressWrite": { "furthest": "s2-p1" } }]
         ]
       },
       "expected": {
@@ -119,7 +119,7 @@
     },
     {
       "op": "trace",
-      "name": "backward manual scroll never lowers the reading mark",
+      "name": "approved backward position carries no progress write",
       "input": {
         "orderedAnchors": ["s1-p1", "s1-p2", "s2-p1"],
         "alignedParagraphs": [
@@ -135,7 +135,7 @@
           "followSuppressed": false
         },
         "events": [
-          ["manual-scroll", { "progressAnchor": "s1-p2" }]
+          ["approved-reader-position", { "selected": "s1-p2", "progressWrite": null }]
         ]
       },
       "expected": {
@@ -163,7 +163,7 @@
           "followSuppressed": false
         },
         "events": [
-          ["manual-scroll", { "progressAnchor": "s1-p2" }],
+          ["approved-reader-position", { "selected": "s1-p2", "progressWrite": { "furthest": "s1-p2" } }],
           ["playback-crossing", { "mediaTime": 30.1 }],
           ["follow-scroll", { "paragraph": "s1-p3" }],
           ["resume-follow", { "quietMs": 2499 }],
@@ -361,9 +361,9 @@
           "followSuppressed": false
         },
         "events": [
-          ["manual-scroll", { "progressAnchor": "s1-p2" }],
+          ["approved-reader-position", { "selected": "s1-p2", "progressWrite": { "furthest": "s1-p2" } }],
           ["play", {}],
-          ["manual-scroll", { "progressAnchor": "s1-p4" }],
+          ["approved-reader-position", { "selected": "s1-p4", "progressWrite": { "furthest": "s1-p4" } }],
           ["play", {}]
         ]
       },

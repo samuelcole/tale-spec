@@ -28,8 +28,10 @@ the paragraph's whole-book media time; begins are finite, non-negative, and
 strictly increasing. An anchor absent from `alignedParagraphs` is unaligned;
 absence is the only marker, exactly as in the timeline area.
 
-Every `selected`, non-null `furthest`, and `manual-scroll.progressAnchor`
-occurs in `orderedAnchors`; these anchors need not be aligned. A
+Every `selected`, non-null `furthest`,
+`approved-reader-position.selected`, and non-null
+`approved-reader-position.progressWrite.furthest` occurs in `orderedAnchors`;
+these anchors need not be aligned. A
 `follow-scroll.paragraph` is a narration target and therefore must occur in
 `alignedParagraphs`.
 
@@ -59,10 +61,13 @@ state snapshot in `steps`, including ignored events. Every snapshot contains
 the same five fields as `initial`. `writes` is the ordered list of progress
 writes across the whole trace. A write is
 `{"source":"reading"|"hearing","furthest":"<anchor>"}`. It is emitted only
-when its anchor is later in `orderedAnchors` than the current `furthest` (with
-`null` before every anchor); the state and write then take that later anchor.
-Thus both reading and hearing are monotone. Percent is not duplicated here:
-the reader area's `advance-reading-progress` operation remains its authority.
+when hearing crosses into an anchor later than the current `furthest`, or when
+an approved reader position carries the intent gate's already-decided
+`progressWrite`. Hearing performs the monotone fold here. Reading does not:
+the event applies and reports the gate's result exactly. A non-null
+`progressWrite.furthest` must therefore be later than the current `furthest`;
+adapters reject an input that claims otherwise. Percent is not duplicated
+here: the intent and reader areas remain its authority.
 
 Inputs outside the preconditions stated here are not variants of the
 operation. Adapters should reject them rather than inventing recovery rules.
@@ -80,16 +85,21 @@ operation. Adapters should reject them rather than inventing recovery rules.
   progress. `followSuppressed` becomes false in every outcome.
 - `pause` takes `{}`. It stops playback, preserves `selected` and `mediaTime`,
   and clears `followSuppressed`.
-- `manual-scroll` takes `{progressAnchor}`. This event means the intent gate
-  has already proved genuine wheel, touch, keyboard, or pointer input;
-  programmatic movement must use `follow-scroll` instead. First, fold
-  `progressAnchor` monotonically into `furthest` with source `reading`. Then
-  select that anchor and hand it to narration. If it is the paragraph
+- `approved-reader-position` takes `{selected, progressWrite}`. It is not a
+  second manual-scroll gate: it is emitted only for an index in the intent
+  area's `approved` result. `selected` is that scroll event's current reader
+  paragraph. `progressWrite` is either `null` or an object containing the
+  resulting `furthest`, mirroring whether the same index appears in the intent
+  area's `progressWrites`; when present, apply it before arbitration and append
+  the corresponding source `reading` write. Programmatic movement never enters
+  this event — it uses `follow-scroll` instead. Select `selected` and hand it
+  to narration. If it is the paragraph
   currently narrated, preserve the exact media time and playing state; while
   playing, set `followSuppressed` true. If it differs, pause and resolve begin
   at or after it: seek when the result is a number, or preserve `mediaTime`
   when it is `null`; then clear suppression. The progress fold happens before
-  this audio arbitration, matching the reader's advance-before-announce hand-off.
+  this audio arbitration in the intent/reader area; this event consumes that
+  result instead of defining another eligibility or progress rule.
 
 ### Narration position events
 
@@ -131,14 +141,14 @@ an alternate rule and not a reason to encode the skipped credit here.
   selects that paragraph. While paused or `followSuppressed`, it is a no-op.
   It never writes progress: automatic page movement is not reader intent.
 - `resume-follow` takes `{quietMs}`, a finite non-negative number measuring
-  wall-clock milliseconds since the **most recent** same-paragraph manual
+  wall-clock milliseconds since the **most recent** same-paragraph approved
   scroll. While playing and suppressed, it clears `followSuppressed` when
   `quietMs >= 2500`; before that threshold it is a no-op. A later
-  `follow-scroll` may then position the page. Another same-paragraph manual
+  `follow-scroll` may then position the page. Another same-paragraph approved
   scroll resets the measurement to zero, so a superseded deadline cannot
   resume follow.
 
 How a platform schedules the logical check, plus scroll animation, viewport
 coordinates, and audio APIs, belongs to its adapter. The 2500 ms threshold and
 ordering do not: no automatic follow may take effect before the most recent
-manual scroll has been quiet for that long.
+approved reader position has been quiet for that long.
