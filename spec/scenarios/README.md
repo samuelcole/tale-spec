@@ -74,3 +74,6 @@ accidental fork.
 - [`note-and-back.md`](note-and-back.md) — a book's endnotes are part of the
   book: the reference hops to the note, the note hops back, and the round
   trip never moves the mark.
+- [`play-and-pocket.md`](play-and-pocket.md) — press play and the voice
+  starts where your reading stands, carries on with the screen away, holds
+  its place across a pause, and moves the one mark.
