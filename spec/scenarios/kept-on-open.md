@@ -136,7 +136,8 @@ Either way onward satisfies the scenario; a dead end does not.
   and never fills anything.
 - **What rides along with the text.** Narration audio and its alignment are
   kept by playing, not by opening, and belong to the read-along scenarios.
-  Endnotes belong to the endnotes scenario once the payload carries them.
+  Endnotes belong to [`note-and-back.md`](note-and-back.md); taking its round
+  trip offline is that scenario's named extension, not a step here.
 - **The list of kept books.** Step 4's way onward may land on one, but what a
   library shows offline — which rows dim, what the dimming says — is not yet
   a portable surface.

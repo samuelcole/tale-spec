@@ -71,3 +71,6 @@ accidental fork.
   reach a book says so and gives the reader a working retry.
 - [`kept-on-open.md`](kept-on-open.md) — a book you've started is a book you
   keep: it opens and reads offline at your place, with no button anywhere.
+- [`note-and-back.md`](note-and-back.md) — a book's endnotes are part of the
+  book: the reference hops to the note, the note hops back, and the round
+  trip never moves the mark.

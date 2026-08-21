@@ -86,6 +86,33 @@ One JSON representation per tale:
   that cannot safely consume the declared schema fails explicitly; it never
   skips an unknown content node and presents a shorter tale as complete.
 
+### Notes
+
+A book's endnotes travel inside `sections` — they are body, not metadata, so
+every rule above already covers them: their markup is byte-for-byte what the
+web renders, their anchors are verbatim, and `contentVersion` changes when a
+note changes. Nothing about them is a schema addition.
+
+- A note reference is a same-document fragment link carried in the prose where
+  the author set it: `<a href="#note-1" id="noteref-1">1</a>`. Its text — the
+  note's number — is book content, not client chrome.
+- The notes themselves are an ordinary trailing section — in curated books,
+  `<section id="endnotes">` titled "Endnotes" — holding an ordered list whose
+  items are `<li id="note-1">` wrapping the note's paragraphs, each paragraph
+  with its own generated anchor, and ending with the way back:
+  `<a href="#noteref-1">↩︎</a>`.
+- The relationship is nothing beyond those two fragment links: ids verbatim,
+  resolvable in both directions within one document. Clients resolve them with
+  `is-same-document-fragment-link` ([`reader.md`](reader.md)) and never parse,
+  renumber, or regenerate them.
+- The `note-`/`noteref-` naming is Standard Ebooks' vocabulary, preserved
+  verbatim by the curated import, and the reference web implementation styles
+  references by that id prefix. A published tale may carry any valid anchors;
+  the fragment-link mechanism, not the naming, is the contract.
+- What activating a reference does to reading progress is fixed by
+  [`intent.md`](intent.md): the activation is a `link-click`, and the movement
+  it causes is a programmatic scroll that never advances the mark.
+
 `contentVersion` is `sha256-<digest>`, where `<digest>` is the base64url SHA-256
 of the ordered canonical section objects. A change to text, markup, attributes,
 or anchors changes it. Metadata and credit do not: their changes are covered by
