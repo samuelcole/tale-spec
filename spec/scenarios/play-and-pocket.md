@@ -100,17 +100,20 @@ and the next was the player's business and nobody else's — no press, no
 pause, no gap a reader had to notice, no book that "just stopped" the moment
 its screen went dark.
 
-**3. Stop the voice, and start it again.**
+**3. Stop the voice, start it again, and then stop it for good.**
 
 Back with the book, the reader presses the transport once. It shows paused,
 and its position stands where the voice stopped — inside the paragraph the
-voice had reached; call that paragraph **K**, further into the prose than
-**P**. The position does not move while paused.
+voice had reached. The position does not move while paused.
 
 Press again. The voice continues from exactly where it stopped: the position
-at the moment of resume is the position at pause, and it advances from there.
-Nothing before the pause is spoken again — a pause is a held breath, not a
-walk back to the top of the paragraph.
+at the moment of resume is the position at pause, and it advances from
+there. Nothing before the pause is spoken again — a pause is a held breath,
+not a walk back to the top of the paragraph.
+
+The reader presses once more and leaves the voice stopped. Call the
+paragraph it last occupied **K**: further into the prose than **P**, and the
+furthest the voice ever reached.
 
 **4. End the session, then open the book again at its address.**
 
