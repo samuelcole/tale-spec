@@ -89,3 +89,6 @@ every unfinished client its intentional red test immediately.
 - [`follow-and-override.md`](follow-and-override.md) — the spoken word lights
   the page and follows in a comfortable band until a genuine reader scroll
   takes control; automatic movement never becomes reading progress.
+- [`mark-offline-and-sync.md`](mark-offline-and-sync.md) — mark, annotate,
+  edit, and remove offline; the local plan survives relaunch, stays visibly
+  unsaved, and becomes shareable only after automatic publication.

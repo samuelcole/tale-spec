@@ -32,6 +32,8 @@ the foundation carve-out are in [`AGENTS.md`](AGENTS.md).
   - [`spec/progress.md`](spec/progress.md) — the local progress store: the
     high-water mark, merging across devices and across renamed keys, and the
     plan-tip rules.
+  - [`spec/marks.md`](spec/marks.md) — immutable plan authoring: locally minted
+    tips, durable offline chains, and idempotent parent-first publication.
   - [`spec/reader.md`](spec/reader.md) — the one current-paragraph rule and
     everything derived from it: percent, arrival dimming, resume, finished.
   - [`spec/timeline.md`](spec/timeline.md) — the whole-book audio timeline:
