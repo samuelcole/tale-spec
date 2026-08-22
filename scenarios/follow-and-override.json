@@ -1,0 +1,85 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "follow-and-override",
+  "title": "Follow and override",
+  "steps": [
+    {
+      "id": "play-and-follow-opening",
+      "action": { "op": "open-play-and-follow", "clean": true, "within": "opening-paragraph" },
+      "expect": {
+        "transport": { "equals": "playing" },
+        "voiceBlock": { "equals": "opening-narrated-block" },
+        "voiceLine": { "equals": "rendered-word-bottom" },
+        "voiceAdvanced": { "equals": true },
+        "voiceMovedBackward": { "equals": false },
+        "litPosition": { "equals": "comfortable-band" },
+        "pageFollowed": { "equals": true }
+      }
+    },
+    {
+      "id": "reopen-after-automatic-follow",
+      "action": { "op": "pause-end-and-open" },
+      "expect": {
+        "cover": { "equals": "on-screen" },
+        "position": { "equals": "start" },
+        "dimBoundary": { "equals": null },
+        "voiceLine": { "equals": "absent" }
+      }
+    },
+    {
+      "id": "select-narrated-block",
+      "action": { "op": "read-to-block", "block": "P" },
+      "expect": {
+        "selection": { "equals": "settled" },
+        "block": { "equals": "narrated" }
+      },
+      "capture": { "selectedBlock": "topBlock" }
+    },
+    {
+      "id": "play-from-selected-block",
+      "action": { "op": "activate-transport" },
+      "expect": {
+        "transport": { "equals": "playing" },
+        "voiceBlock": { "equals": { "ref": "selectedBlock" } },
+        "litPosition": { "equals": "comfortable-band" }
+      }
+    },
+    {
+      "id": "override-within-same-block",
+      "action": { "op": "scroll-within-voice-block", "quietIntervalMs": 2500, "repeat": true },
+      "expect": {
+        "readerBlock": { "equals": { "ref": "selectedBlock" } },
+        "transport": { "equals": "playing" },
+        "voiceSeeked": { "equals": false },
+        "pageStayedAtReaderPosition": { "equals": true },
+        "followSuppressedForMs": { "greaterThanOrEqual": 2500 },
+        "secondScrollRestartedInterval": { "equals": true },
+        "followAfterQuietInterval": { "equals": true }
+      }
+    },
+    {
+      "id": "override-to-different-block",
+      "action": { "op": "scroll-to-different-block", "block": "Q" },
+      "expect": {
+        "readerBlock": { "notEquals": { "ref": "selectedBlock" } },
+        "transport": { "equals": "paused" },
+        "voiceLine": { "equals": "held-at-last-word" },
+        "pageStayedAtReaderPosition": { "equals": true }
+      },
+      "capture": { "overrideBlock": "readerBlock" }
+    },
+    {
+      "id": "resume-from-reader-block",
+      "action": { "op": "activate-transport" },
+      "expect": {
+        "transport": { "equals": "playing" },
+        "voiceBlock": { "equals": "first-aligned-at-or-after-reader-block" },
+        "readerBlock": { "equals": { "ref": "overrideBlock" } },
+        "voiceLine": { "equals": "rendered-word-bottom" },
+        "litPosition": { "equals": "comfortable-band" },
+        "audioSectionSeam": { "equals": "continuous" }
+      }
+    }
+  ]
+}

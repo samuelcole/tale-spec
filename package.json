@@ -2,5 +2,13 @@
   "name": "tale-spec",
   "version": "0.1.0",
   "private": true,
-  "description": "The portable product contract for tale: normative spec prose plus language-neutral JSON semantic vectors."
+  "type": "module",
+  "description": "The portable product contract and conformance runner for tale.",
+  "bin": {
+    "tale-spec": "bin/tale-spec.mjs"
+  },
+  "scripts": {
+    "check:pairs": "node bin/tale-spec.mjs check-pairs",
+    "test": "node --test"
+  }
 }
