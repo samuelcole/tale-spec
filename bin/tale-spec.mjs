@@ -254,49 +254,30 @@ export function checkResult(scenarioValue, resultValue, client) {
   return { client, scenario: scenario.id, version: scenario.version, steps: wanted.length };
 }
 
-async function runClient(
-  scenario,
-  scenarioText,
-  matrixDir,
-  clientConfig,
-  scenarioCopy = clientConfig.scenario,
-) {
-  const client = object(clientConfig, "matrix client");
-  if (typeof client.id !== "string" || !client.id) {
-    fail("matrix client.id must be a non-empty string");
+function adapterCommand(client, key) {
+  const command = client[key];
+  if (!Array.isArray(command) || command.some((part) => typeof part !== "string")) {
+    fail(`${client.id}: ${key} must be an array of strings`);
   }
-  if (!Array.isArray(client.command) || client.command.some((part) => typeof part !== "string")) {
-    fail(`${client.id}: command must be an array of strings`);
+  if (command.length === 0) {
+    fail(`${client.id}: ${key} must not be empty`);
   }
-  if (client.command.length === 0) {
-    fail(`${client.id}: command must not be empty`);
-  }
-  if (typeof scenarioCopy !== "string" || !scenarioCopy) {
-    fail(`${client.id}: scenario must be a non-empty path`);
-  }
-  const cwd = resolve(matrixDir, client.cwd ?? ".");
+  return command;
+}
+
+function adapterEnvironment(client) {
   const clientEnv = client.env === undefined ? {} : object(client.env, `${client.id}.env`);
   if (Object.values(clientEnv).some((value) => typeof value !== "string")) {
     fail(`${client.id}: env values must be strings`);
   }
-  const copyPath = resolve(cwd, scenarioCopy);
-  const copyText = await readFile(copyPath, "utf8");
-  if (copyText !== scenarioText) {
-    fail(`${client.id}: vendored scenario differs from the authoritative file`);
-  }
+  return clientEnv;
+}
 
-  const [command, ...args] = client.command.map((part) =>
-    part.replaceAll("{scenario}", scenario.id),
-  );
+async function collectResults(client, commandParts, cwd, env) {
+  const [command, ...args] = commandParts;
   const child = spawn(command, args, {
     cwd,
-    env: {
-      ...process.env,
-      ...clientEnv,
-      TALE_CONFORMANCE_CLIENT: client.id,
-      TALE_CONFORMANCE_SCENARIO: scenarioCopy,
-      TALE_CONFORMANCE_SCENARIO_ID: scenario.id,
-    },
+    env: { ...process.env, ...env },
     stdio: ["ignore", "pipe", "pipe"],
   });
   let pending = "";
@@ -325,12 +306,95 @@ async function runClient(
     }
   }
   if (exitCode !== 0) {
-    fail(`${client.id}: adapter exited ${exitCode}`);
+    fail(`${client}: adapter exited ${exitCode}`);
   }
+  return results;
+}
+
+async function runClient(
+  scenario,
+  scenarioText,
+  matrixDir,
+  clientConfig,
+  scenarioCopy = clientConfig.scenario,
+) {
+  const client = object(clientConfig, "matrix client");
+  if (typeof client.id !== "string" || !client.id) {
+    fail("matrix client.id must be a non-empty string");
+  }
+  const commandParts = adapterCommand(client, "command");
+  if (typeof scenarioCopy !== "string" || !scenarioCopy) {
+    fail(`${client.id}: scenario must be a non-empty path`);
+  }
+  const cwd = resolve(matrixDir, client.cwd ?? ".");
+  const clientEnv = adapterEnvironment(client);
+  const copyPath = resolve(cwd, scenarioCopy);
+  const copyText = await readFile(copyPath, "utf8");
+  if (copyText !== scenarioText) {
+    fail(`${client.id}: vendored scenario differs from the authoritative file`);
+  }
+
+  const results = await collectResults(
+    client.id,
+    commandParts.map((part) => part.replaceAll("{scenario}", scenario.id)),
+    cwd,
+    {
+      ...clientEnv,
+      TALE_CONFORMANCE_CLIENT: client.id,
+      TALE_CONFORMANCE_SCENARIO: scenarioCopy,
+      TALE_CONFORMANCE_SCENARIO_ID: scenario.id,
+    },
+  );
   if (results.length !== 1) {
     fail(`${client.id}: adapter emitted ${results.length} result records, expected 1`);
   }
   return checkResult(scenario, results[0], client.id);
+}
+
+async function runBatchClient(scenarios, matrixDir, clientConfig) {
+  const client = object(clientConfig, "matrix client");
+  const commandParts = adapterCommand(client, "batchCommand");
+  const cwd = resolve(matrixDir, client.cwd ?? ".");
+  const clientEnv = adapterEnvironment(client);
+
+  for (const { scenarioText, scenarioCopy } of scenarios) {
+    const copyText = await readFile(resolve(cwd, scenarioCopy), "utf8");
+    if (copyText !== scenarioText) {
+      fail(`${client.id}: vendored scenario differs from the authoritative file`);
+    }
+  }
+
+  const scenarioIds = scenarios.map(({ scenario }) => scenario.id);
+  const results = await collectResults(client.id, commandParts, cwd, {
+    ...clientEnv,
+    TALE_CONFORMANCE_CLIENT: client.id,
+    TALE_CONFORMANCE_SCENARIO_DIR: resolve(cwd, client.scenarioDir),
+    TALE_CONFORMANCE_SCENARIO_IDS: JSON.stringify(scenarioIds),
+  });
+  if (results.length !== scenarios.length) {
+    fail(
+      `${client.id}: batch adapter emitted ${results.length} result records, expected ${scenarios.length}`,
+    );
+  }
+
+  const byScenario = new Map();
+  for (const resultValue of results) {
+    const result = object(resultValue, `${client.id} result`);
+    if (!scenarioIds.includes(result.scenario)) {
+      fail(`${client.id}: batch adapter reported unknown scenario ${JSON.stringify(result.scenario)}`);
+    }
+    if (byScenario.has(result.scenario)) {
+      fail(`${client.id}: batch adapter reported ${result.scenario} more than once`);
+    }
+    byScenario.set(result.scenario, result);
+  }
+
+  return scenarios.map(({ scenario }) => {
+    if (!byScenario.has(scenario.id)) {
+      fail(`${client.id}: batch adapter omitted ${scenario.id}`);
+    }
+    return checkResult(scenario, byScenario.get(scenario.id), client.id);
+  });
 }
 
 export async function runMatrix(scenarioPath, matrixPath) {
@@ -373,6 +437,9 @@ export async function runAll(scenarioDir, matrixPath) {
   const matrixDir = dirname(resolve(matrixPath));
   for (const clientConfig of matrix.clients) {
     const client = object(clientConfig, "matrix client");
+    if (typeof client.id !== "string" || !client.id) {
+      fail("matrix client.id must be a non-empty string");
+    }
     if (typeof client.scenarioDir !== "string" || !client.scenarioDir) {
       fail(`${client.id}: scenarioDir must be a non-empty path for run-all`);
     }
@@ -388,6 +455,7 @@ export async function runAll(scenarioDir, matrixPath) {
         fail(`${client.id}: notApplicable names unknown scenario ${id}`);
       }
     }
+    const batchScenarios = [];
     for (const file of files) {
       const scenarioPath = resolve(scenarioDir, file);
       const scenarioText = await readFile(scenarioPath, "utf8");
@@ -403,15 +471,15 @@ export async function runAll(scenarioDir, matrixPath) {
         skipped.push({ client: client.id, scenario: scenario.id, reason });
         continue;
       }
-      reports.push(
-        await runClient(
-          scenario,
-          scenarioText,
-          matrixDir,
-          client,
-          join(client.scenarioDir, file),
-        ),
-      );
+      const scenarioCopy = join(client.scenarioDir, file);
+      if (client.batchCommand !== undefined) {
+        batchScenarios.push({ scenario, scenarioText, scenarioCopy });
+      } else {
+        reports.push(await runClient(scenario, scenarioText, matrixDir, client, scenarioCopy));
+      }
+    }
+    if (client.batchCommand !== undefined && batchScenarios.length > 0) {
+      reports.push(...(await runBatchClient(batchScenarios, matrixDir, client)));
     }
   }
   return { reports, skipped };

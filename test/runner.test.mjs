@@ -250,3 +250,59 @@ test("run-all gives a new client every executable plan by default", async () => 
   );
   assert.deepEqual(result.skipped, []);
 });
+
+test("run-all accepts every plan from one batch adapter process", async () => {
+  const root = await mkdtemp(join(tmpdir(), "tale-spec-batch-"));
+  const authoritativeDir = join(root, "authoritative");
+  const clientDir = join(root, "client");
+  await Promise.all([
+    mkdir(authoritativeDir, { recursive: true }),
+    mkdir(join(clientDir, "scenarios"), { recursive: true }),
+  ]);
+  const plan = (id) => ({
+    format: "tale-surface-scenario",
+    version: 1,
+    id,
+    steps: [{ id: "observe", action: { op: "observe" }, expect: { ready: { equals: true } } }],
+  });
+  for (const id of ["alpha", "beta"]) {
+    const text = JSON.stringify(plan(id));
+    await writeFile(join(authoritativeDir, `${id}.json`), text);
+    await writeFile(join(clientDir, "scenarios", `${id}.json`), text);
+  }
+  await writeFile(
+    join(clientDir, "batch-adapter.mjs"),
+    `import { readFile, writeFile } from "node:fs/promises";\n` +
+      `import { join } from "node:path";\n` +
+      `await writeFile("batch-ran", "once");\n` +
+      `const ids = JSON.parse(process.env.TALE_CONFORMANCE_SCENARIO_IDS).reverse();\n` +
+      `for (const id of ids) {\n` +
+      `  const plan = JSON.parse(await readFile(join(process.env.TALE_CONFORMANCE_SCENARIO_DIR, id + ".json"), "utf8"));\n` +
+      `  console.log("TALE_CONFORMANCE_RESULT " + JSON.stringify({ protocol: 1, client: process.env.TALE_CONFORMANCE_CLIENT, scenario: plan.id, version: plan.version, steps: [{ id: "observe", observations: { ready: true } }] }));\n` +
+      `}\n`,
+  );
+  const matrixPath = join(root, "matrix.json");
+  await writeFile(
+    matrixPath,
+    JSON.stringify({
+      clients: [
+        {
+          id: "batch-client",
+          cwd: "client",
+          scenarioDir: "scenarios",
+          batchCommand: [process.execPath, "batch-adapter.mjs"],
+        },
+      ],
+    }),
+  );
+
+  const result = await runAll(authoritativeDir, matrixPath);
+  assert.deepEqual(
+    result.reports.map(({ client, scenario }) => ({ client, scenario })),
+    [
+      { client: "batch-client", scenario: "alpha" },
+      { client: "batch-client", scenario: "beta" },
+    ],
+  );
+  assert.equal(await readFile(join(clientDir, "batch-ran"), "utf8"), "once");
+});

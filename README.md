@@ -106,11 +106,13 @@ A new client starts with the adapter, before product behavior. The adapter has
 only three responsibilities:
 
 1. load the exact vendored executable scenario selected by
-   `TALE_CONFORMANCE_SCENARIO`;
+   `TALE_CONFORMANCE_SCENARIO`, or the scenarios named in
+   `TALE_CONFORMANCE_SCENARIO_IDS` when running as a batch;
 2. map every action it understands to real UI gestures and report only the
    named, user-observable facts; and
-3. print exactly one `TALE_CONFORMANCE_RESULT ` record using protocol version
-   1. An unknown action is an error, never a skipped step.
+3. print exactly one `TALE_CONFORMANCE_RESULT ` record per selected scenario
+   using protocol version 1. An unknown action is an error, never a skipped
+   step.
 
 Add that command to the conformance matrix:
 
@@ -122,6 +124,26 @@ Add that command to the conformance matrix:
       "cwd": "../tale-android",
       "scenarioDir": "app/src/androidTest/resources/tale-spec/scenarios",
       "command": ["./scripts/run-conformance", "{scenario}"]
+    }
+  ]
+}
+```
+
+An expensive native harness may also provide `batchCommand`. `run-all` launches
+that command once with `TALE_CONFORMANCE_SCENARIO_DIR` and the JSON-encoded
+`TALE_CONFORMANCE_SCENARIO_IDS`, then independently judges the one result record
+for every applicable scenario. Missing, duplicate, or unknown results fail
+closed. Keeping `command` alongside it preserves focused `tale-spec run` calls:
+
+```json
+{
+  "clients": [
+    {
+      "id": "ios",
+      "cwd": "../tale-ios",
+      "scenarioDir": "TaleUIGates",
+      "command": ["bash", "scripts/run-surface-conformance.sh", "{scenario}"],
+      "batchCommand": ["bash", "scripts/run-surface-conformance.sh", "--all"]
     }
   ]
 }
