@@ -1,0 +1,129 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "mark-offline-and-sync",
+  "title": "Mark offline and publish when saved",
+  "steps": [
+    {
+      "id": "mark-first-passage-offline",
+      "action": {
+        "op": "open-kept-book-and-mark",
+        "book": "kept",
+        "passage": "P",
+        "network": "unreachable",
+        "clean": "plans"
+      },
+      "expect": {
+        "state": { "equals": "book" },
+        "markedPassages": { "equals": ["P"] },
+        "unsaved": { "equals": "shown" },
+        "planUrl": { "equals": "absent" },
+        "clipboardPassage": { "equals": "P" },
+        "clipboardAttribution": { "equals": "present" },
+        "clipboardMarkUrl": { "equals": "absent" },
+        "copyReport": { "equals": "succeeded" },
+        "blockingError": { "equals": "absent" }
+      }
+    },
+    {
+      "id": "annotate-first-passage-offline",
+      "action": { "op": "annotate-mark", "passage": "P", "note": "given", "dueDate": "given" },
+      "expect": {
+        "markedPassages": { "equals": ["P"] },
+        "note": { "equals": "rendered-with-P" },
+        "dueDate": { "equals": "rendered-with-P" },
+        "unsaved": { "equals": "shown" },
+        "planUrl": { "equals": "absent" },
+        "blockingError": { "equals": "absent" }
+      }
+    },
+    {
+      "id": "mark-second-passage-offline",
+      "action": { "op": "mark-passage", "passage": "Q" },
+      "expect": {
+        "markedPassages": { "equals": ["P", "Q"] },
+        "note": { "equals": "rendered-with-P" },
+        "dueDate": { "equals": "rendered-with-P" },
+        "unsaved": { "equals": "shown" },
+        "planUrl": { "equals": "absent" },
+        "blockingError": { "equals": "absent" }
+      }
+    },
+    {
+      "id": "relaunch-offline",
+      "action": { "op": "end-session-and-open-book", "book": "kept", "network": "unreachable" },
+      "expect": {
+        "state": { "equals": "book" },
+        "markedPassages": { "equals": ["P", "Q"] },
+        "note": { "equals": "rendered-with-P" },
+        "dueDate": { "equals": "rendered-with-P" },
+        "unsaved": { "equals": "shown" },
+        "planUrl": { "equals": "absent" },
+        "error": { "equals": "absent" },
+        "spinner": { "equals": false }
+      }
+    },
+    {
+      "id": "remove-second-mark-offline",
+      "action": { "op": "remove-mark", "passage": "Q" },
+      "expect": {
+        "markedPassages": { "equals": ["P"] },
+        "note": { "equals": "rendered-with-P" },
+        "dueDate": { "equals": "rendered-with-P" },
+        "unsaved": { "equals": "shown" },
+        "planUrl": { "equals": "absent" },
+        "blockingError": { "equals": "absent" }
+      }
+    },
+    {
+      "id": "reconnect-and-publish",
+      "action": { "op": "set-network", "network": "reachable", "markingAction": "none" },
+      "expect": {
+        "markedPassages": { "equals": ["P"] },
+        "note": { "equals": "rendered-with-P" },
+        "dueDate": { "equals": "rendered-with-P" },
+        "markCount": { "equals": 1 },
+        "unsaved": { "equals": "cleared" },
+        "planUrl": { "equals": "available" },
+        "blockingError": { "equals": "absent" }
+      },
+      "capture": { "publishedPlanUrl": "planUrlValue" }
+    },
+    {
+      "id": "copy-annotated-passage-online",
+      "action": { "op": "copy-marked-passage", "passage": "P" },
+      "expect": {
+        "clipboardPassage": { "equals": "P" },
+        "clipboardAttribution": { "equals": "present" },
+        "clipboardMarkUrl": { "equals": { "ref": "publishedPlanUrl" } },
+        "copyReport": { "equals": "succeeded" }
+      }
+    },
+    {
+      "id": "reopen-published-plan-offline",
+      "action": { "op": "end-session-and-open-current-plan", "network": "unreachable" },
+      "expect": {
+        "state": { "equals": "book" },
+        "markedPassages": { "equals": ["P"] },
+        "note": { "equals": "rendered-with-P" },
+        "dueDate": { "equals": "rendered-with-P" },
+        "unsaved": { "equals": "cleared" },
+        "error": { "equals": "absent" },
+        "spinner": { "equals": false }
+      }
+    },
+    {
+      "id": "open-published-plan-without-local-data",
+      "action": { "op": "open-published-plan", "context": "fresh", "network": "reachable" },
+      "expect": {
+        "state": { "equals": "book" },
+        "markedPassages": { "equals": ["P"] },
+        "note": { "equals": "rendered-with-P" },
+        "dueDate": { "equals": "rendered-with-P" },
+        "markCount": { "equals": 1 },
+        "planUrlValue": { "equals": { "ref": "publishedPlanUrl" } },
+        "redirect": { "equals": "absent" }
+      }
+    }
+  ]
+}
