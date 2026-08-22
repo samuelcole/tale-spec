@@ -6,26 +6,34 @@ It is the authoritative conformance lane. `vectors/` proves that a pure
 operation computes the specified answer; a scenario proves that the shipped
 product, driven the way a person drives it, behaves the specified way.
 
-Each scenario is run by a hand-written adapter in every product that performs
-the behavior — a browser spec against the real web reader, an XCUITest against
-the real app — in that platform's own test runner. Platform repositories own
-their adapters, launch mechanism, device matrix, and diagnostics. This
-directory owns the outcomes. A producer does not become a consumer merely to
-manufacture a green result: a server's HTTP payload contract is proved at its
-real HTTP boundary, while the clients that fetch it own the surface scenario
-for loading and failure.
+Each scenario is a checked pair. The prose file in this directory explains the
+reader story, portability decisions, and boundaries. The executable plan at
+`../../scenarios/<id>.json` owns its ordered actions and pass/fail
+expectations. `npm run check:pairs` rejects an orphan on either side.
 
-## Prose, not a format
+Every product that performs the behavior supplies a thin adapter — a browser
+spec against the real web reader, an XCUITest against the real app, an Android
+instrumentation test against the launched app. Platform repositories own their
+gestures, observation mechanisms, launch mechanism, fixture, device matrix,
+and diagnostics. `tale-spec` owns the actions and outcomes. The adapter emits
+observations; the shared runner judges them. A producer does not become a
+consumer merely to manufacture a green result: a server's HTTP payload
+contract is proved at its real HTTP boundary, while the clients that fetch it
+own the surface scenario for loading and failure.
 
-Scenarios are written as prose deliberately. A scenario's hard part is the
-judgement about what a platform may substitute for an act with no literal
-equivalent — "end the session" is not the same gesture twice — and that
-judgement does not survive being flattened into a table of ops. That table is
-`vectors/`, and it is the wrong tool here: it would prove that two adapters
-agree about a script, not that two products agree about reading. A scenario
-format may earn its way in later, once enough scenarios exist to show what is
-genuinely common between them. Two adapters implementing one written scenario
-is the shape until then.
+## Prose and executable plan
+
+Both halves are normative, for different reasons. Prose preserves the product
+judgement behind portable acts such as ending a session or putting the screen
+away. The executable plan makes omission and weakening mechanically visible:
+it names every action, observation, cross-step capture, and expected result
+once. If the two disagree, the pair is a bug and must change together.
+
+This is not the semantic-vector lane in disguise. A surface adapter still
+performs real gestures against the launched product and observes only rendered
+or accessible outcomes. The JSON plan does not invoke product functions or
+model state; it tells adapters what a reader does and tells the shared runner
+what the reader must be able to see.
 
 ## What an adapter may translate
 
@@ -58,12 +66,13 @@ is the shape until then.
 
 ## Writing one
 
-One file per scenario, named for the reader's session. Sections: what the
-scenario claims, its setup, any act that needs a portability definition, its
-numbered steps with the outcome each must produce, and — required — what it
-does not cover and what the next scenario would have to extend. That last
-section is what keeps scenario two a deliberate extension instead of an
-accidental fork.
+Create the prose and executable files together with the same basename. The
+prose sections state what the scenario claims, its setup, any act needing a
+portability definition, its steps and outcomes, and — required — what it does
+not cover and what the next scenario would extend. The JSON expresses those
+steps as actions, observations, captures, and expectations. That pairing keeps
+scenario two a deliberate extension instead of an accidental fork, and gives
+every unfinished client its intentional red test immediately.
 
 - [`open-and-read.md`](open-and-read.md) — open a book, read down it, leave,
   come back to where you stopped.

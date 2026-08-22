@@ -1,0 +1,81 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "play-and-pocket",
+  "title": "Play and pocket",
+  "steps": [
+    {
+      "id": "read-into-prose",
+      "action": { "op": "open-and-read-to-narrated-block", "clean": true },
+      "expect": {
+        "cover": { "equals": "above-screen" },
+        "playControl": { "equals": "available" },
+        "readingExtent": { "equals": "into-prose" },
+        "settled": { "equals": true }
+      },
+      "capture": { "readingBlock": "topBlock", "readingBlockIndex": "topBlockIndex" }
+    },
+    {
+      "id": "play-from-reading-position",
+      "action": { "op": "activate-transport" },
+      "expect": {
+        "transport": { "equals": "playing" },
+        "voiceBlock": { "equals": { "ref": "readingBlock" } },
+        "voicePosition": { "equals": "inside-reading-block" }
+      },
+      "capture": { "playingAt": "voicePositionValue" }
+    },
+    {
+      "id": "put-screen-away-past-seam",
+      "action": { "op": "put-screen-away-and-return", "until": "past-first-audio-seam" },
+      "expect": {
+        "surfaceWasHidden": { "equals": true },
+        "processStayedAlive": { "equals": true },
+        "transport": { "equals": "playing" },
+        "position": { "equals": "past-first-audio-seam" },
+        "voicePositionSeconds": { "greaterThanOrEqual": 8 },
+        "voicePositionValue": { "notEquals": { "ref": "playingAt" } }
+      }
+    },
+    {
+      "id": "pause",
+      "action": { "op": "activate-transport" },
+      "expect": {
+        "transport": { "equals": "paused" },
+        "pauseDeltaSeconds": { "between": [0, 0] }
+      },
+      "capture": { "pausedSeconds": "voicePositionSeconds" }
+    },
+    {
+      "id": "resume",
+      "action": { "op": "activate-transport" },
+      "expect": {
+        "transport": { "equals": "playing" },
+        "resumedSeconds": { "greaterThanOrEqual": { "ref": "pausedSeconds" } },
+        "resumeDeltaSeconds": { "lessThanOrEqual": 1 },
+        "advanceDeltaSeconds": { "greaterThan": 0 }
+      }
+    },
+    {
+      "id": "stop-for-good",
+      "action": { "op": "activate-transport" },
+      "expect": {
+        "transport": { "equals": "paused" },
+        "voiceBlockIndex": { "greaterThan": { "ref": "readingBlockIndex" } },
+        "furthest": { "equals": true }
+      },
+      "capture": { "heardThrough": "voiceBlock", "successor": "successor" }
+    },
+    {
+      "id": "resume-book-after-listening",
+      "action": { "op": "end-and-open" },
+      "expect": {
+        "cover": { "equals": "above-screen" },
+        "topBlock": { "equals": { "ref": "successor" } },
+        "dimBoundary": { "equals": { "ref": "heardThrough" } },
+        "firstInk": { "equals": { "ref": "successor" } },
+        "dimIsOneRunFromTop": { "equals": true }
+      }
+    }
+  ]
+}

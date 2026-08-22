@@ -25,6 +25,13 @@ must not bypass the user-facing workflow being specified. Persistence is
 observed by terminating and relaunching the product, not by asserting directly
 on an internal store.
 
+Every `spec/scenarios/<id>.md` has a matching executable
+`scenarios/<id>.json`. Change the pair together and run `npm run check:pairs`.
+The prose owns intent and portability boundaries; the executable plan owns the
+ordered actions and expected observations. Client adapters translate actions
+into native user input and report observations, but never restate, omit, or
+weaken the plan's expectations.
+
 ## Red-green is the delivery process
 
 For behavior the web reader already ships:

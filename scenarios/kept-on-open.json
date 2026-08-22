@@ -1,0 +1,82 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "kept-on-open",
+  "title": "Kept on open",
+  "steps": [
+    {
+      "id": "open-first-book",
+      "action": { "op": "open-book", "book": "first", "clean": true, "network": "reachable" },
+      "expect": {
+        "state": { "equals": "book" },
+        "cover": { "equals": "on-screen" },
+        "position": { "equals": "start" },
+        "dimBoundary": { "equals": null }
+      },
+      "capture": { "openingBlock": "firstBlock" }
+    },
+    {
+      "id": "read-first-book",
+      "action": { "op": "read-forward", "extent": "several-screens" },
+      "expect": {
+        "readingExtent": { "equals": "several-screens" },
+        "topBlock": { "notEquals": { "ref": "openingBlock" } },
+        "settled": { "equals": true },
+        "keepControl": { "equals": "absent" },
+        "keepToggle": { "equals": "absent" },
+        "keepIndicator": { "equals": "absent" }
+      },
+      "capture": { "stoppedAt": "topBlock", "successor": "successor" }
+    },
+    {
+      "id": "end-and-go-offline",
+      "action": { "op": "end-session-and-set-network", "network": "unreachable" },
+      "expect": { "session": { "equals": "ended" }, "network": { "equals": "unreachable" } }
+    },
+    {
+      "id": "open-kept-book-offline",
+      "action": { "op": "open-book", "book": "first" },
+      "expect": {
+        "state": { "equals": "book" },
+        "cover": { "equals": "above-screen" },
+        "topBlock": { "equals": { "ref": "successor" } },
+        "dimBoundary": { "equals": { "ref": "stoppedAt" } },
+        "firstInk": { "equals": { "ref": "successor" } },
+        "dimIsOneRunFromTop": { "equals": true },
+        "error": { "equals": "absent" },
+        "spinner": { "equals": false }
+      }
+    },
+    {
+      "id": "read-beyond-kept-viewport",
+      "action": { "op": "read-forward", "extent": "several-screens" },
+      "expect": {
+        "readingExtent": { "equals": "several-screens" },
+        "topBlock": { "notEquals": { "ref": "successor" } },
+        "content": { "equals": "available" }
+      }
+    },
+    {
+      "id": "open-never-started-book-offline",
+      "action": { "op": "open-book", "book": "second" },
+      "expect": {
+        "state": { "equals": "offline-not-kept" },
+        "message": { "equals": "you're offline, and you haven't started this one." },
+        "explanation": { "equals": "a tale keeps itself once you've read a little of it." },
+        "messageOrder": { "equals": "message-explanation-onward" },
+        "cover": { "equals": "absent" },
+        "prose": { "equals": "absent" },
+        "spinner": { "equals": false },
+        "wayOnward": { "equals": "available" }
+      }
+    },
+    {
+      "id": "take-way-onward",
+      "action": { "op": "activate-way-onward", "retryNetwork": "reachable" },
+      "expect": {
+        "destination": { "equals": "book-or-kept-books" },
+        "state": { "equals": "usable" }
+      }
+    }
+  ]
+}
