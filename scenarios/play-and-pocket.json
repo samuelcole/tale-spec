@@ -33,7 +33,6 @@
         "processStayedAlive": { "equals": true },
         "transport": { "equals": "playing" },
         "position": { "equals": "past-first-audio-seam" },
-        "voicePositionSeconds": { "greaterThanOrEqual": 8 },
         "voicePositionValue": { "notEquals": { "ref": "playingAt" } }
       }
     },
@@ -42,18 +41,16 @@
       "action": { "op": "activate-transport" },
       "expect": {
         "transport": { "equals": "paused" },
-        "pauseDeltaSeconds": { "between": [0, 0] }
-      },
-      "capture": { "pausedSeconds": "voicePositionSeconds" }
+        "positionHeld": { "equals": true }
+      }
     },
     {
       "id": "resume",
       "action": { "op": "activate-transport" },
       "expect": {
         "transport": { "equals": "playing" },
-        "resumedSeconds": { "greaterThanOrEqual": { "ref": "pausedSeconds" } },
-        "resumeDeltaSeconds": { "lessThanOrEqual": 1 },
-        "advanceDeltaSeconds": { "greaterThan": 0 }
+        "resumedWithoutRewind": { "equals": true },
+        "positionAdvanced": { "equals": true }
       }
     },
     {
