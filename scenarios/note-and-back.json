@@ -1,0 +1,53 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "note-and-back",
+  "title": "A note and back",
+  "steps": [
+    {
+      "id": "read-to-note-reference",
+      "action": { "op": "open-and-read-to-note-reference", "clean": true },
+      "expect": {
+        "cover": { "equals": "above-screen" },
+        "readingExtent": { "equals": "several-screens" },
+        "reference": { "equals": "inside-prose" },
+        "referenceLabel": { "equals": "visible" },
+        "settled": { "equals": true }
+      },
+      "capture": { "stoppedAt": "topBlock", "successor": "successor", "referenceBlock": "referenceBlock" }
+    },
+    {
+      "id": "activate-reference",
+      "action": { "op": "activate-note-reference" },
+      "expect": {
+        "note": { "equals": "on-screen" },
+        "noteText": { "equals": "visible" },
+        "wayBack": { "equals": "on-screen" },
+        "referenceBlock": { "equals": "off-screen" },
+        "topBlock": { "notEquals": { "ref": "stoppedAt" } }
+      }
+    },
+    {
+      "id": "activate-way-back",
+      "action": { "op": "activate-note-back" },
+      "expect": {
+        "referenceBlock": { "equals": { "ref": "referenceBlock" } },
+        "reference": { "equals": "on-screen" },
+        "note": { "equals": "off-screen" }
+      }
+    },
+    {
+      "id": "resume-after-note-round-trip",
+      "action": { "op": "end-and-open" },
+      "expect": {
+        "cover": { "equals": "above-screen" },
+        "topBlock": { "equals": { "ref": "successor" } },
+        "dimBoundary": { "equals": { "ref": "stoppedAt" } },
+        "firstInk": { "equals": { "ref": "successor" } },
+        "dimIsOneRunFromTop": { "equals": true },
+        "inkBoundary": { "equals": "at-top" },
+        "note": { "equals": "off-screen" }
+      }
+    }
+  ]
+}

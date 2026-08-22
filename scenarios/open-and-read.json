@@ -1,0 +1,62 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "open-and-read",
+  "title": "Open and read",
+  "steps": [
+    {
+      "id": "open-fresh",
+      "action": { "op": "open-book", "clean": true },
+      "expect": {
+        "cover": { "equals": "on-screen" },
+        "position": { "equals": "start" },
+        "dimBoundary": { "equals": null }
+      },
+      "capture": { "openingBlock": "firstBlock" }
+    },
+    {
+      "id": "read-forward",
+      "action": { "op": "read-forward", "extent": "several-screens" },
+      "expect": {
+        "cover": { "equals": "above-screen" },
+        "readingExtent": { "equals": "several-screens" },
+        "settled": { "equals": true },
+        "topBlock": { "notEquals": { "ref": "openingBlock" } },
+        "dimBoundary": { "equals": null }
+      },
+      "capture": {
+        "stoppedAt": "topBlock",
+        "successor": "successor"
+      }
+    },
+    {
+      "id": "resume",
+      "action": { "op": "end-and-open" },
+      "expect": {
+        "cover": { "equals": "above-screen" },
+        "topBlock": { "equals": { "ref": "successor" } },
+        "dimBoundary": { "equals": { "ref": "stoppedAt" } },
+        "firstInk": { "equals": { "ref": "successor" } },
+        "dimIsOneRunFromTop": { "equals": true },
+        "inkBoundary": { "equals": "at-top" },
+        "unreadBelow": { "equals": "screenful" }
+      }
+    },
+    {
+      "id": "reopen-without-reading-1",
+      "action": { "op": "end-and-open" },
+      "expect": {
+        "topBlock": { "equals": { "ref": "successor" } },
+        "dimBoundary": { "equals": { "ref": "stoppedAt" } }
+      }
+    },
+    {
+      "id": "reopen-without-reading-2",
+      "action": { "op": "end-and-open" },
+      "expect": {
+        "topBlock": { "equals": { "ref": "successor" } },
+        "dimBoundary": { "equals": { "ref": "stoppedAt" } }
+      }
+    }
+  ]
+}

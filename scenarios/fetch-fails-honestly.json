@@ -1,0 +1,33 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "fetch-fails-honestly",
+  "title": "Fetch fails honestly",
+  "steps": [
+    {
+      "id": "open-unreachable-book",
+      "action": { "op": "open-book", "clean": true, "network": "unreachable" },
+      "expect": {
+        "state": { "equals": "error" },
+        "message": { "equals": "tale.fyi didn’t answer." },
+        "retryLabel": { "equals": "try again" },
+        "messageBeforeRetry": { "equals": true },
+        "spinner": { "equals": false },
+        "cover": { "equals": "absent" },
+        "prose": { "equals": "absent" }
+      }
+    },
+    {
+      "id": "retry-when-reachable",
+      "action": { "op": "make-reachable-and-activate-retry" },
+      "expect": {
+        "newRequest": { "equals": true },
+        "state": { "equals": "book" },
+        "error": { "equals": "absent" },
+        "cover": { "equals": "on-screen" },
+        "title": { "equals": "visible" },
+        "dimBoundary": { "equals": null }
+      }
+    }
+  ]
+}
