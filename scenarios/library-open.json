@@ -1,0 +1,79 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "library-open",
+  "title": "Pick a book from the library",
+  "steps": [
+    {
+      "id": "cold-launch-library",
+      "action": { "op": "open-library", "clean": true, "network": "reachable" },
+      "expect": {
+        "state": { "equals": "library" },
+        "bookCount": { "greaterThanOrEqual": 2 },
+        "titles": { "equals": "available" },
+        "bylines": { "equals": "available" },
+        "rowsTappable": { "equals": true },
+        "audioBookCount": { "greaterThanOrEqual": 1 },
+        "firstPlayControl": { "equals": "available" }
+      }
+    },
+    {
+      "id": "open-first-book",
+      "action": { "op": "activate-library-book", "book": "first" },
+      "expect": {
+        "state": { "equals": "book" },
+        "cover": { "equals": "on-screen" },
+        "position": { "equals": "start" }
+      }
+    },
+    {
+      "id": "start-and-return",
+      "action": { "op": "read-forward-and-return-to-library", "extent": "several-screens" },
+      "expect": {
+        "state": { "equals": "library" },
+        "firstProgress": { "between": [1, 99] },
+        "firstProgressLabel": { "equals": "percent" }
+      }
+    },
+    {
+      "id": "play-first-book",
+      "action": { "op": "activate-library-book-play", "book": "first" },
+      "expect": {
+        "state": { "equals": "book" },
+        "playback": { "equals": "playing" },
+        "canonicalBook": { "equals": "first" }
+      }
+    },
+    {
+      "id": "finish-and-return",
+      "action": { "op": "pause-finish-and-return-to-library", "book": "first" },
+      "expect": {
+        "state": { "equals": "library" },
+        "firstProgress": { "equals": 100 },
+        "firstProgressLabel": { "equals": "read" }
+      }
+    },
+    {
+      "id": "show-library-offline",
+      "action": { "op": "set-network-with-library-open", "network": "unreachable" },
+      "expect": {
+        "state": { "equals": "library" },
+        "firstRowAvailability": { "equals": "available" },
+        "secondRowAvailability": { "equals": "dimmed" },
+        "secondRowTappable": { "equals": true },
+        "offlineExplanation": { "equals": "you're offline · the dimmed tales aren't available right now" },
+        "offlineExplanationLines": { "equals": 1 }
+      }
+    },
+    {
+      "id": "open-unkept-book-offline",
+      "action": { "op": "activate-library-book", "book": "second" },
+      "expect": {
+        "state": { "equals": "offline-not-kept" },
+        "message": { "equals": "you're offline, and you haven't started this one." },
+        "explanation": { "equals": "a tale keeps itself once you've read a little of it." },
+        "wayOnward": { "equals": "available" }
+      }
+    }
+  ]
+}
