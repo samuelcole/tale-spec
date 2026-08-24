@@ -80,6 +80,7 @@ test("every prose scenario has a matching executable plan", async () => {
     "follow-and-override",
     "kept-on-open",
     "library-open",
+    "library-search",
     "mark-offline-and-sync",
     "note-and-back",
     "open-and-read",

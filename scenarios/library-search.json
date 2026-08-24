@@ -1,0 +1,110 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "library-search",
+  "title": "Typing finds a book",
+  "steps": [
+    {
+      "id": "open-searchable-library",
+      "action": { "op": "open-library-search", "clean": true, "network": "reachable" },
+      "expect": {
+        "state": { "equals": "library" },
+        "searchInput": { "equals": "available" },
+        "query": { "equals": "" },
+        "bookCount": { "greaterThanOrEqual": 3 }
+      }
+    },
+    {
+      "id": "find-list",
+      "action": { "op": "replace-library-query", "text": "gothic monsters" },
+      "expect": {
+        "state": { "equals": "library" },
+        "query": { "equals": "gothic monsters" },
+        "resultCount": { "equals": 1 },
+        "resultKind": { "equals": "list" },
+        "resultTitle": { "equals": "Gothic monsters" },
+        "resultMeta": { "equals": "6 books · a list" }
+      }
+    },
+    {
+      "id": "find-genre",
+      "action": { "op": "replace-library-query", "text": "gothic fiction" },
+      "expect": {
+        "state": { "equals": "library" },
+        "query": { "equals": "gothic fiction" },
+        "resultCount": { "equals": 1 },
+        "resultKind": { "equals": "genre" },
+        "resultTitle": { "equals": "Gothic Fiction" },
+        "resultMeta": { "equals": "12 books · a genre" }
+      }
+    },
+    {
+      "id": "find-era",
+      "action": { "op": "replace-library-query", "text": "19th century" },
+      "expect": {
+        "state": { "equals": "library" },
+        "query": { "equals": "19th century" },
+        "resultCount": { "equals": 1 },
+        "resultKind": { "equals": "era" },
+        "resultTitle": { "equals": "19th century" },
+        "resultMeta": { "equals": "24 books · an era" }
+      }
+    },
+    {
+      "id": "find-author",
+      "action": { "op": "replace-library-query", "text": "doyle" },
+      "expect": {
+        "state": { "equals": "library" },
+        "query": { "equals": "doyle" },
+        "resultCount": { "equals": 1 },
+        "resultKind": { "equals": "author" },
+        "resultTitle": { "equals": "Sir Arthur Conan Doyle" },
+        "resultMeta": { "equals": "9 books · an author" }
+      }
+    },
+    {
+      "id": "find-by-normalized-byline",
+      "action": { "op": "replace-library-query", "text": "  BRONTE  " },
+      "expect": {
+        "state": { "equals": "library" },
+        "query": { "equals": "  BRONTE  " },
+        "resultCount": { "equals": 1 },
+        "resultKind": { "equals": "book" },
+        "targetTitle": { "equals": "The Long Conversation: A 9–12 Reading List" },
+        "targetByline": { "equals": "Charlotte Brontë" }
+      }
+    },
+    {
+      "id": "find-typographic-dash-with-keyboard-hyphen",
+      "action": { "op": "replace-library-query", "text": "9-12" },
+      "expect": {
+        "state": { "equals": "library" },
+        "query": { "equals": "9-12" },
+        "resultCount": { "equals": 1 },
+        "resultKind": { "equals": "book" },
+        "targetTitle": { "equals": "The Long Conversation: A 9–12 Reading List" },
+        "targetByline": { "equals": "Charlotte Brontë" }
+      }
+    },
+    {
+      "id": "open-filtered-book",
+      "action": { "op": "activate-filtered-book", "book": "target" },
+      "expect": {
+        "state": { "equals": "book" },
+        "canonicalBook": { "equals": "target" }
+      }
+    },
+    {
+      "id": "return-to-restored-search",
+      "action": { "op": "return-to-library-search" },
+      "expect": {
+        "state": { "equals": "library" },
+        "query": { "equals": "9-12" },
+        "resultCount": { "equals": 1 },
+        "resultKind": { "equals": "book" },
+        "targetTitle": { "equals": "The Long Conversation: A 9–12 Reading List" },
+        "targetByline": { "equals": "Charlotte Brontë" }
+      }
+    }
+  ]
+}
