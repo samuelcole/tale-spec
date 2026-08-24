@@ -45,6 +45,34 @@ fails to load renders a fallback serif/mono — but a client implementing this
 presentation contract treats a missing bundled face as a defect, not a
 graceful degradation.
 
+## The library — a list in the machine's voice
+
+The front door is a list, not a shelf of cards. Every row is open on the paper
+and speaks in JetBrains Mono: **15 px / line-height 1.8**, with **6 px** above
+and below and a **1 px `rule-soft`** boundary after it. There is no enclosing
+fill, radius, border, shadow, cover thumbnail, or disclosure chevron.
+
+The title comes first in `primary`. Its byline follows in the same line when
+space permits, at **13 px, weight 300**, in `muted`; a person's name never
+breaks inside itself. Reading progress sits at the trailing edge at **11 px,
+weight 300**, in `muted`. A started book shows its integer percent with a `%`;
+a finished book says **read** rather than `100%`. Missing progress leaves no
+placeholder or gap.
+
+A narrated book carries a trailing play control after its progress. The
+control itself is the audiobook indicator: no badge or duplicate label sits by
+the title. It uses the machine's quiet `muted` ink, a **13 px** play glyph in a
+**44 × 44 px** touch target, no fill or boundary, and the accessible name
+**listen to <title>**. Activating it starts the read-along immediately and
+opens the canonical book underneath the continuing transport.
+
+Offline availability changes neither order nor affordance. A book not kept on
+the device remains a real, tappable row and the whole row draws at **0.6
+opacity**. One **11 px, weight 300, `muted`** line above the list explains what
+the dimming means. Metadata inside a dimmed row first flattens to `primary`, so
+the single opacity does not compound into illegibility. A kept book remains at
+full strength.
+
 ## The page
 
 - Book body: Literata, **17 px / line-height 1.6** below 640 px viewport
