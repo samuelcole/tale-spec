@@ -98,3 +98,5 @@ every unfinished client its intentional red test immediately.
 - [`library-search.md`](library-search.md) — type against title and byline with
   the shared normalization, open the filtered book, and return to the same
   search.
+- [`library-browse.md`](library-browse.md) — open list, genre, era, and author
+  results and canonical addresses as native shelves backed by one payload.
