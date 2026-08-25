@@ -73,6 +73,20 @@ the dimming means. Metadata inside a dimmed row first flattens to `primary`, so
 the single opacity does not compound into illegibility. A kept book remains at
 full strength.
 
+Search is one full-width native text input above that same list, in the
+machine's voice at **15 px**, with no fill or enclosing border. A **1 px
+`rule`** line along its bottom becomes `muted` while focused. Its placeholder
+and accessible name are **find a tale**. There is **24 px** between the input
+and the first result.
+
+A matching curated list, genre, era, or author is a discovery row in the same
+open list, never a card or a book wearing a badge. Its name uses the ordinary
+15 px row title. A second line says `<count> books · <kind>` in the machine's
+quiet voice at **11 px, weight 300**, where kind is `a list`, `a genre`, `an
+era`, or `an author` (and `book` is singular when count is one). These rows
+carry no progress or play control. Their destination is Tale's canonical web
+route until a native shelf surface is separately specified.
+
 ## The page
 
 - Book body: Literata, **17 px / line-height 1.6** below 640 px viewport
