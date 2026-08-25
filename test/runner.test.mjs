@@ -79,6 +79,7 @@ test("every prose scenario has a matching executable plan", async () => {
     "fetch-fails-honestly",
     "follow-and-override",
     "kept-on-open",
+    "library-browse",
     "library-open",
     "library-search",
     "mark-offline-and-sync",

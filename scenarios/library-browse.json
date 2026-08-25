@@ -1,0 +1,93 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "library-browse",
+  "title": "Discovery opens a native shelf",
+  "steps": [
+    {
+      "id": "find-list",
+      "action": { "op": "open-library-browse", "query": "gothic monsters", "clean": true, "network": "reachable" },
+      "expect": { "state": { "equals": "library" }, "query": { "equals": "gothic monsters" }, "resultCount": { "equals": 1 }, "resultKind": { "equals": "list" } }
+    },
+    {
+      "id": "open-list-shelf",
+      "action": { "op": "activate-browse-result", "kind": "list" },
+      "expect": { "state": { "equals": "shelf" }, "kind": { "equals": "list" }, "canonicalIdentity": { "equals": "/~gothic-monsters" }, "title": { "equals": "Gothic monsters" }, "bookCount": { "equals": 2 }, "roster": { "equals": ["Frankenstein", "The Last Man"] }, "firstByline": { "equals": "Mary Shelley" }, "firstHasAudio": { "equals": true } }
+    },
+    {
+      "id": "open-shelf-book",
+      "action": { "op": "activate-shelf-book", "position": 1 },
+      "expect": { "state": { "equals": "book" }, "canonicalBook": { "equals": "/frankenstein-scenario" } }
+    },
+    {
+      "id": "return-to-list-shelf",
+      "action": { "op": "return-to-browse-shelf" },
+      "expect": { "state": { "equals": "shelf" }, "canonicalIdentity": { "equals": "/~gothic-monsters" }, "title": { "equals": "Gothic monsters" }, "bookCount": { "equals": 2 }, "roster": { "equals": ["Frankenstein", "The Last Man"] } }
+    },
+    {
+      "id": "return-to-list-search",
+      "action": { "op": "return-to-library-browse" },
+      "expect": { "state": { "equals": "library" }, "query": { "equals": "gothic monsters" }, "resultCount": { "equals": 1 }, "resultKind": { "equals": "list" } }
+    },
+    {
+      "id": "open-genre-shelf",
+      "action": { "op": "replace-and-activate-browse-result", "query": "gothic", "kind": "genre" },
+      "expect": { "state": { "equals": "shelf" }, "kind": { "equals": "genre" }, "canonicalIdentity": { "equals": "/genre/gothic" }, "title": { "equals": "Gothic" }, "bookCount": { "equals": 2 }, "roster": { "equals": ["Frankenstein", "The Last Man"] } }
+    },
+    {
+      "id": "return-to-genre-search",
+      "action": { "op": "return-to-library-browse" },
+      "expect": { "state": { "equals": "library" }, "query": { "equals": "gothic" }, "resultCount": { "equals": 2 }, "resultKind": { "equals": "genre" } }
+    },
+    {
+      "id": "open-era-shelf",
+      "action": { "op": "replace-and-activate-browse-result", "query": "19th century", "kind": "era" },
+      "expect": { "state": { "equals": "shelf" }, "kind": { "equals": "era" }, "canonicalIdentity": { "equals": "/eras/19th-century" }, "title": { "equals": "19th century" }, "bookCount": { "equals": 2 }, "roster": { "equals": ["Frankenstein", "The Last Man"] } }
+    },
+    {
+      "id": "return-to-era-search",
+      "action": { "op": "return-to-library-browse" },
+      "expect": { "state": { "equals": "library" }, "query": { "equals": "19th century" }, "resultCount": { "equals": 1 }, "resultKind": { "equals": "era" } }
+    },
+    {
+      "id": "open-author-shelf",
+      "action": { "op": "replace-and-activate-browse-result", "query": "shelley", "kind": "author" },
+      "expect": { "state": { "equals": "shelf" }, "kind": { "equals": "author" }, "canonicalIdentity": { "equals": "/author/mary-shelley" }, "title": { "equals": "Mary Shelley" }, "bookCount": { "equals": 2 }, "roster": { "equals": ["Frankenstein", "The Last Man"] } }
+    },
+    {
+      "id": "return-to-author-search",
+      "action": { "op": "return-to-library-browse" },
+      "expect": { "state": { "equals": "library" }, "query": { "equals": "shelley" }, "resultCount": { "equals": 3 }, "resultKind": { "equals": "author" } }
+    },
+    {
+      "id": "open-list-address",
+      "action": { "op": "open-browse-address", "address": "https://tale.fyi/~gothic-monsters" },
+      "expect": { "state": { "equals": "shelf" }, "kind": { "equals": "list" }, "canonicalIdentity": { "equals": "/~gothic-monsters" }, "title": { "equals": "Gothic monsters" }, "bookCount": { "equals": 2 }, "roster": { "equals": ["Frankenstein", "The Last Man"] } }
+    },
+    {
+      "id": "open-genre-address",
+      "action": { "op": "open-browse-address", "address": "https://tale.fyi/genre/gothic" },
+      "expect": { "state": { "equals": "shelf" }, "kind": { "equals": "genre" }, "canonicalIdentity": { "equals": "/genre/gothic" }, "title": { "equals": "Gothic" }, "bookCount": { "equals": 2 }, "roster": { "equals": ["Frankenstein", "The Last Man"] } }
+    },
+    {
+      "id": "open-era-address",
+      "action": { "op": "open-browse-address", "address": "https://tale.fyi/eras/19th-century" },
+      "expect": { "state": { "equals": "shelf" }, "kind": { "equals": "era" }, "canonicalIdentity": { "equals": "/eras/19th-century" }, "title": { "equals": "19th century" }, "bookCount": { "equals": 2 }, "roster": { "equals": ["Frankenstein", "The Last Man"] } }
+    },
+    {
+      "id": "open-author-address",
+      "action": { "op": "open-browse-address", "address": "https://tale.fyi/author/mary-shelley" },
+      "expect": { "state": { "equals": "shelf" }, "kind": { "equals": "author" }, "canonicalIdentity": { "equals": "/author/mary-shelley" }, "title": { "equals": "Mary Shelley" }, "bookCount": { "equals": 2 }, "roster": { "equals": ["Frankenstein", "The Last Man"] } }
+    },
+    {
+      "id": "unavailable-shelf-fails-natively",
+      "action": { "op": "open-browse-address", "address": "https://tale.fyi/genre/unavailable-scenario" },
+      "expect": { "state": { "equals": "shelf-unavailable" }, "native": { "equals": true }, "retry": { "equals": "available" }, "webFallback": { "equals": false } }
+    },
+    {
+      "id": "malformed-shelf-fails-natively",
+      "action": { "op": "open-browse-address", "address": "https://tale.fyi/author/malformed-scenario" },
+      "expect": { "state": { "equals": "shelf-unavailable" }, "native": { "equals": true }, "retry": { "equals": "available" }, "webFallback": { "equals": false } }
+    }
+  ]
+}
