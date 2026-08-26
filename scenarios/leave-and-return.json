@@ -1,0 +1,60 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "leave-and-return",
+  "title": "Leave and return",
+  "steps": [
+    {
+      "id": "reopen-at-next-unread",
+      "action": { "op": "reopen-started-book" },
+      "expect": {
+        "readerBlock": { "equals": "U" },
+        "progressTrackCount": { "equals": 1 },
+        "progressTrackHeight": { "equals": 3 },
+        "progressTrackEdge": { "equals": "bottom-safe-area" },
+        "progressTrackColor": { "equals": "rule-soft" },
+        "savedFillBlock": { "equals": "S" },
+        "savedFillColor": { "equals": "muted" },
+        "currentTickBlock": { "equals": "U" },
+        "currentTickWidth": { "equals": 2 },
+        "currentTickColor": { "equals": "primary-half-opacity" },
+        "progressTrackAccessibility": { "equals": "visual-only" }
+      },
+      "capture": { "savedFillPosition": "savedFillPosition" }
+    },
+    {
+      "id": "look-back",
+      "action": { "op": "read-back-to-block", "block": "E" },
+      "expect": {
+        "readerBlock": { "equals": "E" },
+        "currentTickBlock": { "equals": "E" },
+        "savedFillPosition": { "equals": { "ref": "savedFillPosition" } },
+        "continueVisible": { "equals": true },
+        "continueRole": { "equals": "button" },
+        "continueLabel": { "equals": "continue ↓" },
+        "textGeometryChanged": { "equals": false }
+      }
+    },
+    {
+      "id": "continue-to-next-unread",
+      "action": { "op": "activate-continue" },
+      "expect": {
+        "readerBlock": { "equals": "U" },
+        "pageMotion": { "equals": "eased" },
+        "continueVisible": { "equals": false },
+        "savedFillPosition": { "equals": { "ref": "savedFillPosition" } },
+        "readingProgressAdvanced": { "equals": false }
+      }
+    },
+    {
+      "id": "reopen-with-unchanged-mark",
+      "action": { "op": "end-session-and-reopen" },
+      "expect": {
+        "readerBlock": { "equals": "U" },
+        "savedFillPosition": { "equals": { "ref": "savedFillPosition" } },
+        "currentTickBlock": { "equals": "U" },
+        "continueVisible": { "equals": false }
+      }
+    }
+  ]
+}
