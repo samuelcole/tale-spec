@@ -10,7 +10,9 @@ of block sequence and are the first candidates for vectors if this area ever
 earns them. User-visible position and motion are exercised at the product
 surface by [`position-and-motion`](scenarios/position-and-motion.md), while
 saved-versus-current orientation is exercised by
-[`leave-and-return`](scenarios/leave-and-return.md).
+[`leave-and-return`](scenarios/leave-and-return.md). Reader-controlled type
+size and appearance are exercised by
+[`reading-preferences`](scenarios/reading-preferences.md).
 
 ## The chrome line
 
@@ -102,6 +104,27 @@ route until a native shelf surface is separately specified.
 - Numerals: oldstyle and proportional — a date sits in the line instead of
   shouting over it. Kerning on; common and contextual ligatures on.
 - Ink on paper (palette below): body text is `primary` on `paper`.
+
+## Reader choices
+
+The default page above is the book's presentation, not a refusal to let a
+reader make it readable. One quiet disclosure control offers two local,
+account-free choices:
+
+- **Book text size** has four bounded steps: `small` (**0.9×**), `default`
+  (**1×**), `large` (**1.125×**), and `larger` (**1.25×**). The multiplier
+  applies to the inherited prose face and its em-derived geometry. Cover,
+  byline, credits, chapter marks, bridgeheads, hints, and other chrome keep
+  their specified sizes. A size change reflows around the same visible
+  passage and is never reading progress.
+- **Appearance** has `system`, `light`, and `dark` choices. `system` is the
+  default and follows the platform setting; an explicit light or dark choice
+  overrides it until the reader returns to `system`.
+
+Both choices persist on the device without an account and apply on the next
+book open before its first rendered page. The disclosure and its controls use
+the platform's ordinary accessible control semantics; their exact popover,
+menu, or panel treatment is native chrome.
 
 ## The cover — what a book opens on
 
@@ -284,8 +307,9 @@ inset.
 | `rule-soft` | `#13121014` | `#f5edcb1a` |
 | `accent-red` | `#cf1e2e` | `#e84752` |
 
-8-digit values are RGBA. Light and dark are both normative; a client
-follows the platform's appearance setting.
+8-digit values are RGBA. Light and dark are both normative. A client follows
+the platform's appearance setting unless the reader has made the explicit
+local override defined above.
 
 ## Provenance
 

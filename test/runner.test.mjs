@@ -88,6 +88,7 @@ test("every prose scenario has a matching executable plan", async () => {
     "open-and-read",
     "play-and-pocket",
     "position-and-motion",
+    "reading-preferences",
   ]);
 });
 
