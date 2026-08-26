@@ -5,9 +5,10 @@ document is the visual half of that promise: what a book page looks like is
 a contract, not a per-platform interpretation. A reader who moves between
 tale.fyi and a native app is holding the same book, set the same way.
 
-Prose-only area for now — no vectors. The indent/flush rules below are a
-pure function of block sequence and are the first candidates for vectors if
-this area ever earns them.
+No semantic vectors for now. The indent/flush rules below are a pure function
+of block sequence and are the first candidates for vectors if this area ever
+earns them. User-visible position and motion are exercised at the product
+surface by [`position-and-motion`](scenarios/position-and-motion.md).
 
 ## The chrome line
 
@@ -188,6 +189,44 @@ What novels do, and what the source markup assumes:
   *within its container*, with 2.5 em above and below — inside a
   blockquote the container is the quote's inset box, so a quoted scene
   break sits centered in the quote, not the page.
+
+## Position and motion — orientation, not emphasis
+
+The reader's current body paragraph carries one **2 px leading-gutter line**.
+It is an overlay outside the paragraph's text box, never padding or a border,
+so showing or moving it cannot reflow the book. During silent reading it spans
+the paragraph's full rendered height. Its color is `rule` in both appearances:
+this is a quiet answer to “where am I?”, not an alert or selection. In
+particular, `accent-red` is not a reading-position color.
+
+Narration temporarily owns that same line. There is still one position line,
+in the same gutter and the same `rule` color, but its rendered bottom is the
+bottom of the active word box rather than the bottom of the paragraph. As the
+voice advances, changes in line height use a **450 ms ease** and the narration
+line fades in over **140 ms**. The line eases from its currently rendered
+height toward each new word instead of snapping or moving backward during
+continuous playback.
+
+Movement the product initiates while the book is already on screen also keeps
+the reader oriented. Continue, start over, read from here, and narration
+follow interpolate from the currently rendered position to their exact target.
+The duration and curve may use the platform's native smooth-scroll treatment,
+but the movement must expose a start, intermediate positions, and an end; a
+teleport is not conforming. If the target changes mid-movement, the new move
+begins at the currently rendered position. Animation never changes the target
+paragraph, the comfortable follow band, or whether the movement is allowed to
+write reading progress.
+
+Initial restoration or passage placement completed before the book is
+presented may be immediate. Genuine reader scrolling keeps the platform's own
+physics under the chrome line above; this section does not replace momentum,
+deceleration, or overscroll.
+
+When the platform's **Reduce Motion** preference is enabled, narration-line
+height changes, ownership changes, and product-initiated page movement are
+immediate. Their final word edge, paragraph, follow band, and progress outcome
+remain identical to ordinary-motion mode. The preference is read for each new
+movement; it does not require a different build of the reader.
 
 ## Chapter marks — navigation, not prose
 
