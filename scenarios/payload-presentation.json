@@ -1,0 +1,50 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "payload-presentation",
+  "title": "Payload presentation",
+  "steps": [
+    {
+      "id": "open-serif-fiction",
+      "action": {
+        "op": "open-payload-presentation",
+        "path": "payload-presentation-serif",
+        "clean": true
+      },
+      "expect": {
+        "coverTypeface": { "equals": "serif" },
+        "bodyTypeface": { "equals": "serif" },
+        "classification": { "equals": "absent" },
+        "classificationRole": { "equals": "absent" }
+      }
+    },
+    {
+      "id": "open-sans-nonfiction",
+      "action": {
+        "op": "open-payload-presentation",
+        "path": "payload-presentation-sans",
+        "clean": false
+      },
+      "expect": {
+        "coverTypeface": { "equals": "sans" },
+        "bodyTypeface": { "equals": "sans" },
+        "classification": { "equals": "non-fiction" },
+        "classificationRole": { "equals": "text" }
+      }
+    },
+    {
+      "id": "open-mono-fiction",
+      "action": {
+        "op": "open-payload-presentation",
+        "path": "payload-presentation-mono",
+        "clean": false
+      },
+      "expect": {
+        "coverTypeface": { "equals": "mono" },
+        "bodyTypeface": { "equals": "mono" },
+        "classification": { "equals": "absent" },
+        "classificationRole": { "equals": "absent" }
+      }
+    }
+  ]
+}

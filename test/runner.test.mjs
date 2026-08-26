@@ -86,6 +86,7 @@ test("every prose scenario has a matching executable plan", async () => {
     "mark-offline-and-sync",
     "note-and-back",
     "open-and-read",
+    "payload-presentation",
     "play-and-pocket",
     "position-and-motion",
     "reading-preferences",
