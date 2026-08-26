@@ -86,6 +86,9 @@ every unfinished client its intentional red test immediately.
 - [`play-and-pocket.md`](play-and-pocket.md) — press play and the voice
   starts where your reading stands, carries on with the screen away, holds
   its place across a pause, and moves the one mark.
+- [`position-and-motion.md`](position-and-motion.md) — one quiet gutter line
+  shows silent and spoken position; product movement interpolates, retargets,
+  and becomes immediate under Reduce Motion without changing its destination.
 - [`follow-and-override.md`](follow-and-override.md) — the spoken word lights
   the page and follows in a comfortable band until a genuine reader scroll
   takes control; automatic movement never becomes reading progress.

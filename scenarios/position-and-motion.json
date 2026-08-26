@@ -1,0 +1,60 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "position-and-motion",
+  "title": "Position and motion",
+  "steps": [
+    {
+      "id": "select-silent-position",
+      "action": { "op": "read-to-narrated-block", "block": "P" },
+      "expect": {
+        "readerBlock": { "notEquals": null },
+        "positionLineCount": { "equals": 1 },
+        "positionLineRole": { "equals": "silent" },
+        "positionLineColor": { "equals": "rule" },
+        "positionLineWidth": { "equals": 2 },
+        "positionLineExtent": { "equals": "full-rendered-block" },
+        "textGeometryChanged": { "equals": false }
+      },
+      "capture": { "selectedBlock": "readerBlock" }
+    },
+    {
+      "id": "play-and-grow-line",
+      "action": { "op": "play-through-word-bottoms", "count": 2 },
+      "expect": {
+        "transport": { "equals": "playing" },
+        "voiceBlock": { "equals": { "ref": "selectedBlock" } },
+        "positionLineCount": { "equals": 1 },
+        "positionLineRole": { "equals": "narration" },
+        "positionLineColor": { "equals": "rule" },
+        "positionLineWidth": { "equals": 2 },
+        "positionLineBottom": { "equals": "rendered-word-bottom" },
+        "lineMotion": { "equals": "eased" },
+        "lineTransitionDurationMs": { "between": [400, 550] },
+        "lineAppearanceDurationMs": { "between": [100, 200] }
+      }
+    },
+    {
+      "id": "follow-and-retarget",
+      "action": { "op": "permit-follow-and-retarget", "beforeSettled": true },
+      "expect": {
+        "pageMotion": { "equals": "eased" },
+        "pageRetargeting": { "equals": "continuous-forward" },
+        "litPosition": { "equals": "comfortable-band" },
+        "readingProgressAdvanced": { "equals": false }
+      }
+    },
+    {
+      "id": "reduce-motion-and-repeat",
+      "action": { "op": "repeat-with-reduced-motion", "clean": true },
+      "expect": {
+        "lineMotion": { "equals": "immediate" },
+        "pageMotion": { "equals": "immediate" },
+        "positionLineBottom": { "equals": "rendered-word-bottom" },
+        "lineMovedBackward": { "equals": false },
+        "litPosition": { "equals": "comfortable-band" },
+        "readingProgressAdvanced": { "equals": false }
+      }
+    }
+  ]
+}
