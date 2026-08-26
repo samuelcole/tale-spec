@@ -98,6 +98,9 @@ every unfinished client its intentional red test immediately.
 - [`mark-offline-and-sync.md`](mark-offline-and-sync.md) — mark, annotate,
   edit, and remove offline; the local plan survives relaunch, stays visibly
   unsaved, and becomes shareable only after automatic publication.
+- [`reading-preferences.md`](reading-preferences.md) — change the book text
+  size and appearance behind one quiet control; reflow keeps the passage and
+  mark, and both choices survive a new session.
 - [`library-open.md`](library-open.md) — cold launch into the library, open a
   row, see started and finished progress, and understand offline availability
   without losing the door into an unkept book.

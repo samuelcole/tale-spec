@@ -1,0 +1,79 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "reading-preferences",
+  "title": "Reading preferences",
+  "steps": [
+    {
+      "id": "open-preferences",
+      "action": { "op": "read-to-block-and-open-preferences", "clean": true },
+      "expect": {
+        "preferences": { "equals": "open" },
+        "sample": { "equals": "on-screen" },
+        "followDeviceVisible": { "equals": false }
+      },
+      "capture": {
+        "selectedBlock": "readerBlock",
+        "successor": "successor",
+        "defaultTextSize": "bookTextSize",
+        "startingAppearance": "appearance",
+        "coverTitleSize": "coverTitleSize"
+      }
+    },
+    {
+      "id": "increase-size",
+      "action": { "op": "increase-book-text-size" },
+      "expect": {
+        "bookTextSize": { "greaterThan": { "ref": "defaultTextSize" } },
+        "coverTitleSize": { "equals": { "ref": "coverTitleSize" } }
+      },
+      "capture": { "largeTextSize": "bookTextSize" }
+    },
+    {
+      "id": "toggle-theme",
+      "action": { "op": "toggle-light-dark-theme" },
+      "expect": {
+        "followDeviceVisible": { "equals": true },
+        "appearance": { "notEquals": { "ref": "startingAppearance" } },
+        "bookTextSize": { "equals": { "ref": "largeTextSize" } }
+      },
+      "capture": { "manualAppearance": "appearance" }
+    },
+    {
+      "id": "reopen-with-preferences",
+      "action": { "op": "end-open-and-open-preferences" },
+      "expect": {
+        "preferences": { "equals": "open" },
+        "bookTextSize": { "equals": { "ref": "largeTextSize" } },
+        "followDeviceVisible": { "equals": true },
+        "appearance": { "equals": { "ref": "manualAppearance" } },
+        "readerBlock": { "equals": { "ref": "successor" } },
+        "dimBoundary": { "equals": { "ref": "selectedBlock" } }
+      }
+    },
+    {
+      "id": "follow-device",
+      "action": { "op": "follow-device-theme" },
+      "expect": {
+        "preferences": { "equals": "open" },
+        "bookTextSize": { "equals": { "ref": "largeTextSize" } },
+        "followDeviceVisible": { "equals": false },
+        "appearance": { "equals": { "ref": "startingAppearance" } },
+        "readerBlock": { "equals": { "ref": "successor" } },
+        "dimBoundary": { "equals": { "ref": "selectedBlock" } }
+      }
+    },
+    {
+      "id": "reopen-following-device",
+      "action": { "op": "end-open-and-open-preferences" },
+      "expect": {
+        "preferences": { "equals": "open" },
+        "bookTextSize": { "equals": { "ref": "largeTextSize" } },
+        "followDeviceVisible": { "equals": false },
+        "appearance": { "equals": { "ref": "startingAppearance" } },
+        "readerBlock": { "equals": { "ref": "successor" } },
+        "dimBoundary": { "equals": { "ref": "selectedBlock" } }
+      }
+    }
+  ]
+}
