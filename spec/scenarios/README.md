@@ -89,6 +89,9 @@ every unfinished client its intentional red test immediately.
 - [`position-and-motion.md`](position-and-motion.md) — one quiet gutter line
   shows silent and spoken position; product movement interpolates, retargets,
   and becomes immediate under Reduce Motion without changing its destination.
+- [`leave-and-return.md`](leave-and-return.md) — a bottom track distinguishes
+  the saved mark from the current viewport, and an accessible continue action
+  returns from a look back without counting the jump as reading.
 - [`follow-and-override.md`](follow-and-override.md) — the spoken word lights
   the page and follows in a comfortable band until a genuine reader scroll
   takes control; automatic movement never becomes reading progress.

@@ -8,7 +8,9 @@ tale.fyi and a native app is holding the same book, set the same way.
 No semantic vectors for now. The indent/flush rules below are a pure function
 of block sequence and are the first candidates for vectors if this area ever
 earns them. User-visible position and motion are exercised at the product
-surface by [`position-and-motion`](scenarios/position-and-motion.md).
+surface by [`position-and-motion`](scenarios/position-and-motion.md), while
+saved-versus-current orientation is exercised by
+[`leave-and-return`](scenarios/leave-and-return.md).
 
 ## The chrome line
 
@@ -227,6 +229,29 @@ height changes, ownership changes, and product-initiated page movement are
 immediate. Their final word edge, paragraph, follow band, and progress outcome
 remain identical to ordinary-motion mode. The preference is read for each new
 movement; it does not require a different build of the reader.
+
+## Saved progress and the way back
+
+One **3 px fixed track** sits at the bottom safe-area edge of every open book.
+Its background is `rule-soft`. A fill from the leading edge to the persisted
+furthest-read percent uses `muted`; it is the saved high-water mark and does
+not walk backwards when the reader re-reads earlier text. One **2 px tick** in
+`primary` at 0.5 opacity marks the current viewport position. The fill and tick
+are deliberately independent: when the reader looks back, the tick moves back
+while the fill stays put.
+
+When the current paragraph is arrival-dimmed, the next unread paragraph is
+below the viewport, and the cover's own continue affordance is not visible, a
+fixed strip directly above the track offers **continue ↓** in the machine's
+voice. It is a button, not status text. Activating it moves to the exact next
+unread paragraph using the product-motion rules above, does not spend the
+reading-intent window, and therefore does not advance saved progress. The strip
+disappears once the saved place is no longer below the viewport.
+
+The track is visual orientation, not a touch target or an accessibility value.
+The continue button is the accessible path back. A platform may use its native
+safe-area mechanism and control implementation, but not turn the track into an
+interactive seek surface or substitute an approximate destination.
 
 ## Chapter marks — navigation, not prose
 
