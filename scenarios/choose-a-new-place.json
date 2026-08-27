@@ -1,0 +1,98 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "choose-a-new-place",
+  "title": "Choose a new place",
+  "steps": [
+    {
+      "id": "look-back-to-choose-place",
+      "action": { "op": "reopen-and-read-back-to-block", "block": "E" },
+      "expect": {
+        "readerBlock": { "equals": "E" },
+        "savedFillBlock": { "equals": "S" },
+        "readFromHereVisible": { "equals": true },
+        "readFromHereRole": { "equals": "button" },
+        "readFromHereLabel": { "equals": "read from here" },
+        "readFromHereColor": { "equals": "accent-red" },
+        "textGeometryChanged": { "equals": false }
+      },
+      "capture": {
+        "savedFillPosition": "savedFillPosition",
+        "chosenBlock": "readerBlock"
+      }
+    },
+    {
+      "id": "arm-read-from-here",
+      "action": { "op": "activate-read-from-here" },
+      "expect": {
+        "readerBlock": { "equals": { "ref": "chosenBlock" } },
+        "readFromHereVisible": { "equals": true },
+        "readFromHereLabel": { "equals": "are you sure?" },
+        "savedFillPosition": { "equals": { "ref": "savedFillPosition" } },
+        "textGeometryChanged": { "equals": false }
+      }
+    },
+    {
+      "id": "confirm-read-from-here",
+      "action": { "op": "activate-read-from-here" },
+      "expect": {
+        "readerBlock": { "equals": { "ref": "chosenBlock" } },
+        "savedFillBlock": { "equals": "immediately-before-E" },
+        "currentTickBlock": { "equals": "E" },
+        "readFromHereVisible": { "equals": false }
+      },
+      "capture": { "rewoundFillPosition": "savedFillPosition" }
+    },
+    {
+      "id": "reopen-at-chosen-place",
+      "action": { "op": "end-session-and-reopen" },
+      "expect": {
+        "readerBlock": { "equals": { "ref": "chosenBlock" } },
+        "savedFillBlock": { "equals": "immediately-before-E" },
+        "savedFillPosition": { "equals": { "ref": "rewoundFillPosition" } },
+        "readFromHereVisible": { "equals": false }
+      }
+    },
+    {
+      "id": "return-to-cover",
+      "action": { "op": "read-back-to-cover" },
+      "expect": {
+        "coverVisible": { "equals": true },
+        "startOverVisible": { "equals": true },
+        "startOverRole": { "equals": "button" },
+        "startOverLabel": { "equals": "(start over)" },
+        "savedFillPosition": { "equals": { "ref": "rewoundFillPosition" } }
+      }
+    },
+    {
+      "id": "arm-start-over",
+      "action": { "op": "activate-start-over" },
+      "expect": {
+        "coverVisible": { "equals": true },
+        "startOverVisible": { "equals": true },
+        "startOverLabel": { "equals": "are you sure?" },
+        "savedFillPosition": { "equals": { "ref": "rewoundFillPosition" } }
+      }
+    },
+    {
+      "id": "confirm-start-over",
+      "action": { "op": "activate-start-over" },
+      "expect": {
+        "coverVisible": { "equals": true },
+        "savedFillPosition": { "equals": 0 },
+        "arrivalDimmedBlockCount": { "equals": 0 },
+        "startOverVisible": { "equals": false }
+      }
+    },
+    {
+      "id": "reopen-with-no-place",
+      "action": { "op": "end-session-and-reopen" },
+      "expect": {
+        "coverVisible": { "equals": true },
+        "savedFillPosition": { "equals": 0 },
+        "arrivalDimmedBlockCount": { "equals": 0 },
+        "startOverVisible": { "equals": false }
+      }
+    }
+  ]
+}
