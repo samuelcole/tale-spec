@@ -1,0 +1,71 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "voice-rides-along",
+  "title": "The voice rides along",
+  "steps": [
+    {
+      "id": "open-first-narrated-book",
+      "action": { "op": "open-book", "book": "first", "clean": true, "network": "reachable" },
+      "expect": {
+        "state": { "equals": "book" },
+        "cover": { "equals": "on-screen" },
+        "playControl": { "equals": "available" },
+        "voiceKeepControl": { "equals": "absent" }
+      }
+    },
+    {
+      "id": "play-and-keep-voice",
+      "action": { "op": "activate-transport-and-wait-for-keep" },
+      "expect": {
+        "preparedThenPlayed": { "equals": true },
+        "transport": { "equals": "playing" },
+        "positionAdvanced": { "equals": true },
+        "playbackWaitedForKeep": { "equals": false },
+        "voiceKeep": { "equals": "complete" }
+      }
+    },
+    {
+      "id": "reopen-and-play-offline",
+      "action": { "op": "end-session-set-network-open-and-play", "book": "first", "network": "unreachable" },
+      "expect": {
+        "state": { "equals": "book" },
+        "text": { "equals": "available" },
+        "playControl": { "equals": "available" },
+        "transport": { "equals": "playing" },
+        "position": { "equals": "past-first-audio-seam" },
+        "narrationError": { "equals": "absent" }
+      }
+    },
+    {
+      "id": "open-second-book-without-playing",
+      "action": { "op": "end-session-set-network-and-open", "book": "second", "network": "reachable" },
+      "expect": {
+        "state": { "equals": "book" },
+        "playControl": { "equals": "available" },
+        "transport": { "equals": "idle" },
+        "playActivated": { "equals": false }
+      }
+    },
+    {
+      "id": "try-unkept-voice-offline",
+      "action": { "op": "end-session-set-network-and-open", "book": "second", "network": "unreachable" },
+      "expect": {
+        "state": { "equals": "book" },
+        "text": { "equals": "available" },
+        "transport": { "equals": "idle" },
+        "playControl": { "equals": "absent" },
+        "sound": { "equals": "absent" }
+      }
+    },
+    {
+      "id": "restore-network",
+      "action": { "op": "set-network-and-wait-for-voice", "network": "reachable" },
+      "expect": {
+        "transport": { "equals": "idle" },
+        "playControl": { "equals": "available" },
+        "sound": { "equals": "absent" }
+      }
+    }
+  ]
+}
