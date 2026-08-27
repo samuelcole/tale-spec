@@ -112,3 +112,5 @@ every unfinished client its intentional red test immediately.
   search.
 - [`library-browse.md`](library-browse.md) — open list, genre, era, and author
   results and canonical addresses as native shelves backed by one payload.
+- [`finish-and-leave.md`](finish-and-leave.md) — finish the text, find its
+  provenance and original year in a quiet colophon, then take the way home.
