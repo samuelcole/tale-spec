@@ -1,0 +1,47 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "book-navigation",
+  "title": "A book keeps its doors",
+  "steps": [
+    {
+      "id": "open-direct-book",
+      "action": { "op": "open-book-address" },
+      "expect": {
+        "state": { "equals": "book" },
+        "canonicalBook": { "equals": "/frankenstein-scenario" },
+        "homeControl": { "equals": "available" },
+        "authorLabel": { "equals": "Mary Shelley" },
+        "authorRole": { "equals": "link" }
+      }
+    },
+    {
+      "id": "open-linked-author",
+      "action": { "op": "activate-author-byline" },
+      "expect": {
+        "state": { "equals": "shelf" },
+        "kind": { "equals": "author" },
+        "canonicalIdentity": { "equals": "/author/mary-shelley" },
+        "title": { "equals": "Mary Shelley" }
+      }
+    },
+    {
+      "id": "reopen-direct-book",
+      "action": { "op": "open-book-address" },
+      "expect": {
+        "state": { "equals": "book" },
+        "canonicalBook": { "equals": "/frankenstein-scenario" },
+        "homeControl": { "equals": "available" }
+      }
+    },
+    {
+      "id": "leave-for-library",
+      "action": { "op": "activate-reader-home" },
+      "expect": {
+        "readerVisible": { "equals": false },
+        "libraryVisible": { "equals": true },
+        "addressPath": { "equals": "/" }
+      }
+    }
+  ]
+}

@@ -117,3 +117,5 @@ every unfinished client its intentional red test immediately.
 - [`voice-rides-along.md`](voice-rides-along.md) — play once online and the
   voice replays across its seams offline; a voice never played explains what
   is missing and remains retryable.
+- [`book-navigation.md`](book-navigation.md) — a directly opened book keeps a
+  way home, and a producer-linked byline opens its native author shelf.
