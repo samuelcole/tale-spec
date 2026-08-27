@@ -1,0 +1,88 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "finish-and-discover",
+  "title": "The last page opens outward",
+  "steps": [
+    {
+      "id": "reach-discovery",
+      "action": { "op": "read-to-finished-book-discovery" },
+      "expect": {
+        "recommendationHeading": { "equals": "More by Scenario Author" },
+        "recommendationLabel": { "equals": "A Wider Measure" },
+        "recommendationRole": { "equals": "link" },
+        "genreLabel": { "equals": "Gothic" },
+        "genreRole": { "equals": "link" },
+        "listLabel": { "equals": "Small wonders" },
+        "listRole": { "equals": "link" },
+        "eraLabel": { "equals": "1897" },
+        "eraRole": { "equals": "link" }
+      }
+    },
+    {
+      "id": "open-recommendation",
+      "action": { "op": "activate-finished-book-recommendation" },
+      "expect": {
+        "state": { "equals": "book" },
+        "canonicalBook": { "equals": "/a-wider-measure-scenario" }
+      }
+    },
+    {
+      "id": "reopen-after-recommendation",
+      "action": { "op": "reopen-and-read-to-finished-book-discovery" },
+      "expect": {
+        "state": { "equals": "book" },
+        "canonicalBook": { "equals": "/finish-and-leave-scenario" },
+        "discoveryVisible": { "equals": true }
+      }
+    },
+    {
+      "id": "open-genre",
+      "action": { "op": "activate-finished-book-genre" },
+      "expect": {
+        "state": { "equals": "shelf" },
+        "kind": { "equals": "genre" },
+        "canonicalIdentity": { "equals": "/genre/gothic" },
+        "title": { "equals": "Gothic" }
+      }
+    },
+    {
+      "id": "reopen-after-genre",
+      "action": { "op": "reopen-and-read-to-finished-book-discovery" },
+      "expect": {
+        "state": { "equals": "book" },
+        "canonicalBook": { "equals": "/finish-and-leave-scenario" },
+        "discoveryVisible": { "equals": true }
+      }
+    },
+    {
+      "id": "open-list",
+      "action": { "op": "activate-finished-book-list" },
+      "expect": {
+        "state": { "equals": "shelf" },
+        "kind": { "equals": "list" },
+        "canonicalIdentity": { "equals": "/~small-wonders" },
+        "title": { "equals": "Small wonders" }
+      }
+    },
+    {
+      "id": "reopen-after-list",
+      "action": { "op": "reopen-and-read-to-finished-book-discovery" },
+      "expect": {
+        "state": { "equals": "book" },
+        "canonicalBook": { "equals": "/finish-and-leave-scenario" },
+        "discoveryVisible": { "equals": true }
+      }
+    },
+    {
+      "id": "open-era",
+      "action": { "op": "activate-finished-book-era" },
+      "expect": {
+        "state": { "equals": "shelf" },
+        "kind": { "equals": "era" },
+        "canonicalIdentity": { "equals": "/eras/1897" },
+        "title": { "equals": "1897" }
+      }
+    }
+  ]
+}
