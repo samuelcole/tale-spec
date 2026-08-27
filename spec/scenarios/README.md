@@ -114,6 +114,8 @@ every unfinished client its intentional red test immediately.
   results and canonical addresses as native shelves backed by one payload.
 - [`finish-and-leave.md`](finish-and-leave.md) — finish the text, find its
   provenance and original year in a quiet colophon, then take the way home.
+- [`finish-and-discover.md`](finish-and-discover.md) — a finished book opens
+  outward through producer-linked recommendations, genres, lists, and era.
 - [`voice-rides-along.md`](voice-rides-along.md) — play once online and the
   voice replays across its seams offline; a voice never played explains what
   is missing and remains retryable.

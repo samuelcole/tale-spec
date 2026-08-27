@@ -37,6 +37,23 @@ One JSON representation per tale:
     "href": "/dracula/read-along.json",
     "contentVersion": "sha256-VHWf..."
   },
+  "discovery": {
+    "recommendations": {
+      "heading": "More by Bram Stoker",
+      "showAuthors": false,
+      "items": [{
+        "path": "the-jewel-of-seven-stars",
+        "title": "The Jewel of Seven Stars",
+        "author": "Bram Stoker",
+        "description": "An Egyptologist's discovery wakes something old.",
+        "nonfiction": false,
+        "href": "/the-jewel-of-seven-stars"
+      }]
+    },
+    "genres": [{ "label": "Horror", "href": "/genre/horror" }],
+    "lists": [{ "label": "Gothic Monsters", "href": "/~gothic-monsters" }],
+    "era": { "label": "1897", "href": "/eras/1897" }
+  },
   "sections": [
     {
       "id": "chapter-1",
@@ -69,6 +86,18 @@ One JSON representation per tale:
   complete narrator display phrase used in the colophon; `coverReadBy` is the
   intentionally compact phrase used beside the cover. Clients render these
   server-produced strings and do not recompute or truncate narrator credits.
+- Optional `discovery` carries the quiet doors after the final passage. The
+  producer supplies every displayed label and canonical `href`; clients do not
+  derive author slugs, genre identities, list paths, era addresses, or
+  recommendations. `recommendations.heading` and `showAuthors` own whether
+  each recommended row repeats its author. Every recommendation includes the
+  synopsis that qualified it, its classification, its canonical reading
+  `path`, and its reading `href`. `path` has the same no-leading-slash form as
+  the enclosing payload path and lets reading-state stores use the producer's
+  identity without parsing the URL.
+  `genres` and `lists` preserve producer order. `era` is the original-year
+  door when one exists. A payload without `discovery`, or with no populated
+  discovery section, simply continues from the colophon without these doors.
 
 ## Content
 
