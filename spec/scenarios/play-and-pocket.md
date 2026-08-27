@@ -27,8 +27,11 @@ adapter may translate and what it may not weaken.
 - A narrated book: its payload declares `narration`, its recording runs in at
   least two sections with the first short enough to cross in one sitting, and
   its pinned fixture alignment covers the opening paragraphs so every span the
-  outcomes name is known. The reference fixture is the curated
-  `frankenstein-scenario` with its pinned fixture recording and alignment.
+  outcomes name is known. The alignment response can be held briefly after the
+  first play gesture, so the surface can be observed while sound is genuinely
+  pending rather than racing a local response. The reference fixture is the
+  curated `frankenstein-scenario` with its pinned fixture recording and
+  alignment.
 - Ordinary reading conditions: default type size, no plan marks open, no
   passage fragment in the address. Narration is not playing — until step 1
   starts it.
@@ -81,7 +84,13 @@ paragraph at the top of the settled screen **P**. A play control stands with
 the book — it exists because this book is narrated, and only because of that:
 a book without narration offers none, which is
 [`kept-on-open.md`](kept-on-open.md)'s no-control outcome, still true.
-Activating it is a genuine press.
+Activating it is a genuine press. While the alignment and recording are still
+on their way, the transport immediately says it is preparing and gives the
+reader a visible pending treatment on the same control. The play control does
+not disappear, claim to be playing, or sit visually unchanged through the
+silence. This state is available to assistive technology as well as sight.
+
+When sound is ready, the preparing treatment clears without another press.
 
 The transport shows playing, and the voice stands inside **P**'s narrated
 span: playback began where reading stands — not at the top of the book, not
@@ -143,6 +152,9 @@ is.
 - **Seeking.** Nothing here scrubs, skips, or jumps the voice. What a seek
   does to the transport, and the rule that crossing a seek credits nothing to
   the mark, is future vector territory alongside the next scenario.
+- **Failure copy.** A failed alignment or recording must return to an honest,
+  pressable transport rather than remain preparing, but what words explain the
+  failure is not decided here.
 - **Keeping the voice.** Audio kept on the device by playing — and a relaunch
   offline that still plays — is
   [`kept-on-open.md`](kept-on-open.md)'s reserved "voice rides along"

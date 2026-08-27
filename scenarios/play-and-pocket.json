@@ -16,8 +16,17 @@
       "capture": { "readingBlock": "topBlock", "readingBlockIndex": "topBlockIndex" }
     },
     {
+      "id": "prepare-narration",
+      "action": { "op": "activate-transport-and-hold-response" },
+      "expect": {
+        "transport": { "equals": "preparing" },
+        "playControl": { "equals": "available" },
+        "preparingFeedback": { "equals": "visible-and-accessible" }
+      }
+    },
+    {
       "id": "play-from-reading-position",
-      "action": { "op": "activate-transport" },
+      "action": { "op": "allow-response-and-wait-for-playing" },
       "expect": {
         "transport": { "equals": "playing" },
         "voiceBlock": { "equals": { "ref": "readingBlock" } },
