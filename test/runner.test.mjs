@@ -78,6 +78,7 @@ test("every prose scenario has a matching executable plan", async () => {
   assert.deepEqual(ids, [
     "choose-a-new-place",
     "fetch-fails-honestly",
+    "finish-and-leave",
     "follow-and-override",
     "kept-on-open",
     "leave-and-return",
@@ -91,6 +92,7 @@ test("every prose scenario has a matching executable plan", async () => {
     "play-and-pocket",
     "position-and-motion",
     "reading-preferences",
+    "voice-rides-along",
   ]);
 });
 
