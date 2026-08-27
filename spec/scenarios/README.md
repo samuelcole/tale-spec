@@ -121,3 +121,6 @@ every unfinished client its intentional red test immediately.
   is missing and remains retryable.
 - [`book-navigation.md`](book-navigation.md) — a directly opened book keeps a
   way home, and a producer-linked byline opens its native author shelf.
+- [`voice-flourish-and-peek.md`](voice-flourish-and-peek.md) — Play briefly
+  washes through the live phrase; holding the playing control keeps that same
+  emphasis visible without changing playback.
