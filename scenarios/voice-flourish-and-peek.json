@@ -1,0 +1,65 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "voice-flourish-and-peek",
+  "title": "Voice flourish and peek",
+  "steps": [
+    {
+      "id": "play-and-show-flourish",
+      "action": { "op": "activate-transport-and-watch-phrase-wash" },
+      "expect": {
+        "transport": { "equals": "playing" },
+        "phraseWashCount": { "equals": 1 },
+        "phraseWashBlock": { "equals": "voice-block" },
+        "phraseWashOrigin": { "equals": "narration-rule" },
+        "phraseWashBottom": { "equals": "rendered-word-bottom" },
+        "phraseWashFollowedVoice": { "equals": true },
+        "textGeometryChanged": { "equals": false }
+      }
+    },
+    {
+      "id": "let-flourish-finish",
+      "action": { "op": "wait-for-phrase-wash-to-recede" },
+      "expect": {
+        "transport": { "equals": "playing" },
+        "phraseWashCount": { "equals": 0 },
+        "narrationRule": { "equals": "rendered-word-bottom" }
+      }
+    },
+    {
+      "id": "hold-playing-transport",
+      "action": { "op": "press-and-hold-transport", "minimumDurationMs": 420 },
+      "expect": {
+        "transport": { "equals": "playing" },
+        "narrationAdvancedDuringHold": { "equals": true },
+        "phraseWashCount": { "equals": 1 },
+        "phraseWashBlock": { "equals": "voice-block" },
+        "phraseWashBottom": { "equals": "rendered-word-bottom" },
+        "phraseWashFollowedVoice": { "equals": true },
+        "phraseWashHeldForGesture": { "equals": true }
+      }
+    },
+    {
+      "id": "release-hold-and-tap",
+      "action": { "op": "release-held-transport-then-tap" },
+      "expect": {
+        "transportAfterRelease": { "equals": "playing" },
+        "phraseWashCountAfterRelease": { "equals": 0 },
+        "narrationRuleAfterRelease": { "equals": "rendered-word-bottom" },
+        "transportAfterTap": { "equals": "paused" },
+        "tapToggleCount": { "equals": 1 }
+      }
+    },
+    {
+      "id": "repeat-with-reduced-motion",
+      "action": { "op": "repeat-flourish-and-hold-with-reduced-motion", "clean": true },
+      "expect": {
+        "transport": { "equals": "playing" },
+        "phraseWashCount": { "equals": 1 },
+        "phraseWashBottom": { "equals": "rendered-word-bottom" },
+        "phraseWashMotion": { "equals": "immediate" },
+        "phraseWashPresentOnlyWhileRequested": { "equals": true }
+      }
+    }
+  ]
+}
