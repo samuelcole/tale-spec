@@ -1,0 +1,33 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "finish-and-leave",
+  "title": "Finish and leave",
+  "steps": [
+    {
+      "id": "reach-colophon",
+      "action": { "op": "read-to-end" },
+      "expect": {
+        "gratitude": { "equals": "thank you for reading" },
+        "textCredit": {
+          "equals": "A Narrow Measure by Scenario Author. The text is in the US public domain, from the Standard Ebooks edition. Served from our own copy; read on their site for the full edition with images and typography."
+        },
+        "audioCredit": {
+          "equals": "Narrated by Fixture Voice for LibriVox, also public domain."
+        },
+        "firstPublished": { "equals": "First published in 1897." },
+        "homeLabel": { "equals": "tale.fyi" },
+        "homeRole": { "equals": "link" }
+      }
+    },
+    {
+      "id": "leave-for-library",
+      "action": { "op": "activate-colophon-home" },
+      "expect": {
+        "readerVisible": { "equals": false },
+        "libraryVisible": { "equals": true },
+        "addressPath": { "equals": "/" }
+      }
+    }
+  ]
+}
