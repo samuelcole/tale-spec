@@ -124,3 +124,6 @@ every unfinished client its intentional red test immediately.
 - [`voice-flourish-and-peek.md`](voice-flourish-and-peek.md) — Play briefly
   washes through the live phrase; holding the playing control keeps that same
   emphasis visible without changing playback.
+- [`place-follows-you.md`](place-follows-you.md) — sign in and your place
+  follows you between devices: forward-only, honoring an explicit rewind,
+  arriving from offline reading, and surviving sign-out locally.

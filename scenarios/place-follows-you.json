@@ -1,0 +1,139 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "place-follows-you",
+  "title": "Your place follows you",
+  "steps": [
+    {
+      "id": "read-signed-out",
+      "action": { "op": "open-book-and-read-to", "block": "P", "clean": "everything" },
+      "expect": {
+        "signedIn": { "equals": false },
+        "readerBlock": { "equals": "P" },
+        "identityPrompt": { "equals": "absent" },
+        "blockingError": { "equals": "absent" }
+      }
+    },
+    {
+      "id": "sign-in-at-the-place",
+      "action": { "op": "sign-in-and-open-book" },
+      "expect": {
+        "signedIn": { "equals": true },
+        "savedFillBlock": { "equals": "P" },
+        "readerBlock": { "equals": "immediately-after-P" },
+        "blockingError": { "equals": "absent" }
+      }
+    },
+    {
+      "id": "fresh-context-signed-out",
+      "action": { "op": "open-book-in-fresh-context" },
+      "expect": {
+        "signedIn": { "equals": false },
+        "position": { "equals": "start" },
+        "savedFillBlock": { "equals": "absent" },
+        "identityPrompt": { "equals": "absent" },
+        "blockingError": { "equals": "absent" }
+      }
+    },
+    {
+      "id": "sign-in-pulls-the-place",
+      "action": { "op": "sign-in-and-open-book" },
+      "expect": {
+        "signedIn": { "equals": true },
+        "savedFillBlock": { "equals": "P" },
+        "readerBlock": { "equals": "immediately-after-P" },
+        "blockingError": { "equals": "absent" }
+      }
+    },
+    {
+      "id": "read-ahead",
+      "action": { "op": "read-to-block", "block": "Q" },
+      "expect": {
+        "readerBlock": { "equals": "Q" },
+        "savedFillBlock": { "equals": "Q" }
+      }
+    },
+    {
+      "id": "rewind-to-p",
+      "action": { "op": "rewind-to-block", "block": "P" },
+      "expect": {
+        "readerBlock": { "equals": "P" },
+        "savedFillBlock": { "equals": "immediately-before-P" },
+        "readFromHereVisible": { "equals": false }
+      }
+    },
+    {
+      "id": "rewind-survives-reopen",
+      "action": { "op": "end-session-and-reopen" },
+      "expect": {
+        "readerBlock": { "equals": "P" },
+        "savedFillBlock": { "equals": "immediately-before-P" },
+        "blockingError": { "equals": "absent" }
+      }
+    },
+    {
+      "id": "rewind-follows",
+      "action": { "op": "sign-in-in-fresh-context-and-open-book" },
+      "expect": {
+        "signedIn": { "equals": true },
+        "readerBlock": { "equals": "P" },
+        "savedFillBlock": { "equals": "immediately-before-P" },
+        "blockingError": { "equals": "absent" }
+      }
+    },
+    {
+      "id": "go-offline",
+      "action": { "op": "set-network", "network": "unreachable" },
+      "expect": {
+        "readerBlock": { "equals": "P" },
+        "blockingError": { "equals": "absent" }
+      }
+    },
+    {
+      "id": "read-offline",
+      "action": { "op": "read-to-block", "block": "R" },
+      "expect": {
+        "readerBlock": { "equals": "R" },
+        "savedFillBlock": { "equals": "R" },
+        "blockingError": { "equals": "absent" }
+      }
+    },
+    {
+      "id": "reconnect",
+      "action": { "op": "set-network", "network": "reachable", "readingAction": "none" },
+      "expect": {
+        "readerBlock": { "equals": "R" },
+        "blockingError": { "equals": "absent" }
+      }
+    },
+    {
+      "id": "offline-place-follows",
+      "action": { "op": "sign-in-in-fresh-context-and-open-book" },
+      "expect": {
+        "signedIn": { "equals": true },
+        "savedFillBlock": { "equals": "R" },
+        "readerBlock": { "equals": "immediately-after-R" },
+        "blockingError": { "equals": "absent" }
+      }
+    },
+    {
+      "id": "sign-out",
+      "action": { "op": "sign-out-and-open-book" },
+      "expect": {
+        "signedIn": { "equals": false },
+        "savedFillBlock": { "equals": "R" },
+        "readerBlock": { "equals": "immediately-after-R" },
+        "blockingError": { "equals": "absent" }
+      }
+    },
+    {
+      "id": "local-survives-sign-out",
+      "action": { "op": "end-session-and-reopen" },
+      "expect": {
+        "savedFillBlock": { "equals": "R" },
+        "readerBlock": { "equals": "immediately-after-R" },
+        "blockingError": { "equals": "absent" }
+      }
+    }
+  ]
+}
