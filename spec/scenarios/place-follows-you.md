@@ -139,3 +139,55 @@ reader's always is.
   this surface.
 - **Account linking across addresses**, deferred by the identity contract
   (TAL-182) until authoring reaches native.
+
+## Harness notes
+
+What the first two adapters — web Playwright and iOS XCUITest — had to
+interpret, settled here so the next client doesn't re-decide it.
+
+- **Where identity is observed.** `signedIn` is read wherever the shipped
+  product states it: the sentence the web index says it in, a native
+  client's identity door. Visiting that surface mid-step is route
+  translation, not weakening — but the surface must be the product's own,
+  and a client that states identity nowhere reachable cannot run this
+  scenario. A native identity surface should publish its state through the
+  platform's accessibility layer for exactly this reason.
+- **The saved mark's live rendering.** `savedFillBlock` is read off the
+  client's live statement of the saved mark — on web, the progress bar's
+  fill, inverted to a paragraph. Arrival dimming does not work for it:
+  dimming is an arrival phenomenon and never moves mid-session, while steps
+  5, 6 and 10 observe a mark that moved *this* session. A client with no
+  live rendering of the mark cannot observe those steps.
+- **The code's delivery.** The account fixture's mailbox is the
+  environment's, never a real inbox: the web dev handoff route, a test
+  run's own database read where Better Auth wrote the code, a native
+  network fixture that redeems the code it minted. *Entering* the address
+  and code through the shipped sign-in surface is the conformance part;
+  how the environment hands the code to the adapter is not, and no mail
+  may leave.
+- **A fresh product context, off the web.** The portable meaning is: the
+  client's own durable store is gone, the environment's account and
+  progress service persist. On a platform with one app container per
+  install, that requires the progress-service fixture to live apart from
+  the client's own storage root — a constraint on the fixture design, and
+  the reason the web adapter's disposable database and an iOS
+  `URLProtocol`-backed service store are both faithful translations.
+- **How long the reader stays offline.** Unbounded, and the adapter must
+  not quietly keep the stay inside a client's push cadence: after the
+  offline reading, linger past any debounce the client is known to have
+  before restoring the network, so that "arrives without a button" is
+  proved against a push that already failed, not one that never fired.
+- **Reconnecting is an environment act.** The cue a client may use for
+  "the route is back" is the platform's own reachability signal (a browser
+  `online` event, a path monitor), or its next naturally scheduled
+  request succeeding. An adapter must not require the product to poll, and
+  a fixture that couples "the network returned" to "the product retried"
+  proves nothing about the retry.
+- **Four devices are four clients.** The run signs in from several fresh
+  contexts in quick succession; a product's per-client rate limiting is
+  real and out of scope. Each context should present as its own client
+  (its own forwarded address, its own fixture identity), because that is
+  what distinct devices are.
+- **P, Q and R are spaced jointly.** The rewind puts the reader back at P,
+  so the offline read to R starts from P and passes Q; R must land well
+  clear of Q or "Q" and "immediately after R" collapse into neighbours.
