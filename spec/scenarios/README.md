@@ -101,6 +101,9 @@ every unfinished client its intentional red test immediately.
 - [`mark-offline-and-sync.md`](mark-offline-and-sync.md) — mark, annotate,
   edit, and remove offline; the local plan survives relaunch, stays visibly
   unsaved, and becomes shareable only after automatic publication.
+- [`plan-opens-on-its-tip.md`](plan-opens-on-its-tip.md) — a plan address is a
+  link to a place: it opens on the plan's newest mark even for a reader with a
+  position of their own, and leaves that position where it was.
 - [`reading-preferences.md`](reading-preferences.md) — change the book text
   size and appearance behind one quiet control; reflow keeps the passage and
   mark, and both choices survive a new session.

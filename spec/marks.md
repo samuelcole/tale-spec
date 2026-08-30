@@ -162,6 +162,25 @@ Ownership, edit tokens, last-write-wins plan contents, background conflict
 resolution, and a general-purpose operation log are outside this contract. The
 narrow mechanism is a durable outbox for immutable rows.
 
+## The tip is the address, so the tip is the landing
+
+A plan address names a place in a tale, and opening one puts the reader at that
+place: the tip's anchor — the newest mark, the one the address is named for.
+This holds however many marks the chain carries, and it holds for a reader who
+already has a position in that tale. Their position is not consulted, because a
+plan is shared by someone who read far enough to mark it: yielding to a saved
+position makes the address work for every reader except the one who sent it.
+
+The placement is not a reading. It moves no mark and advances no progress —
+[`progress.md`](progress.md)'s rule that only genuine input advances a position
+governs here exactly as it governs a passage fragment. The tale's own address,
+carrying no tip, still resumes where the reader left off.
+
+Which ask wins when a reader is given more than one is a client concern rather
+than this contract's: an explicit passage fragment is more specific than a plan
+address and outranks it, and a back or forward navigation leaves the platform's
+own restored position alone.
+
 ## Surface proof
 
 [`scenarios/mark-offline-and-sync.md`](scenarios/mark-offline-and-sync.md)
@@ -177,3 +196,9 @@ that have no standing address surface must copy a mark to read the plan's
 address at all, and that probe writes the very clipboard the rewrite would be
 observed on. It is normative here and named under "what the next scenario would
 extend" there.
+
+[`scenarios/plan-opens-on-its-tip.md`](scenarios/plan-opens-on-its-tip.md)
+proves ["The tip is the address, so the tip is the landing"](#the-tip-is-the-address-so-the-tip-is-the-landing):
+the device that made a two-mark plan reopens it at
+its address and lands on the tip rather than on its own reading position, and
+the plain book address still resumes at that position afterwards.
