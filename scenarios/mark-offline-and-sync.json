@@ -1,6 +1,6 @@
 {
   "format": "tale-surface-scenario",
-  "version": 1,
+  "version": 2,
   "id": "mark-offline-and-sync",
   "title": "Mark offline and publish when saved",
   "steps": [
@@ -20,6 +20,7 @@
         "planUrl": { "equals": "absent" },
         "clipboardPassage": { "equals": "P" },
         "clipboardAttribution": { "equals": "present" },
+        "clipboardUrl": { "equals": "book" },
         "clipboardMarkUrl": { "equals": "absent" },
         "copyReport": { "equals": "succeeded" },
         "blockingError": { "equals": "absent" }
@@ -95,6 +96,7 @@
       "expect": {
         "clipboardPassage": { "equals": "P" },
         "clipboardAttribution": { "equals": "present" },
+        "clipboardUrl": { "equals": { "ref": "publishedPlanUrl" } },
         "clipboardMarkUrl": { "equals": { "ref": "publishedPlanUrl" } },
         "copyReport": { "equals": "succeeded" }
       }

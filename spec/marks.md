@@ -39,15 +39,39 @@ showing it.
 
 An unpublished tip is real local data but not yet a public address. The client
 must not put its canonical plan URL in copied content or the visible address
-bar until the persistence boundary acknowledges every node the tip needs. The
-ordinary mark-and-copy action still copies the passage and attribution while
-offline; it simply omits the mark URL that the server cannot resolve yet.
+bar until the persistence boundary acknowledges every node the tip needs.
+
+What it withholds is that one address, not the link. **A copied passage always
+carries a URL that resolves.** A quotation pasted into a message with no way
+back to the book is the failure this contract exists to prevent, and being
+offline is not an excuse for it: the tale's own canonical reading URL is true
+before any network answers, so that is what the copy carries until the tip
+becomes an address of its own.
+
+One copy therefore has two possible addresses and one fixed lifecycle:
+
+1. **The tale's URL, written with the copy.** Not a placeholder the reader
+   waits through — the passage, its attribution, and a working link are on the
+   clipboard by the time the copy is reported, whatever the network is doing.
+2. **The plan's URL, written over it on acknowledgement.** When the boundary
+   acknowledges the tip that copy names, the client quietly rewrites the same
+   copy with the plan's canonical URL. There is no second report and no second
+   announcement; the reader was told they copied, once, and that is still true.
+3. **The tale's URL, if acknowledgement never comes.** Nothing is retracted and
+   nothing fails. The reader keeps a link to the book they quoted.
+
+The rewrite belongs to that copy alone. A client performs it only while the
+clipboard still holds byte-for-byte what that copy wrote: a reader who has
+copied something else since owns their clipboard, and a quiet upgrade that
+overwrites their work is worse than no upgrade at all. Where a platform cannot
+read its clipboard back without asking the reader for permission, it does not
+ask — it remembers what it wrote and declines the rewrite whenever it cannot
+be sure.
 
 The authoring surface must quietly but persistently distinguish unpublished
 local changes from a saved plan. "Unsaved" or an equivalent platform treatment
-is enough; a blocking network error is not. Once the tip is acknowledged, the
-ordinary copy output includes its canonical mark URL again. Connectivity
-changes what a copy contains; it does not disable copying.
+is enough; a blocking network error is not. Connectivity decides which of the
+two URLs a copy carries; it never removes the URL and never disables copying.
 
 The client-minted ID that is eventually acknowledged becomes the public tip;
 the server does not replace it with a server-minted ID. If a tip has already
@@ -76,8 +100,8 @@ When connectivity returns, the client uploads automatically. Launch,
 foregrounding, and a connectivity transition may all trigger the same
 best-effort attempt. They do not create different synchronization semantics.
 Reading, marking, copying, and editing never wait for an attempt to finish. An
-offline copy omits the unresolved plan URL; a copy made after acknowledgement
-includes it.
+offline copy carries the tale's URL in place of the unresolved plan URL; an
+acknowledgement replaces it, in that copy, without a second gesture.
 
 The client removes nodes from the outbox only after the persistence boundary
 acknowledges their IDs. A timeout, lost response, interruption, or process exit
@@ -161,10 +185,20 @@ own restored position alone.
 
 [`scenarios/mark-offline-and-sync.md`](scenarios/mark-offline-and-sync.md)
 proves the contract through the real product: a plan is authored offline,
-survives relaunch, publishes without a second marking gesture, and adds its
-resolvable mark URL to later copies after acknowledgement.
+survives relaunch, publishes without a second marking gesture, and moves a copy
+from the tale's URL to its own resolvable mark URL after acknowledgement.
+
+That scenario pins both ends of the lifecycle — the tale's URL in the offline
+copy, the plan's URL in a copy made after acknowledgement — at the two steps a
+copy is the reader's own action. The quiet rewrite *between* them, on a
+clipboard nobody touched, has no portable observation point yet: the adapters
+that have no standing address surface must copy a mark to read the plan's
+address at all, and that probe writes the very clipboard the rewrite would be
+observed on. It is normative here and named under "what the next scenario would
+extend" there.
 
 [`scenarios/plan-opens-on-its-tip.md`](scenarios/plan-opens-on-its-tip.md)
-proves the section above: the device that made a two-mark plan reopens it at
+proves ["The tip is the address, so the tip is the landing"](#the-tip-is-the-address-so-the-tip-is-the-landing):
+the device that made a two-mark plan reopens it at
 its address and lands on the tip rather than on its own reading position, and
 the plain book address still resumes at that position afterwards.

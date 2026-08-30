@@ -3,8 +3,8 @@
 **The claim.** Marking belongs to the offline reader. A reader can highlight a
 passage, add a note and date, extend the plan, and fork it again with no
 network. The local plan survives relaunch and publishes automatically when the
-device reconnects. Until then, it is visibly unsaved and copied passages omit
-the unresolved mark URL.
+device reconnects. Until then, it is visibly unsaved and copied passages carry
+the tale's own URL in place of the unresolved mark URL — never no URL at all.
 
 This scenario is the surface proof for [`spec/marks.md`](../marks.md). Read
 [`README.md`](README.md) in this directory first: it says what an adapter may
@@ -41,21 +41,52 @@ pressing a product retry control. The automatic upload is part of the outcome.
 context, then launch a fresh one against the same durable local data. Keeping a
 component or process alive is not a relaunch.
 
+## The plan's URL, and the tale's
+
+Two addresses run through this scenario and they are not interchangeable. The
+**tale's URL** is the book's own canonical reading address, true from the
+moment the reader opens it. The **plan's URL** is that address carrying the
+acknowledged tip. `planUrl`, `planUrlValue`, and `clipboardMarkUrl` are only
+ever about the second: a copy carrying the tale's URL still observes
+`planUrl: absent`, because the book's address is not the plan's. What
+`clipboardUrl` observes is the one the copy actually ends with — `book` before
+acknowledgement, the plan's URL after.
+
+Where the plan's URL is read is the platform's to decide, and platforms differ
+in kind here, not in detail. A client with a visible address bar states it as a
+standing fact, and an adapter reads it there. A client with no address bar —
+a native reader whose plan travels only inside a copied mark — makes no
+standing statement, so its adapter copies a mark and reads the address out of
+the payload. Both are the product's own answer. Neither may become a question
+put to the plan store.
+
+That difference carries a cost the scenario accepts rather than hides. An
+adapter with no address surface spends a copy and a paste on every reading of
+`planUrl`, and that probe overwrites the clipboard it reads. Such an adapter
+may carry one live reading forward across the steps that merely restate it —
+the offline steps, where a plan cannot have become an address — provided every
+reading that decides its step is live: the first copy, the reconnection, and
+the fresh-context open. It also means the clipboard is only observable at the
+steps where a copy is the reader's own action, which is why steps 1 and 7 name
+what it holds and the steps between them do not.
+
 ## Steps
 
 **1. Open the kept tale while offline and activate P's marking gesture.**
 
 P becomes marked immediately. Call this local version **A**. The authoring
-surface quietly shows that the plan is unsaved. The clipboard contains P and
-its attribution, but no mark URL. The product reports the successful passage
-copy normally; it does not put an unpublished tip in the visible address bar,
-show a blocking network error, or remove the mark.
+surface quietly shows that the plan is unsaved. The clipboard contains P, its
+attribution, and the tale's own canonical URL — not the unpublished tip, and
+not nothing: a quotation with no way back to the book is the outcome this step
+forbids. The product reports the successful passage copy normally; it does not
+put an unpublished tip in the visible address bar, show a blocking network
+error, or remove the mark.
 
 **2. Give P a note and a due date while still offline.**
 
 The note and date render with P. Because editing is immutable, the current
 local version becomes **B**. It remains visibly unsaved and still exposes no
-public plan URL.
+plan URL of its own.
 
 **3. Activate Q's marking gesture while still offline.**
 
@@ -86,8 +117,9 @@ surface never duplicates a mark and never mints a replacement tip.
 **7. Copy annotated P while online.**
 
 The clipboard now contains the assignment or passage copy, its attribution,
-and D's canonical plan URL. The same copy behavior that omitted the unresolved
-URL offline includes it now that D is saved.
+and D's canonical plan URL. The same copy behavior that stood in the tale's own
+URL offline names the plan itself now that D is saved. The copy carried a
+working address in both conditions; only which address changed.
 
 **8. End the session, remove the network again, and open D on the originating
 device.**
@@ -121,8 +153,15 @@ replacement, and the plan contains no duplicate node from a retry.
   address. A value obtained by inspecting internal storage is not a supported
   share flow.
 - **Copy typography and share-sheet furniture.** The copied value carries the
-  passage, attribution, and canonical plan URL. Native presentation belongs to
+  passage, attribution, and one working address. Native presentation belongs to
   each platform.
+- **The quiet rewrite on acknowledgement.** [`spec/marks.md`](../marks.md)
+  requires a copy holding the tale's URL to be rewritten with the plan's URL
+  once the tip it names is acknowledged, and only while the clipboard still
+  holds that copy byte-for-byte. No step here observes it, because the only
+  clipboard reading available between the two copies is the one an
+  address-less adapter performs to read `planUrl` — and that reading writes the
+  clipboard it would have to inspect.
 - **The device matrix.** Declared per platform, not here.
 
 ## What the next scenario would extend
@@ -135,3 +174,10 @@ replacement, and the plan contains no duplicate node from a retry.
 2. **Editing an already-public plan offline** — begin from an acknowledged tip,
    fork it locally, and prove the old URL remains public while the unpublished
    fork is withheld until acknowledgement.
+3. **The clipboard nobody touched** — mark offline, reconnect, and read the
+   clipboard once without copying anything first, proving the tale's URL became
+   the plan's on its own. It needs a clipboard reading that is not also the
+   only way to learn the plan's address; a platform that gains a standing
+   address surface, or an adapter granted a non-destructive read, could carry
+   it. Its twin is the case that must stay red: a reader who copies something
+   else in the meantime keeps what they copied.
