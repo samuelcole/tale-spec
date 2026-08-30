@@ -92,6 +92,7 @@ test("every prose scenario has a matching executable plan", async () => {
     "open-and-read",
     "payload-presentation",
     "place-follows-you",
+    "plan-opens-on-its-tip",
     "play-and-pocket",
     "position-and-motion",
     "reading-preferences",

@@ -1,0 +1,88 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "plan-opens-on-its-tip",
+  "title": "A plan opens on its tip",
+  "steps": [
+    {
+      "id": "open-fresh",
+      "action": { "op": "open-book", "clean": true },
+      "expect": {
+        "cover": { "equals": "on-screen" },
+        "position": { "equals": "start" },
+        "dimBoundary": { "equals": null }
+      }
+    },
+    {
+      "id": "read-to-the-first-passage",
+      "action": { "op": "read-to-block", "block": "P" },
+      "expect": {
+        "cover": { "equals": "above-screen" },
+        "settled": { "equals": true }
+      },
+      "capture": { "firstMarkBlock": "topBlock" }
+    },
+    {
+      "id": "mark-the-first-passage",
+      "action": { "op": "mark-passage", "passage": "P" },
+      "expect": {
+        "markedPassages": { "equals": ["P"] },
+        "planUrl": { "equals": "available" }
+      }
+    },
+    {
+      "id": "read-to-the-second-passage",
+      "action": { "op": "read-to-block", "block": "Q" },
+      "expect": {
+        "settled": { "equals": true },
+        "topBlock": { "notEquals": { "ref": "firstMarkBlock" } }
+      },
+      "capture": { "tipBlock": "topBlock" }
+    },
+    {
+      "id": "mark-the-second-passage",
+      "action": { "op": "mark-passage", "passage": "Q" },
+      "expect": {
+        "markedPassages": { "equals": ["P", "Q"] },
+        "markCount": { "equals": 2 },
+        "planUrl": { "equals": "available" }
+      }
+    },
+    {
+      "id": "read-on-past-both-marks",
+      "action": { "op": "read-forward", "extent": "several-screens" },
+      "expect": {
+        "settled": { "equals": true },
+        "topBlock": { "notEquals": { "ref": "tipBlock" } }
+      },
+      "capture": { "stoppedAt": "topBlock", "successor": "successor" }
+    },
+    {
+      "id": "the-book-address-still-resumes",
+      "action": { "op": "end-session-and-open-book" },
+      "expect": {
+        "cover": { "equals": "above-screen" },
+        "topBlock": { "equals": { "ref": "successor" } },
+        "dimBoundary": { "equals": { "ref": "stoppedAt" } }
+      }
+    },
+    {
+      "id": "the-plan-address-opens-on-its-tip",
+      "action": { "op": "end-session-and-open-current-plan" },
+      "expect": {
+        "cover": { "equals": "above-screen" },
+        "topBlock": { "equals": { "ref": "tipBlock" } },
+        "markedPassages": { "equals": ["P", "Q"] },
+        "dimBoundary": { "equals": { "ref": "stoppedAt" } }
+      }
+    },
+    {
+      "id": "landing-on-the-tip-was-not-reading",
+      "action": { "op": "end-session-and-open-book" },
+      "expect": {
+        "topBlock": { "equals": { "ref": "successor" } },
+        "dimBoundary": { "equals": { "ref": "stoppedAt" } }
+      }
+    }
+  ]
+}
