@@ -1278,6 +1278,19 @@
     },
     {
       "op": "has-progress",
+      "name": "is false for a record holding only a percent",
+      "input": {
+        "record": {
+          "sections": {},
+          "percent": 42,
+          "updatedAt": ""
+        }
+      },
+      "expected": false,
+      "note": "A percent can rank and label a remotely merged row without naming a place the reader can resume."
+    },
+    {
+      "op": "has-progress",
       "name": "is false for a record holding only a plan tip",
       "input": {
         "record": {
