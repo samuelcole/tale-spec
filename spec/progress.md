@@ -261,8 +261,9 @@ an unknown byline is not recorded as a byline. It never touches `sections`,
 ## Has progress
 
 A record counts as having progress when its `sections` map is non-empty or a
-`furthest` is present. Nothing else counts: a tip alone is a plan the reader
-opened, not a place they got to.
+`furthest` is present. Nothing else counts: a percent-only record is a
+ranking and display hint, not evidence of a reachable saved place; a tip alone
+is a plan the reader opened, not a place they got to.
 
 ## Operations
 
