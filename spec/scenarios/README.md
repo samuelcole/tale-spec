@@ -130,3 +130,6 @@ every unfinished client its intentional red test immediately.
 - [`place-follows-you.md`](place-follows-you.md) — sign in and your place
   follows you between devices: forward-only, honoring an explicit rewind,
   arriving from offline reading, and surviving sign-out locally.
+- [`link-handoff.md`](link-handoff.md) — a supported public passage link opens
+  the native client at that passage cold, warm, or through activity
+  continuation; an unsupported URL stays unchanged in the browser.
