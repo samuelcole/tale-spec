@@ -1,0 +1,29 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "link-handoff",
+  "title": "Link handoff",
+  "steps": [
+    {
+      "id": "cold-link",
+      "action": { "op": "tap-public-link", "source": "browser", "clientState": "not-running", "target": "passage" },
+      "expect": { "venue": { "equals": "client" }, "canonicalBook": { "equals": "fixture" }, "passage": { "equals": "P" }, "passagePosition": { "equals": "reading-line" }, "cover": { "equals": "above-screen" } }
+    },
+    {
+      "id": "warm-link",
+      "action": { "op": "tap-public-link", "source": "browser", "clientState": "running", "target": "passage" },
+      "expect": { "venue": { "equals": "client" }, "canonicalBook": { "equals": "fixture" }, "passage": { "equals": "P" }, "passagePosition": { "equals": "reading-line" }, "cover": { "equals": "above-screen" } }
+    },
+    {
+      "id": "continue-link",
+      "action": { "op": "continue-public-activity", "source": "other-device-browser", "target": "passage" },
+      "expect": { "venue": { "equals": "client" }, "canonicalBook": { "equals": "fixture" }, "passage": { "equals": "P" }, "passagePosition": { "equals": "reading-line" }, "cover": { "equals": "above-screen" } }
+    },
+    {
+      "id": "unsupported-link",
+      "action": { "op": "tap-public-link", "source": "browser", "clientState": "running", "target": "unsupported" },
+      "expect": { "venue": { "equals": "browser" }, "url": { "equals": "unchanged" } }
+    }
+  ]
+}
+

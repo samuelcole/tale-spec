@@ -1,0 +1,144 @@
+{
+  "area": "addresses",
+  "version": 1,
+  "cases": [
+    {
+      "op": "route",
+      "name": "a book is lowercase identity and carries its decoded passage",
+      "input": { "url": "https://tale.fyi/Dracula?from=share#chapter-3-p14" },
+      "expected": { "kind": "reading", "door": "book", "visiblePath": "dracula", "canonicalPath": "dracula", "planTip": null, "anchor": "chapter-3-p14" }
+    },
+    {
+      "op": "route",
+      "name": "a book plan preserves its opaque tip",
+      "input": { "url": "https://tale.fyi/Dracula/Tip-AbC" },
+      "expected": { "kind": "reading", "door": "book", "visiblePath": "dracula/Tip-AbC", "canonicalPath": "dracula", "planTip": "Tip-AbC", "anchor": null }
+    },
+    {
+      "op": "route",
+      "name": "an authored tale lowercases identity and preserves its tip",
+      "input": { "url": "https://tale.fyi/@Sam/My-Tale/Tip-AbC#Scene%202" },
+      "expected": { "kind": "reading", "door": "authored-tale", "visiblePath": "@sam/my-tale/Tip-AbC", "canonicalPath": "@sam/my-tale", "planTip": "Tip-AbC", "anchor": "Scene 2" }
+    },
+    {
+      "op": "route",
+      "name": "a list-context door waits for the server-owned canonical path",
+      "input": { "url": "https://tale.fyi/~Favorites/Shelf/Dracula#chapter-1-p2" },
+      "expected": { "kind": "reading", "door": "list-context", "visiblePath": "~favorites/shelf/dracula", "canonicalPath": null, "planTip": null, "anchor": "chapter-1-p2" }
+    },
+    {
+      "op": "route",
+      "name": "a list opens its native shelf",
+      "input": { "url": "https://tale.fyi/~Favorites" },
+      "expected": { "kind": "browse", "browseKind": "list", "slug": "favorites", "canonicalPath": "/~favorites" }
+    },
+    {
+      "op": "route",
+      "name": "an era opens its native shelf despite the web namespace",
+      "input": { "url": "https://tale.fyi/eras/19th-Century" },
+      "expected": { "kind": "browse", "browseKind": "era", "slug": "19th-century", "canonicalPath": "/eras/19th-century" }
+    },
+    {
+      "op": "route",
+      "name": "a genre opens its native shelf",
+      "input": { "url": "https://tale.fyi/genre/Gothic" },
+      "expected": { "kind": "browse", "browseKind": "genre", "slug": "gothic", "canonicalPath": "/genre/gothic" }
+    },
+    {
+      "op": "route",
+      "name": "an author opens their native shelf",
+      "input": { "url": "https://tale.fyi/author/Mary-Shelley" },
+      "expected": { "kind": "browse", "browseKind": "author", "slug": "mary-shelley", "canonicalPath": "/author/mary-shelley" }
+    },
+    {
+      "op": "route",
+      "name": "an unsupported web path stays unchanged in the browser",
+      "input": { "url": "https://tale.fyi/author/mary-shelley/works?order=year#top" },
+      "expected": { "kind": "browser", "url": "https://tale.fyi/author/mary-shelley/works?order=year#top" }
+    },
+    {
+      "op": "route",
+      "name": "the web root stays in the browser",
+      "input": { "url": "https://tale.fyi/" },
+      "expected": { "kind": "browser", "url": "https://tale.fyi/" }
+    },
+    {
+      "op": "route",
+      "name": "an encoded separator cannot invent another route segment",
+      "input": { "url": "https://tale.fyi/dracula%2FTip" },
+      "expected": { "kind": "browser", "url": "https://tale.fyi/dracula%2FTip" }
+    },
+    {
+      "op": "route",
+      "name": "an ordinary three-segment path is not a native plan",
+      "input": { "url": "https://tale.fyi/dracula/tip/extra" },
+      "expected": { "kind": "browser", "url": "https://tale.fyi/dracula/tip/extra" }
+    },
+    {
+      "op": "route",
+      "name": "an authored list route stays on the web",
+      "input": { "url": "https://tale.fyi/@sam/list/books" },
+      "expected": { "kind": "browser", "url": "https://tale.fyi/@sam/list/books" }
+    },
+    {
+      "op": "route",
+      "name": "a list submission route stays on the web",
+      "input": { "url": "https://tale.fyi/~favorites/dracula/submit" },
+      "expected": { "kind": "browser", "url": "https://tale.fyi/~favorites/dracula/submit" }
+    },
+    {
+      "op": "route",
+      "name": "an empty interior segment cannot collapse the route shape",
+      "input": { "url": "https://tale.fyi/dracula//tip" },
+      "expected": { "kind": "browser", "url": "https://tale.fyi/dracula//tip" }
+    },
+    {
+      "op": "route",
+      "name": "an encoded dot segment cannot rewrite the route shape",
+      "input": { "url": "https://tale.fyi/dracula/%2E%2E/api" },
+      "expected": { "kind": "browser", "url": "https://tale.fyi/dracula/%2E%2E/api" }
+    },
+    {
+      "op": "route",
+      "name": "an explicit port stays on the web even when it is the default",
+      "input": { "url": "https://tale.fyi:443/dracula" },
+      "expected": { "kind": "browser", "url": "https://tale.fyi:443/dracula" }
+    },
+    {
+      "op": "route",
+      "name": "credentials make an otherwise familiar URL unsupported",
+      "input": { "url": "https://reader@tale.fyi/dracula" },
+      "expected": { "kind": "browser", "url": "https://reader@tale.fyi/dracula" }
+    },
+    {
+      "op": "route",
+      "name": "a foreign origin stays unchanged in the browser",
+      "input": { "url": "https://example.com/dracula#chapter-3-p14" },
+      "expected": { "kind": "browser", "url": "https://example.com/dracula#chapter-3-p14" }
+    },
+    {
+      "op": "canonical-passage-url",
+      "name": "a book passage has one lowercase public URL",
+      "input": { "canonicalPath": "/Dracula/", "anchor": "chapter-3-p14" },
+      "expected": "https://tale.fyi/dracula#chapter-3-p14"
+    },
+    {
+      "op": "canonical-passage-url",
+      "name": "an authored passage lowercases identity and encodes its anchor",
+      "input": { "canonicalPath": "@Sam/My-Tale", "anchor": "Scene 2" },
+      "expected": "https://tale.fyi/@sam/my-tale#Scene%202"
+    },
+    {
+      "op": "canonical-passage-url",
+      "name": "a list-context path cannot become an invented canonical URL",
+      "input": { "canonicalPath": "~favorites/dracula", "anchor": "chapter-1-p2" },
+      "expected": null
+    },
+    {
+      "op": "canonical-passage-url",
+      "name": "a web namespace cannot become a book URL",
+      "input": { "canonicalPath": "eras", "anchor": null },
+      "expected": null
+    }
+  ]
+}
