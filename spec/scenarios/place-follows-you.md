@@ -14,37 +14,38 @@ comparison, and the rewind exception — driven the way a person drives it.
 Read [`README.md`](README.md) in this directory first: it says what an
 adapter may translate and what it may not weaken.
 
-**Required starting state:** web-green, native-red. The reference web product
-ships pull, push, rewind, and sign-out; a native client stays red until the
-same session story runs through its shipped UI. If any step proves red on
-web, that is a finding about the web product, recorded with the adapter — not
-a reason to soften the step.
+**Required starting state:** web-red, native-red. The reference web product
+ships pull, push, rewind, and sign-out, but stays red until Sign in with Apple
+can drive the same session story through its shipped web UI. A native client
+stays red until the whole story runs through its shipped UI. If any step
+proves red, that is a finding about the product, recorded with the adapter —
+not a reason to soften the step.
 
 ## Setup
 
 - A book fixture with three prose paragraphs in reading order, far enough
   apart that each occupies its own screen at the fixture viewport. Call them
   **P**, **Q**, and **R**.
-- An account fixture with one verified identity the launched product can
-  genuinely authorize inside the test environment. The credential mechanism
-  is the platform's shipped one: email and a one-time code on the web, Sign in
-  with Apple on Apple platforms. The environment may provide a deterministic
-  credential through the same visible control, but the authorization still
-  goes through the product's shipped sign-in surface and session transport.
+- An account fixture with one verified Apple identity the launched product can
+  genuinely authorize inside the test environment. Sign in with Apple is a
+  shipped credential on the web and the only shipped credential on Apple
+  platforms. The web may continue to offer email and a one-time code beside
+  it. The environment may provide a deterministic credential through the same
+  visible Apple control, but the authorization still goes through the
+  product's shipped sign-in surface and session transport.
 - A progress service the launched product syncs with, holding no record for
   the account at the start of the run.
 - The run begins signed out, with no local reading data.
 
 ## Identity, contexts, and connectivity
 
-**Signing in** means the reader uses the product's shipping credential for
-that platform through the product's own sign-in surface. On the web that is
-the email address and one-time code it receives. On Apple platforms it is Sign
-in with Apple — native must not substitute an email-code form for the system
-credential. The route to the surface is the adapter's — a settings door, an
-index footer, a quiet offer — but it is the shipped surface, and reaching it
-never interrupts or gates reading. **Signing out** likewise goes through the
-shipped surface.
+**Signing in** in this scenario means the reader uses Sign in with Apple
+through the product's own sign-in surface. The web offers that Apple path
+alongside its email-code path; Apple platforms offer Apple only and must not
+substitute an email-code form for the system credential. The route to the
+surface is the adapter's — a settings door, an index footer, a quiet offer —
+but it is the shipped surface, and reaching it never interrupts or gates
+reading. **Signing out** likewise goes through the shipped surface.
 
 **A fresh product context** has the meaning established by
 [`mark-offline-and-sync.md`](mark-offline-and-sync.md): the same launched
@@ -163,14 +164,13 @@ interpret, settled here so the next client doesn't re-decide it.
   5, 6 and 10 observe a mark that moved *this* session. A client with no
   live rendering of the mark cannot observe those steps.
 - **The credential fixture.** The account fixture belongs to the environment,
-  never a real inbox or Apple account. On web it may be the dev handoff route
-  or a test run's own database read where Better Auth wrote the code. On Apple
-  platforms, an explicit fixture launch may make the visible Sign in with
-  Apple control return a deterministic Apple-shaped authorization to the
-  production session client. The control, session transport, persistence, and
-  resulting product state remain the shipped workflow; the system account
-  chooser itself is platform infrastructure and may be deterministic in the
-  environment. No mail may leave and no real Apple account may be required.
+  never a real inbox or Apple account. On every surface, an explicit fixture
+  launch may make the visible Sign in with Apple control return a deterministic
+  Apple-shaped authorization to the production session client. The control,
+  session transport, persistence, and resulting product state remain the
+  shipped workflow; Apple's account chooser itself is platform infrastructure
+  and may be deterministic in the environment. No mail may leave and no real
+  Apple account may be required.
 - **A fresh product context, off the web.** The portable meaning is: the
   client's own durable store is gone, the environment's account and
   progress service persist. On a platform with one app container per
