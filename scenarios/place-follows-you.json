@@ -16,7 +16,7 @@
     },
     {
       "id": "sign-in-at-the-place",
-      "action": { "op": "sign-in-and-open-book" },
+      "action": { "op": "sign-in-and-open-book", "credential": "platform-native" },
       "expect": {
         "signedIn": { "equals": true },
         "savedFillBlock": { "equals": "P" },
@@ -37,7 +37,7 @@
     },
     {
       "id": "sign-in-pulls-the-place",
-      "action": { "op": "sign-in-and-open-book" },
+      "action": { "op": "sign-in-and-open-book", "credential": "platform-native" },
       "expect": {
         "signedIn": { "equals": true },
         "savedFillBlock": { "equals": "P" },
@@ -73,7 +73,10 @@
     },
     {
       "id": "rewind-follows",
-      "action": { "op": "sign-in-in-fresh-context-and-open-book" },
+      "action": {
+        "op": "sign-in-in-fresh-context-and-open-book",
+        "credential": "platform-native"
+      },
       "expect": {
         "signedIn": { "equals": true },
         "readerBlock": { "equals": "P" },
@@ -108,7 +111,10 @@
     },
     {
       "id": "offline-place-follows",
-      "action": { "op": "sign-in-in-fresh-context-and-open-book" },
+      "action": {
+        "op": "sign-in-in-fresh-context-and-open-book",
+        "credential": "platform-native"
+      },
       "expect": {
         "signedIn": { "equals": true },
         "savedFillBlock": { "equals": "R" },

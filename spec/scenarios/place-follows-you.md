@@ -25,22 +25,26 @@ a reason to soften the step.
 - A book fixture with three prose paragraphs in reading order, far enough
   apart that each occupies its own screen at the fixture viewport. Call them
   **P**, **Q**, and **R**.
-- An account fixture: one email address whose sign-in code the launched
-  product can genuinely request and redeem inside the test environment. The
-  delivery mechanism is the environment's (a development handoff route, a
-  stubbed sender); the *entry* of the address and code goes through the
-  product's shipped sign-in surface.
+- An account fixture with one verified identity the launched product can
+  genuinely authorize inside the test environment. The credential mechanism
+  is the platform's shipped one: email and a one-time code on the web, Sign in
+  with Apple on Apple platforms. The environment may provide a deterministic
+  credential through the same visible control, but the authorization still
+  goes through the product's shipped sign-in surface and session transport.
 - A progress service the launched product syncs with, holding no record for
   the account at the start of the run.
 - The run begins signed out, with no local reading data.
 
 ## Identity, contexts, and connectivity
 
-**Signing in** means the reader enters their email address and the code it
-receives, through the product's own sign-in surface. The route to that
-surface is the adapter's — a settings door, an index footer, a quiet offer —
-but it is the shipped surface, and reaching it never interrupts or gates
-reading. **Signing out** likewise goes through the shipped surface.
+**Signing in** means the reader uses the product's shipping credential for
+that platform through the product's own sign-in surface. On the web that is
+the email address and one-time code it receives. On Apple platforms it is Sign
+in with Apple — native must not substitute an email-code form for the system
+credential. The route to the surface is the adapter's — a settings door, an
+index footer, a quiet offer — but it is the shipped surface, and reaching it
+never interrupts or gates reading. **Signing out** likewise goes through the
+shipped surface.
 
 **A fresh product context** has the meaning established by
 [`mark-offline-and-sync.md`](mark-offline-and-sync.md): the same launched
@@ -158,13 +162,15 @@ interpret, settled here so the next client doesn't re-decide it.
   dimming is an arrival phenomenon and never moves mid-session, while steps
   5, 6 and 10 observe a mark that moved *this* session. A client with no
   live rendering of the mark cannot observe those steps.
-- **The code's delivery.** The account fixture's mailbox is the
-  environment's, never a real inbox: the web dev handoff route, a test
-  run's own database read where Better Auth wrote the code, a native
-  network fixture that redeems the code it minted. *Entering* the address
-  and code through the shipped sign-in surface is the conformance part;
-  how the environment hands the code to the adapter is not, and no mail
-  may leave.
+- **The credential fixture.** The account fixture belongs to the environment,
+  never a real inbox or Apple account. On web it may be the dev handoff route
+  or a test run's own database read where Better Auth wrote the code. On Apple
+  platforms, an explicit fixture launch may make the visible Sign in with
+  Apple control return a deterministic Apple-shaped authorization to the
+  production session client. The control, session transport, persistence, and
+  resulting product state remain the shipped workflow; the system account
+  chooser itself is platform infrastructure and may be deterministic in the
+  environment. No mail may leave and no real Apple account may be required.
 - **A fresh product context, off the web.** The portable meaning is: the
   client's own durable store is gone, the environment's account and
   progress service persist. On a platform with one app container per
@@ -184,10 +190,10 @@ interpret, settled here so the next client doesn't re-decide it.
   a fixture that couples "the network returned" to "the product retried"
   proves nothing about the retry.
 - **Four devices are four clients.** The run signs in from several fresh
-  contexts in quick succession; a product's per-client rate limiting is
-  real and out of scope. Each context should present as its own client
-  (its own forwarded address, its own fixture identity), because that is
-  what distinct devices are.
+  contexts in quick succession; a product's per-client rate limiting is real
+  and out of scope. Each context should present as its own client while the
+  fixture resolves them to the same account — distinct client sessions for
+  one verified identity, which is what the devices represent.
 - **P, Q and R are spaced jointly.** The rewind puts the reader back at P,
   so the offline read to R starts from P and passes Q; R must land well
   clear of Q or "Q" and "immediately after R" collapse into neighbours.
