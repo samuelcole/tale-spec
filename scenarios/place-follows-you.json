@@ -16,7 +16,7 @@
     },
     {
       "id": "sign-in-at-the-place",
-      "action": { "op": "sign-in-and-open-book", "credential": "platform-native" },
+      "action": { "op": "sign-in-and-open-book", "credential": "apple" },
       "expect": {
         "signedIn": { "equals": true },
         "savedFillBlock": { "equals": "P" },
@@ -37,7 +37,7 @@
     },
     {
       "id": "sign-in-pulls-the-place",
-      "action": { "op": "sign-in-and-open-book", "credential": "platform-native" },
+      "action": { "op": "sign-in-and-open-book", "credential": "apple" },
       "expect": {
         "signedIn": { "equals": true },
         "savedFillBlock": { "equals": "P" },
@@ -75,7 +75,7 @@
       "id": "rewind-follows",
       "action": {
         "op": "sign-in-in-fresh-context-and-open-book",
-        "credential": "platform-native"
+        "credential": "apple"
       },
       "expect": {
         "signedIn": { "equals": true },
@@ -113,7 +113,7 @@
       "id": "offline-place-follows",
       "action": {
         "op": "sign-in-in-fresh-context-and-open-book",
-        "credential": "platform-native"
+        "credential": "apple"
       },
       "expect": {
         "signedIn": { "equals": true },
