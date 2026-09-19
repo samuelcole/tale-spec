@@ -1,6 +1,6 @@
 {
   "format": "tale-surface-scenario",
-  "version": 1,
+  "version": 2,
   "id": "voice-flourish-and-peek",
   "title": "Voice flourish and peek",
   "steps": [
@@ -28,7 +28,11 @@
     },
     {
       "id": "hold-playing-transport",
-      "action": { "op": "press-and-hold-transport", "minimumDurationMs": 420 },
+      "action": {
+        "op": "press-and-hold-transport",
+        "minimumDurationMs": 420,
+        "gestures": { "touch": "press-and-hold", "pointer": "hover-without-pressing" }
+      },
       "expect": {
         "transport": { "equals": "playing" },
         "narrationAdvancedDuringHold": { "equals": true },
@@ -41,7 +45,10 @@
     },
     {
       "id": "release-hold-and-tap",
-      "action": { "op": "release-held-transport-then-tap" },
+      "action": {
+        "op": "release-held-transport-then-tap",
+        "gestures": { "touch": "release-then-tap", "pointer": "move-away-then-click" }
+      },
       "expect": {
         "transportAfterRelease": { "equals": "playing" },
         "phraseWashCountAfterRelease": { "equals": 0 },
@@ -52,7 +59,11 @@
     },
     {
       "id": "repeat-with-reduced-motion",
-      "action": { "op": "repeat-flourish-and-hold-with-reduced-motion", "clean": true },
+      "action": {
+        "op": "repeat-flourish-and-hold-with-reduced-motion",
+        "clean": true,
+        "gestures": { "touch": "press-and-hold-then-release", "pointer": "hover-then-move-away" }
+      },
       "expect": {
         "transport": { "equals": "playing" },
         "phraseWashCount": { "equals": 1 },

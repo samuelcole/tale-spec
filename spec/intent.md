@@ -66,7 +66,8 @@ ignored.
 
 The genuine input subtypes are platform-neutral. A platform's mouse or
 trackpad callback is translated to `drag` or `wheel`, while a touch callback
-is translated to `touch`. `pointer` is intentionally not a subtype. On a
+is translated to `touch`. `pointer` is intentionally not a progress-gate input subtype: merely hovering
+a control does not establish reading intent. On a
 platform with momentum scrolling, `deceleration` refreshes the window so the
 tail of a genuine flick remains eligible after the initiating touch expires.
 
@@ -140,3 +141,18 @@ fold earned a write.
 No DOM, UIKit, gesture recognizer, scroll physics, or animation detail belongs
 in this contract. A platform adapter translates its native callbacks into
 these closed event kinds and runs the same traces.
+
+## Surface gesture subtypes
+
+A surface scenario may distinguish `touch` and `pointer` gesture subtypes
+when the same reader action has different physical forms. These describe how
+an adapter performs an action, not new `apply-intent-trace` input values.
+For the transport peek, `touch` means holding the playing control; `pointer`
+means resting the pointer on it without pressing a button. Ending the gesture
+means lifting the finger or moving the pointer away, respectively. An ordinary
+tap or click still toggles playback once and does not become a peek.
+
+Both forms have the same wash lifecycle and observations, including under
+Reduce Motion. Hovering, ending a hover, and the resulting wash animation do
+not open a reading-intent window or advance progress. A genuine pointer drag
+or wheel still enters the progress gate under its existing subtype.
