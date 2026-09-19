@@ -171,6 +171,20 @@ the reader actually saw, so on a short tale the mark can be at index 4 of 9
 with the percent at 100. The percent is the finish line; the boundary rule
 trusts it over the mark.
 
+### Section headings
+
+Arrival paint treats a section heading as part of its section: it dims with
+the section only when every paragraph in that section is at or before the
+dim boundary. In a partially read section, only the paragraphs through the
+boundary dim; the heading remains at full ink. Finished tales still reopen
+entirely at full ink under the rule above.
+
+The accessibility reading state is distinct from this section-level paint.
+A heading before the boundary paragraph is reported as read even when its
+partially read section keeps the heading at full ink. Clients must preserve
+both meanings: paragraph order determines the accessible reading state;
+section completion determines heading dimming.
+
 ## Continuing
 
 `next-unread-index` answers "where does this tale open", or `null` for
