@@ -52,6 +52,30 @@
     },
     {
       "op": "route",
+      "name": "a LibriVox reader opens their native shelf despite the web namespace",
+      "input": { "url": "https://tale.fyi/readers/David-Barnes" },
+      "expected": { "kind": "browse", "browseKind": "reader", "slug": "david-barnes", "canonicalPath": "/readers/david-barnes" }
+    },
+    {
+      "op": "route",
+      "name": "the readers index stays on the web",
+      "input": { "url": "https://tale.fyi/readers" },
+      "expected": { "kind": "browser", "url": "https://tale.fyi/readers" }
+    },
+    {
+      "op": "route",
+      "name": "the privacy policy stays on the web",
+      "input": { "url": "https://tale.fyi/privacy" },
+      "expected": { "kind": "browser", "url": "https://tale.fyi/privacy" }
+    },
+    {
+      "op": "route",
+      "name": "support stays on the web",
+      "input": { "url": "https://tale.fyi/support" },
+      "expected": { "kind": "browser", "url": "https://tale.fyi/support" }
+    },
+    {
+      "op": "route",
       "name": "an unsupported web path stays unchanged in the browser",
       "input": { "url": "https://tale.fyi/author/mary-shelley/works?order=year#top" },
       "expected": { "kind": "browser", "url": "https://tale.fyi/author/mary-shelley/works?order=year#top" }
