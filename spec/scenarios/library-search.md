@@ -35,11 +35,16 @@ The reference search alphabet is deliberately small:
   `Brontë` whether the stored text is composed or decomposed;
 - the typographic dash characters U+2010 through U+2015 and mathematical minus
   U+2212 match the keyboard hyphen-minus U+002D; and
-- whitespace before or after the query is ignored.
+- whitespace before or after the query is ignored; and
+- whitespace inside the query separates words.
 
-All other punctuation and internal whitespace remain part of the text. A
-match is a substring of either the displayed title or the full displayed
-byline. An empty query shows the ordinary library rows.
+All other punctuation remains part of the text. A row matches when every
+word of the folded query is a substring of its displayed title or its full
+displayed byline. Each word may match a different field and words match in
+any order, so `stoker dracula` finds `Dracula` by `Bram Stoker`. A
+single-word query is therefore an ordinary substring match against either
+field. A discovery row has one displayed name, so every word must be found in
+it. An empty query shows the ordinary library rows.
 
 ## Steps
 
@@ -75,17 +80,23 @@ Rows filter as the text is entered. When typing settles, only the target row is
 visible. Its displayed byline still says `Charlotte Brontë`; matching never
 rewrites catalog text.
 
-**7. Replace the query with `9-12`.**
+**7. Replace the query with `bronte conversation`.**
+
+Only the target row is visible. `bronte` is found in its byline and
+`conversation` in its title, in the opposite order to how they are displayed;
+no single field contains the whole query.
+
+**8. Replace the query with `9-12`.**
 
 Only that same row remains visible. The keyboard hyphen found the typographic
 dash in its displayed title.
 
-**8. Activate the filtered row.**
+**9. Activate the filtered row.**
 
 The target's canonical book route opens. Search does not mint a search-specific
 reader route or an intermediate result screen.
 
-**9. Use the platform's ordinary back navigation.**
+**10. Use the platform's ordinary back navigation.**
 
 The library returns with `9-12` still in its text input and the same one-row
 result still visible. Restoring the query means restoring the search itself,

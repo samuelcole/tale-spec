@@ -1,6 +1,6 @@
 {
   "format": "tale-surface-scenario",
-  "version": 1,
+  "version": 2,
   "id": "library-search",
   "title": "Typing finds a book",
   "steps": [
@@ -68,6 +68,18 @@
       "expect": {
         "state": { "equals": "library" },
         "query": { "equals": "  BRONTE  " },
+        "resultCount": { "equals": 1 },
+        "resultKind": { "equals": "book" },
+        "targetTitle": { "equals": "The Long Conversation: A 9–12 Reading List" },
+        "targetByline": { "equals": "Charlotte Brontë" }
+      }
+    },
+    {
+      "id": "find-words-across-title-and-byline",
+      "action": { "op": "replace-library-query", "text": "bronte conversation" },
+      "expect": {
+        "state": { "equals": "library" },
+        "query": { "equals": "bronte conversation" },
         "resultCount": { "equals": 1 },
         "resultKind": { "equals": "book" },
         "targetTitle": { "equals": "The Long Conversation: A 9–12 Reading List" },
