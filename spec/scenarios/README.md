@@ -110,9 +110,9 @@ every unfinished client its intentional red test immediately.
 - [`library-open.md`](library-open.md) — cold launch into the library, open a
   row, see started and finished progress, and understand offline availability
   without losing the door into an unkept book.
-- [`library-search.md`](library-search.md) — type against title and byline with
-  the shared normalization, open the filtered book, and return to the same
-  search.
+- [`library-search.md`](library-search.md) — type words against title and
+  byline with the shared normalization, open the filtered book, and return to
+  the same search.
 - [`library-browse.md`](library-browse.md) — open list, genre, era, and author
   results and canonical addresses as native shelves backed by one payload.
 - [`finish-and-leave.md`](finish-and-leave.md) — finish the text, find its
