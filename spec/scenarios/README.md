@@ -113,6 +113,9 @@ every unfinished client its intentional red test immediately.
 - [`library-search.md`](library-search.md) — type words against title and
   byline with the shared normalization, open the filtered book, and return to
   the same search.
+- [`clear-the-search.md`](clear-the-search.md) — a clear control in the
+  search input and the `tale.fyi` mark each return the unfiltered library in
+  one act.
 - [`library-browse.md`](library-browse.md) — open list, genre, era, and author
   results and canonical addresses as native shelves backed by one payload.
 - [`finish-and-leave.md`](finish-and-leave.md) — finish the text, find its
