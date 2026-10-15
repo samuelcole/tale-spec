@@ -80,6 +80,9 @@ every unfinished client its intentional red test immediately.
   reach a book says so and gives the reader a working retry.
 - [`kept-on-open.md`](kept-on-open.md) — a book you've started is a book you
   keep: it opens and reads offline at your place, with no button anywhere.
+- [`kept-on-a-stalled-network.md`](kept-on-a-stalled-network.md) — a network
+  that never answers cannot hold a book hostage: a kept book opens at once, and
+  one never kept stops waiting and says so.
 - [`note-and-back.md`](note-and-back.md) — a book's endnotes are part of the
   book: the reference hops to the note, the note hops back, and the round
   trip never moves the mark.

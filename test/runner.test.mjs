@@ -83,6 +83,7 @@ test("every prose scenario has a matching executable plan", async () => {
     "finish-and-discover",
     "finish-and-leave",
     "follow-and-override",
+    "kept-on-a-stalled-network",
     "kept-on-open",
     "leave-and-return",
     "library-browse",

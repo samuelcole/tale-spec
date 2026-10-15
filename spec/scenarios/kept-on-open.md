@@ -9,9 +9,13 @@ onward.
 
 The kept copy is the payload in [`spec/payload.md`](../payload.md), and this
 scenario is where that document's cache rule earns its wording. A keep is not
-a second speculative cache in front of the HTTP validators: an online open
-still revalidates through them, and the keep answers only when the network
-cannot answer at all. The position that survives is the store in
+a second speculative cache in front of the HTTP validators: a kept book opens
+from the keep and still revalidates through them in the background, and a book
+never kept is fetched exactly as before. That a kept book must not wait for the
+network first is fixed by
+[`kept-on-a-stalled-network.md`](kept-on-a-stalled-network.md), which proves it
+against a network that never answers; this file's network fails at once, so it
+cannot tell the two orders apart. The position that survives is the store in
 [`spec/progress.md`](../progress.md), restored by the resume rules in
 [`spec/reader.md`](../reader.md) — this scenario adds nothing to either; it
 proves the *text* is as durable as the mark.

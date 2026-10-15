@@ -198,7 +198,13 @@ text changing therefore produces a different response identity.
 Responses say `Cache-Control: public, max-age=0, must-revalidate`. A request
 whose `If-None-Match` contains the current validator returns `304` with no body.
 Clients use those ordinary HTTP validators; they do not put a second
-speculative cache in front of them. A missing or unreadable public tale is
+speculative cache in front of them. The one exception is a book the reader has
+started and the client has kept
+([`scenarios/kept-on-open.md`](scenarios/kept-on-open.md)). That book opens from
+the keep at once and revalidates through the validators in the background. A
+newer representation is kept for the next open and never replaces text under a
+reader mid-session
+([`scenarios/kept-on-a-stalled-network.md`](scenarios/kept-on-a-stalled-network.md)). A missing or unreadable public tale is
 `404`, never an empty successful payload.
 
 The read-along response uses the same cache and strong-validator rules. Its
