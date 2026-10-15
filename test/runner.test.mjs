@@ -78,6 +78,7 @@ test("every prose scenario has a matching executable plan", async () => {
   assert.deepEqual(ids, [
     "book-navigation",
     "choose-a-new-place",
+    "clear-the-search",
     "fetch-fails-honestly",
     "finish-and-discover",
     "finish-and-leave",

@@ -1,0 +1,60 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 2,
+  "id": "clear-the-search",
+  "title": "The way back to the whole library",
+  "steps": [
+    {
+      "id": "open-searchable-library",
+      "action": { "op": "open-library-search", "clean": true, "network": "reachable" },
+      "expect": {
+        "state": { "equals": "library" },
+        "searchInput": { "equals": "available" },
+        "query": { "equals": "" },
+        "bookCount": { "greaterThanOrEqual": 3 },
+        "clearControl": { "equals": "absent" }
+      }
+    },
+    {
+      "id": "search-shows-clear",
+      "action": { "op": "replace-library-query", "text": "doyle" },
+      "expect": {
+        "state": { "equals": "library" },
+        "query": { "equals": "doyle" },
+        "resultCount": { "equals": 1 },
+        "clearControl": { "equals": "available" }
+      }
+    },
+    {
+      "id": "clear-returns-the-library",
+      "action": { "op": "clear-library-query" },
+      "expect": {
+        "state": { "equals": "library" },
+        "query": { "equals": "" },
+        "bookCount": { "greaterThanOrEqual": 3 },
+        "clearControl": { "equals": "absent" },
+        "searchFocused": { "equals": true }
+      }
+    },
+    {
+      "id": "search-again",
+      "action": { "op": "replace-library-query", "text": "bronte" },
+      "expect": {
+        "state": { "equals": "library" },
+        "query": { "equals": "bronte" },
+        "resultCount": { "equals": 1 },
+        "clearControl": { "equals": "available" }
+      }
+    },
+    {
+      "id": "mark-returns-the-library",
+      "action": { "op": "activate-library-mark" },
+      "expect": {
+        "state": { "equals": "library" },
+        "query": { "equals": "" },
+        "bookCount": { "greaterThanOrEqual": 3 },
+        "clearControl": { "equals": "absent" }
+      }
+    }
+  ]
+}
