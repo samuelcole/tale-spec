@@ -51,8 +51,9 @@ not reuse the failed result.
 - A missing tale (`404`), an unsupported payload version or unsafe content, a
   malformed response, or a server error. Typed failures may give those states
   different words, but this scenario fixes only an unreachable transport.
-- How long a loading state waits before the transport fails, or what progress
-  indicator it uses while a request is genuinely in flight.
+- What progress indicator a loading state uses while a request is genuinely in
+  flight. How long it may wait on a request that never answers is fixed by
+  [`kept-on-a-stalled-network.md`](kept-on-a-stalled-network.md).
 - Automatic retry, backoff, background refresh, catalog loading, sync, audio,
   or any cache above the HTTP validators in [`spec/payload.md`](../payload.md).
 - The device matrix. Each consuming platform declares the viewports,
