@@ -6,81 +6,193 @@
   "steps": [
     {
       "id": "play-and-pause-while-keep-stalls",
-      "action": { "op": "open-book-activate-transport-and-pause", "book": "first", "clean": true, "network": "reachable", "stall": "third-section-onward" },
-      "expect": {
-        "state": { "equals": "book" },
-        "playControl": { "equals": "available" },
-        "transportBeforePause": { "equals": "playing" },
-        "voiceKeep": { "equals": "in-flight" },
-        "transport": { "equals": "paused" },
-        "position": { "equals": "before-first-audio-seam" }
+      "action": {
+        "op": "open-book-activate-transport-and-pause",
+        "book": "first",
+        "clean": true,
+        "network": "reachable",
+        "stall": "third-section-onward"
       },
-      "capture": { "pausedAt": "voiceBlock" }
+      "expect": {
+        "state": {
+          "equals": "book"
+        },
+        "playControl": {
+          "equals": "available"
+        },
+        "transportBeforePause": {
+          "equals": "playing"
+        },
+        "voiceKeep": {
+          "equals": "in-flight"
+        },
+        "transport": {
+          "equals": "paused"
+        },
+        "position": {
+          "equals": "before-first-audio-seam"
+        }
+      },
+      "capture": {
+        "pausedAt": "voiceBlock",
+        "pausedAtIndex": "voiceBlockIndex"
+      }
     },
     {
       "id": "reopen-stalled",
-      "action": { "op": "end-session-set-network-and-open", "book": "first", "network": "stalled" },
+      "action": {
+        "op": "end-session-set-network-and-open",
+        "book": "first",
+        "network": "stalled"
+      },
       "expect": {
-        "secondsToOpen": { "lessThanOrEqual": 3 },
-        "state": { "equals": "book" },
-        "text": { "equals": "available" },
-        "secondsToPlayControl": { "lessThanOrEqual": 3 },
-        "playControl": { "equals": "available" },
-        "playControlState": { "equals": "plays" },
-        "transport": { "equals": "idle" }
+        "secondsToOpen": {
+          "lessThanOrEqual": 3
+        },
+        "state": {
+          "equals": "book"
+        },
+        "text": {
+          "equals": "available"
+        },
+        "secondsToPlayControl": {
+          "lessThanOrEqual": 3
+        },
+        "playControl": {
+          "equals": "available"
+        },
+        "playControlState": {
+          "equals": "plays"
+        },
+        "transport": {
+          "equals": "idle"
+        }
       }
     },
     {
       "id": "play-kept-sections",
-      "action": { "op": "activate-transport-and-wait-past-seam" },
+      "action": {
+        "op": "activate-transport-and-wait-past-seam"
+      },
       "expect": {
-        "startingState": { "equals": "shown" },
-        "secondsToStartingState": { "lessThanOrEqual": 1 },
-        "secondsToFirstWord": { "lessThanOrEqual": 3 },
-        "firstWordBlock": { "equals": { "ref": "pausedAt" } },
-        "transport": { "equals": "playing" },
-        "position": { "equals": "past-first-audio-seam" },
-        "narrationError": { "equals": "absent" }
+        "startingState": {
+          "equals": "shown"
+        },
+        "secondsToStartingState": {
+          "lessThanOrEqual": 1
+        },
+        "secondsToFirstWord": {
+          "lessThanOrEqual": 3
+        },
+        "firstWordBlockIndex": {
+          "greaterThanOrEqual": {
+            "ref": "pausedAtIndex"
+          }
+        },
+        "transport": {
+          "equals": "playing"
+        },
+        "position": {
+          "equals": "past-first-audio-seam"
+        },
+        "narrationError": {
+          "equals": "absent"
+        }
       }
     },
     {
       "id": "reach-unkept-section",
-      "action": { "op": "wait-for-unkept-section" },
-      "expect": {
-        "secondsToHonestStop": { "lessThanOrEqual": 12 },
-        "transport": { "equals": "paused" },
-        "position": { "equals": "at-first-unkept-section-start" },
-        "stopWorded": { "equals": true },
-        "stopAccessible": { "equals": true },
-        "stopSays": { "equals": "rest-of-voice-not-on-device" },
-        "text": { "equals": "available" },
-        "readingGestureMovesPage": { "equals": true },
-        "playControl": { "equals": "available" }
+      "action": {
+        "op": "wait-for-unkept-section"
       },
-      "capture": { "stoppedAt": "voiceBlock", "stoppedPosition": "voicePositionValue" }
+      "expect": {
+        "secondsToHonestStop": {
+          "lessThanOrEqual": 12
+        },
+        "transport": {
+          "equals": "paused"
+        },
+        "position": {
+          "equals": "at-first-unkept-section-start"
+        },
+        "stopWorded": {
+          "equals": true
+        },
+        "stopAccessible": {
+          "equals": true
+        },
+        "stopSays": {
+          "equals": "rest-of-voice-not-on-device"
+        },
+        "text": {
+          "equals": "available"
+        },
+        "readingGestureMovesPage": {
+          "equals": true
+        },
+        "playControl": {
+          "equals": "available"
+        }
+      },
+      "capture": {
+        "stoppedAt": "voiceBlock",
+        "stoppedPosition": "voicePositionValue"
+      }
     },
     {
       "id": "restore-and-continue",
-      "action": { "op": "set-network-and-activate-transport", "network": "reachable" },
+      "action": {
+        "op": "set-network-and-activate-transport",
+        "network": "reachable"
+      },
       "expect": {
-        "startingState": { "equals": "shown" },
-        "secondsToStartingState": { "lessThanOrEqual": 1 },
-        "transport": { "equals": "playing" },
-        "resumedBlock": { "equals": { "ref": "stoppedAt" } },
-        "resumedWithoutRewind": { "equals": true },
-        "positionAdvanced": { "equals": true },
-        "voiceKeep": { "equals": "complete" }
+        "startingState": {
+          "equals": "shown"
+        },
+        "secondsToStartingState": {
+          "lessThanOrEqual": 1
+        },
+        "transport": {
+          "equals": "playing"
+        },
+        "resumedBlock": {
+          "equals": {
+            "ref": "stoppedAt"
+          }
+        },
+        "resumedWithoutRewind": {
+          "equals": true
+        },
+        "positionAdvanced": {
+          "equals": true
+        },
+        "voiceKeep": {
+          "equals": "complete"
+        }
       }
     },
     {
       "id": "library-offline",
-      "action": { "op": "pause-end-session-set-network-and-open-library", "network": "unreachable" },
+      "action": {
+        "op": "pause-end-session-set-network-and-open-library",
+        "network": "unreachable"
+      },
       "expect": {
-        "state": { "equals": "library" },
-        "firstRowPlayControl": { "equals": "available" },
-        "secondRowDimmed": { "equals": false },
-        "secondRowPlayControl": { "equals": "absent" },
-        "secondRowActivatable": { "equals": true }
+        "state": {
+          "equals": "library"
+        },
+        "firstRowPlayControl": {
+          "equals": "available"
+        },
+        "secondRowDimmed": {
+          "equals": false
+        },
+        "secondRowPlayControl": {
+          "equals": "absent"
+        },
+        "secondRowActivatable": {
+          "equals": true
+        }
       }
     }
   ]

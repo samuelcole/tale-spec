@@ -101,8 +101,12 @@ its address again.**
 **3. Press play.**
 
 - Within 1 second the control is *starting*; within 3 seconds the transport
-  shows playing and the voice's position is visible, inside the paragraph
-  where reading stood.
+  shows playing and the voice's position is visible, where reading stands:
+  the paragraph the voice paused in, or the one after it. The mark is
+  inclusive and a new session opens at the next unread paragraph
+  ([`play-and-pocket.md`](play-and-pocket.md) step 4), and the transport's
+  media time does not survive the session boundary, so the voice may pick up
+  at the paragraph after the one it paused in. It never picks up before it.
 - The voice crosses the boundary between the first and second sections and
   the transport stays playing. Both are kept, and the seam is the player's
   business.
