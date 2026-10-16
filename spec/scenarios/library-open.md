@@ -79,7 +79,10 @@ The library stays usable. The first book is available because opening it kept
 it on the device. The never-opened second book is dimmed but remains tappable.
 One line above the list says
 `you're offline · the dimmed tales aren't available right now`; dimming never
-has to explain itself.
+has to explain itself. The first book's row still carries its play control,
+because its voice was kept by playing in step 4; a narrated row whose voice is
+not on the device offers none, which
+[`voice-kept-in-part.md`](voice-kept-in-part.md) fixes.
 
 **7. Activate the dimmed second row.**
 

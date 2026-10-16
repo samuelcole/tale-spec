@@ -7,6 +7,12 @@ download button and no second decision. A narrated book opened but never
 played keeps its text only. Offline, when its voice is not on the device, it
 is simply a readable book without a Play control.
 
+Version 2 of the executable plan changes one outcome: a never-played voice
+offline no longer hides its control. It stands as *can't play here*, the
+honest state [`voice-on-a-stalled-network.md`](voice-on-a-stalled-network.md)
+defines, so that absence never reads as a book with no narration. Clients must
+sync the plan and report its version when adopting the change.
+
 This is the extension [`kept-on-open.md`](kept-on-open.md) and
 [`play-and-pocket.md`](play-and-pocket.md) both reserve. It changes neither
 trigger: opening remains enough to keep a book's small text payload, while the
@@ -45,9 +51,11 @@ megabytes of recording.
 
 Keeping runs beside playback. Sound begins from the network without waiting
 for the complete recording to land, and the transport remains usable while
-the keep finishes. A completed keep is all-or-nothing at playback time:
-partial or damaged alignment or audio cannot be presented later as an
-offline voice.
+the keep finishes. A kept section is whole or absent: a damaged or half-written
+section is never presented as kept. A keep that stopped partway is a partly
+kept voice, and [`voice-kept-in-part.md`](voice-kept-in-part.md) fixes what it
+plays; a keep that began must finish without the reader, which is
+[`keep-outlives-the-screen.md`](keep-outlives-the-screen.md).
 
 ## Taking the network away
 
@@ -95,10 +103,14 @@ Its narration has not: no play gesture occurred and no recording began.
 **5. Reopen the second book offline.**
 
 The kept text opens. Because this session reached it through the offline
-fallback, the product checks whether the exact local voice is complete before
-offering playback. It is not, so no Play control or narration explanation
-appears. The book remains ordinarily readable, no sound starts, and no remote
-URL is treated as a local recording.
+fallback, the product checks what of the exact local voice is on the device
+before offering playback. None of it is, so the play control stands as
+*can't play here*, the state
+[`voice-on-a-stalled-network.md`](voice-on-a-stalled-network.md) fixes:
+present, dimmed, idle, and a press is answered in words that the voice isn't
+on this device yet. The control does not disappear, because a book with no
+control reads as a book with no narration. The book remains ordinarily
+readable, no sound starts, and no remote URL is treated as a local recording.
 
 **6. Restore the network.**
 
@@ -112,9 +124,14 @@ does not make the decision for the reader.
   voices are present, exposes their size, or offers removal is a separate
   platform surface. This scenario needs no download button and deletes
   nothing.
-- **Eviction and storage pressure policy.** A failed or interrupted keep must
-  fail closed, but this scenario neither fills the device nor decides what may
-  be evicted.
+- **Eviction and storage pressure policy.** A damaged section must fail
+  closed, but this scenario neither fills the device nor decides what may be
+  evicted. An interrupted keep is
+  [`voice-kept-in-part.md`](voice-kept-in-part.md)'s.
+- **A network that stalls rather than fails.** This scenario's network is
+  gone, so it cannot tell a client that reads its keep first from one that
+  waits for the network to fail. That order is fixed by
+  [`voice-on-a-stalled-network.md`](voice-on-a-stalled-network.md).
 - **Freshness.** An online alignment remains network-first. Replacing a kept
   recording after the producer publishes a new content version belongs with
   kept-text freshness.
@@ -130,6 +147,6 @@ does not make the decision for the reader.
    their weight, and one deliberate removal that leaves the text alone.
 2. **Refresh a kept voice** — receive a new content version online without
    mixing its alignment, audio, text, or mark with the old one.
-3. **Lose space honestly** — interrupt a keep or exhaust storage, then prove
-   playback continues online while the incomplete voice never claims to be
-   available offline.
+3. **Lose space honestly** — exhaust storage mid-keep, then prove playback
+   continues online while a damaged section is never presented as kept. An
+   interrupted keep is now [`voice-kept-in-part.md`](voice-kept-in-part.md).

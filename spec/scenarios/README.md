@@ -128,6 +128,16 @@ every unfinished client its intentional red test immediately.
 - [`voice-rides-along.md`](voice-rides-along.md) — play once online and the
   voice replays across its seams offline; a voice never played explains what
   is missing and remains retryable.
+- [`voice-on-a-stalled-network.md`](voice-on-a-stalled-network.md) — a kept
+  voice starts from the device at once on a network that never answers; one
+  control with honest states, and every press answered from the press to the
+  first word.
+- [`voice-kept-in-part.md`](voice-kept-in-part.md) — a keep that stopped
+  partway plays the sections it has and stops honestly at the first it lacks;
+  the library offers no play it cannot honor offline.
+- [`keep-outlives-the-screen.md`](keep-outlives-the-screen.md) — a keep that
+  began finishes while the screen is away, and the whole voice plays through
+  offline afterwards.
 - [`book-navigation.md`](book-navigation.md) — a directly opened book keeps a
   way home, and a producer-linked byline opens its native author shelf.
 - [`voice-flourish-and-peek.md`](voice-flourish-and-peek.md) — Play briefly

@@ -132,9 +132,10 @@ retry makes a new request, and the book opens at its cover.
   can observe on a total stall. That a book arriving slowly is not abandoned
   is required above but not exercised: it needs a fixture that trickles bytes.
 - **Everything else that loads.** The library index, discovery rows, plans,
-  synced progress, and narration have their own requests and their own
-  scenarios. Whether a stalled index or a stalled alignment holds a reader up
-  is not fixed here.
+  and synced progress have their own requests and their own scenarios.
+  Whether a stalled index holds a reader up is not fixed here. A stalled
+  alignment or recording is
+  [`voice-on-a-stalled-network.md`](voice-on-a-stalled-network.md).
 - **Distinguishing a stall from being offline.** A client that can prove the
   device has no path may say so sooner. Nothing here requires waiting the full
   deadline.
@@ -142,9 +143,8 @@ retry makes a new request, and the book opens at its cover.
 
 ## What the next scenario would extend
 
-1. **The voice on a stalled network.** Press play in a kept, narrated book
-   whose voice is kept, with the network stalled. The voice starts within the
-   same kind of bound. That is [`voice-rides-along.md`](voice-rides-along.md)'s
-   territory, shaped like this file.
-2. **The index on a stalled network.** The library opens from what it last
+1. **The index on a stalled network.** The library opens from what it last
    knew, and its kept books open as step 3 does here.
+
+The voice on a stalled network, this file's first named extension, is now
+[`voice-on-a-stalled-network.md`](voice-on-a-stalled-network.md).

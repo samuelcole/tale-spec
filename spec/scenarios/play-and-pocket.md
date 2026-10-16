@@ -91,6 +91,10 @@ not disappear, claim to be playing, or sit visually unchanged through the
 silence. This state is available to assistive technology as well as sight.
 
 When sound is ready, the preparing treatment clears without another press.
+What the pending treatment must be, legible at a glance and not a change of
+opacity alone, is fixed by
+[`voice-on-a-stalled-network.md`](voice-on-a-stalled-network.md)'s *starting*
+state; this scenario fixes only that it exists and is accessible.
 
 The transport shows playing, and the voice stands inside **P**'s narrated
 span: playback began where reading stands — not at the top of the book, not
