@@ -1,0 +1,86 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "read-in-your-language",
+  "title": "Read in your language",
+  "steps": [
+    {
+      "id": "home-without-a-choice",
+      "action": { "op": "open-library-search", "clean": true, "network": "reachable", "deviceLanguage": "en" },
+      "expect": {
+        "state": { "equals": "library" },
+        "leadingShelf": { "equals": null }
+      }
+    },
+    {
+      "id": "search-in-english",
+      "action": { "op": "replace-library-query", "text": "hel" },
+      "expect": {
+        "state": { "equals": "library" },
+        "bookOrder": { "equals": ["Helen of Troy", "Helena"] },
+        "bookLanguages": { "equals": [null, "Português"] }
+      }
+    },
+    {
+      "id": "choose-portuguese",
+      "action": { "op": "open-browse-address-and-choose-reading-language", "address": "https://tale.fyi/language/pt" },
+      "expect": {
+        "state": { "equals": "shelf" },
+        "canonicalIdentity": { "equals": "/language/pt" },
+        "readingLanguageControl": { "equals": "chosen" },
+        "rosterLanguages": { "equals": [null, null] }
+      }
+    },
+    {
+      "id": "home-leads-with-portuguese",
+      "action": { "op": "return-to-library-search" },
+      "expect": {
+        "state": { "equals": "library" },
+        "leadingShelf": { "equals": "Português" },
+        "leadingShelfBooks": { "equals": ["Dom Casmurro", "Helena"] }
+      }
+    },
+    {
+      "id": "search-in-portuguese",
+      "action": { "op": "replace-library-query", "text": "hel" },
+      "expect": {
+        "state": { "equals": "library" },
+        "bookOrder": { "equals": ["Helena", "Helen of Troy"] },
+        "bookLanguages": { "equals": [null, "English"] }
+      }
+    },
+    {
+      "id": "choice-survives-relaunch",
+      "action": { "op": "end-session-and-open-library" },
+      "expect": {
+        "state": { "equals": "library" },
+        "leadingShelf": { "equals": "Português" }
+      }
+    },
+    {
+      "id": "back-to-device-language",
+      "action": { "op": "open-browse-address-and-clear-reading-language", "address": "https://tale.fyi/language/pt" },
+      "expect": {
+        "state": { "equals": "shelf" },
+        "readingLanguageControl": { "equals": "not-chosen" }
+      }
+    },
+    {
+      "id": "home-ordinary-again",
+      "action": { "op": "return-to-library-search" },
+      "expect": {
+        "state": { "equals": "library" },
+        "leadingShelf": { "equals": null }
+      }
+    },
+    {
+      "id": "device-language-is-the-default",
+      "action": { "op": "open-library-search", "clean": true, "network": "reachable", "deviceLanguage": "pt" },
+      "expect": {
+        "state": { "equals": "library" },
+        "leadingShelf": { "equals": "Português" },
+        "leadingShelfBooks": { "equals": ["Dom Casmurro", "Helena"] }
+      }
+    }
+  ]
+}

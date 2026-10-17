@@ -124,6 +124,9 @@ every unfinished client its intentional red test immediately.
 - [`library-language.md`](library-language.md) — a language is a shelf:
   search finds it by either name, its address opens it, and a book not in
   English says which language it is.
+- [`read-in-your-language.md`](read-in-your-language.md) — choose the
+  language you read in; home and search lead with it, and it outlives the
+  session.
 - [`finish-and-leave.md`](finish-and-leave.md) — finish the text, find its
   provenance and original year in a quiet colophon, then take the way home.
 - [`finish-and-discover.md`](finish-and-discover.md) — a finished book opens
