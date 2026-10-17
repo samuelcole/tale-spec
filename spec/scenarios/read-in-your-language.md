@@ -31,8 +31,10 @@ prose owns the ordered actions and observations.
   match in another language still ranks above a weaker one in the reading
   language. Discovery results keep their place ahead of books.
 - **Labels.** A book row names its language, by that language's own name,
-  whenever it differs from the reading language. With an English reading
-  language this is exactly `library-language`'s rule.
+  whenever it differs from the reading language — except on a language shelf,
+  where every book shares the shelf's language and the title already says it,
+  so no row is labelled. Elsewhere, with an English reading language, this is
+  exactly `library-language`'s rule.
 
 ## Setup
 
@@ -57,7 +59,8 @@ The home page opens on its ordinary first row; no language shelf leads it.
 
 **3. Open the `Português` shelf and choose to read in Português.**
 
-The shelf's control shows that Português is chosen.
+The shelf's control shows that Português is chosen. No row on the shelf is
+labelled: the title already names the language.
 
 **4. Return to the library.**
 

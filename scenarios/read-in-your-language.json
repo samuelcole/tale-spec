@@ -27,7 +27,8 @@
       "expect": {
         "state": { "equals": "shelf" },
         "canonicalIdentity": { "equals": "/language/pt" },
-        "readingLanguageControl": { "equals": "chosen" }
+        "readingLanguageControl": { "equals": "chosen" },
+        "rosterLanguages": { "equals": [null, null] }
       }
     },
     {
