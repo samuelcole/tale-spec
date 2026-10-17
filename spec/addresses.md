@@ -8,7 +8,7 @@ addresses, never a second set of links.
 `route` accepts one absolute URL and returns one of three decisions:
 
 - `reading` — a book, authored tale, list-context tale, or immutable plan tip;
-- `browse` — a list, genre, era, author, or reader shelf; or
+- `browse` — a list, genre, era, author, reader, or language shelf; or
 - `browser` — the unchanged input URL when Tale has no native surface for it.
 
 Only `https://tale.fyi` without credentials or an explicit port enters the
@@ -37,20 +37,23 @@ list-context tale slot is unsupported.
 ### Browse doors
 
 - `/~<list>` is a list shelf.
-- `/genre/<slug>`, `/eras/<slug>`, `/author/<slug>`, and `/readers/<slug>`
-  are producer-owned shelves. Their slugs are lowercase identity. A
-  `/readers/<slug>` shelf is a LibriVox reader's, `browseKind` `reader`.
+- `/genre/<slug>`, `/eras/<slug>`, `/author/<slug>`, `/readers/<slug>`, and
+  `/language/<tag>` are producer-owned shelves. Their slugs are lowercase
+  identity. A `/readers/<slug>` shelf is a LibriVox reader's, `browseKind`
+  `reader`. A `/language/<tag>` shelf is every book in one language,
+  `browseKind` `language`, its slug the language's primary subtag (see
+  [`scenarios/library-language.md`](scenarios/library-language.md)).
 
 ### Web-only namespaces
 
 The following first segments are web-owned and must return `browser` unchanged:
 
 `_next`, `api`, `audiobooks`, `author`, `body`, `curate`, `eras`, `following`,
-`genre`, `monitoring`, `privacy`, `readers`, `request`, `signin`, `support`,
-`synopses`, and `tell`.
+`genre`, `language`, `monitoring`, `privacy`, `readers`, `request`, `signin`,
+`support`, `synopses`, and `tell`.
 
-The four browse shapes above are the deliberate exceptions within `author`,
-`eras`, `genre`, and `readers`. Filesystem precedence on one client is not part of this
+The browse shapes above are the deliberate exceptions within `author`,
+`eras`, `genre`, `language`, and `readers`. Filesystem precedence on one client is not part of this
 contract.
 
 ## Canonical passage URL
