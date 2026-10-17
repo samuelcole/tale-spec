@@ -121,6 +121,9 @@ every unfinished client its intentional red test immediately.
   one act.
 - [`library-browse.md`](library-browse.md) — open list, genre, era, and author
   results and canonical addresses as native shelves backed by one payload.
+- [`library-language.md`](library-language.md) — a language is a shelf:
+  search finds it by either name, its address opens it, and a book not in
+  English says which language it is.
 - [`finish-and-leave.md`](finish-and-leave.md) — finish the text, find its
   provenance and original year in a quiet colophon, then take the way home.
 - [`finish-and-discover.md`](finish-and-discover.md) — a finished book opens
