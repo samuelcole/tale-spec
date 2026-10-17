@@ -58,6 +58,18 @@
     },
     {
       "op": "route",
+      "name": "a language opens its native shelf despite the web namespace",
+      "input": { "url": "https://tale.fyi/language/PT" },
+      "expected": { "kind": "browse", "browseKind": "language", "slug": "pt", "canonicalPath": "/language/pt" }
+    },
+    {
+      "op": "route",
+      "name": "the bare language namespace stays in the browser",
+      "input": { "url": "https://tale.fyi/language" },
+      "expected": { "kind": "browser", "url": "https://tale.fyi/language" }
+    },
+    {
+      "op": "route",
       "name": "the readers index stays on the web",
       "input": { "url": "https://tale.fyi/readers" },
       "expected": { "kind": "browser", "url": "https://tale.fyi/readers" }
