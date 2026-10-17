@@ -1,0 +1,109 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "library-language",
+  "title": "A language is a shelf",
+  "steps": [
+    {
+      "id": "find-language-by-own-name",
+      "action": { "op": "open-library-browse", "query": "português", "clean": true, "network": "reachable" },
+      "expect": {
+        "state": { "equals": "library" },
+        "query": { "equals": "português" },
+        "resultCount": { "equals": 1 },
+        "resultKind": { "equals": "language" },
+        "resultTitle": { "equals": "Português" },
+        "resultMeta": { "equals": "2 books · a language" }
+      }
+    },
+    {
+      "id": "open-language-shelf",
+      "action": { "op": "activate-browse-result", "kind": "language" },
+      "expect": {
+        "state": { "equals": "shelf" },
+        "kind": { "equals": "language" },
+        "canonicalIdentity": { "equals": "/language/pt" },
+        "title": { "equals": "Português" },
+        "bookCount": { "equals": 2 },
+        "roster": { "equals": ["Dom Casmurro", "Helena"] },
+        "firstByline": { "equals": "Machado de Assis" }
+      }
+    },
+    {
+      "id": "open-language-shelf-book",
+      "action": { "op": "activate-shelf-book", "position": 1 },
+      "expect": {
+        "state": { "equals": "book" },
+        "canonicalBook": { "equals": "/dom-casmurro-scenario" }
+      }
+    },
+    {
+      "id": "return-to-language-shelf",
+      "action": { "op": "return-to-browse-shelf" },
+      "expect": {
+        "state": { "equals": "shelf" },
+        "canonicalIdentity": { "equals": "/language/pt" },
+        "title": { "equals": "Português" },
+        "bookCount": { "equals": 2 },
+        "roster": { "equals": ["Dom Casmurro", "Helena"] }
+      }
+    },
+    {
+      "id": "return-to-language-search",
+      "action": { "op": "return-to-library-browse" },
+      "expect": {
+        "state": { "equals": "library" },
+        "query": { "equals": "português" },
+        "resultCount": { "equals": 1 },
+        "resultKind": { "equals": "language" }
+      }
+    },
+    {
+      "id": "find-language-by-english-name",
+      "action": { "op": "replace-library-query", "text": "Portuguese" },
+      "expect": {
+        "state": { "equals": "library" },
+        "resultCount": { "equals": 1 },
+        "resultKind": { "equals": "language" },
+        "resultTitle": { "equals": "Português" },
+        "resultMeta": { "equals": "2 books · a language" }
+      }
+    },
+    {
+      "id": "label-a-book-not-in-english",
+      "action": { "op": "replace-library-query", "text": "casmurro" },
+      "expect": {
+        "state": { "equals": "library" },
+        "resultCount": { "equals": 1 },
+        "resultKind": { "equals": "book" },
+        "targetTitle": { "equals": "Dom Casmurro" },
+        "targetByline": { "equals": "Machado de Assis" },
+        "targetLanguage": { "equals": "Português" }
+      }
+    },
+    {
+      "id": "leave-an-english-book-unlabelled",
+      "action": { "op": "replace-library-query", "text": "frankenstein" },
+      "expect": {
+        "state": { "equals": "library" },
+        "resultCount": { "equals": 1 },
+        "resultKind": { "equals": "book" },
+        "targetTitle": { "equals": "Frankenstein" },
+        "targetByline": { "equals": "Mary Shelley" },
+        "targetLanguage": { "equals": null }
+      }
+    },
+    {
+      "id": "open-language-address",
+      "action": { "op": "open-browse-address", "address": "https://tale.fyi/language/pt" },
+      "expect": {
+        "state": { "equals": "shelf" },
+        "kind": { "equals": "language" },
+        "canonicalIdentity": { "equals": "/language/pt" },
+        "title": { "equals": "Português" },
+        "bookCount": { "equals": 2 },
+        "roster": { "equals": ["Dom Casmurro", "Helena"] }
+      }
+    }
+  ]
+}
