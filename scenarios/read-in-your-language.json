@@ -1,6 +1,6 @@
 {
   "format": "tale-surface-scenario",
-  "version": 1,
+  "version": 2,
   "id": "read-in-your-language",
   "title": "Read in your language",
   "steps": [
@@ -17,7 +17,7 @@
       "action": { "op": "replace-library-query", "text": "hel" },
       "expect": {
         "state": { "equals": "library" },
-        "bookOrder": { "equals": ["Helen of Troy", "Helena"] },
+        "bookOrder": { "equals": ["Helbeck of Bannisdale", "Helena"] },
         "bookLanguages": { "equals": [null, "Português"] }
       }
     },
@@ -45,7 +45,7 @@
       "action": { "op": "replace-library-query", "text": "hel" },
       "expect": {
         "state": { "equals": "library" },
-        "bookOrder": { "equals": ["Helena", "Helen of Troy"] },
+        "bookOrder": { "equals": ["Helena", "Helbeck of Bannisdale"] },
         "bookLanguages": { "equals": [null, "English"] }
       }
     },
