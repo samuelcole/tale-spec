@@ -40,8 +40,10 @@ prose owns the ordered actions and observations.
 
 - One signed-out device with no restored state.
 - The fixture library of `library-language`, plus one English book whose title
-  shares a prefix with a Portuguese one: `Helen of Troy` (`en`), beside
-  `Helena` (`pt`). Under English ordering `Helen of Troy` comes first.
+  shares a prefix with a Portuguese one: `Helbeck of Bannisdale` (`en`),
+  beside `Helena` (`pt`). It sorts first under every collation — version 1
+  used `Helen of Troy`, which a collation that ignores spaces (glibc's
+  `en_US`) sorts *after* `Helena`, so the order depended on the database.
 - The device's preferred languages are English unless a step says otherwise.
 
 These names are test material, not prescribed production content.
@@ -54,8 +56,8 @@ The home page opens on its ordinary first row; no language shelf leads it.
 
 **2. Search for `hel`.**
 
-`Helen of Troy` is first and `Helena` second; `Helena` is labelled
-`Português` and `Helen of Troy` is not.
+`Helbeck of Bannisdale` is first and `Helena` second; `Helena` is labelled
+`Português` and `Helbeck of Bannisdale` is not.
 
 **3. Open the `Português` shelf and choose to read in Português.**
 
@@ -69,7 +71,7 @@ Casmurro` and `Helena`.
 
 **5. Search for `hel`.**
 
-`Helena` is now first, unlabelled; `Helen of Troy` second, labelled
+`Helena` is now first, unlabelled; `Helbeck of Bannisdale` second, labelled
 `English`.
 
 **6. End the session and reopen the library.**
