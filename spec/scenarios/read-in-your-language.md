@@ -40,10 +40,13 @@ prose owns the ordered actions and observations.
 
 - One signed-out device with no restored state.
 - The fixture library of `library-language`, plus one English book whose title
-  shares a prefix with a Portuguese one: `Helbeck of Bannisdale` (`en`),
-  beside `Helena` (`pt`). It sorts first under every collation — version 1
-  used `Helen of Troy`, which a collation that ignores spaces (glibc's
-  `en_US`) sorts *after* `Helena`, so the order depended on the database.
+  begins with a Portuguese one's: `Helena's Path` (`en`), beside `Helena`
+  (`pt`). The query `helena` matches those two books and nothing else, both
+  as equally strong title-prefix matches, so their order is the tie-break
+  alone and no database collation can decide it. (Version 1 used `Helen of
+  Troy`, whose order against `Helena` depends on whether a collation ignores
+  spaces; version 2's `Helbeck of Bannisdale` with the query `hel` also
+  matched every book by Mary Shelley.)
 - The device's preferred languages are English unless a step says otherwise.
 
 These names are test material, not prescribed production content.
@@ -54,10 +57,10 @@ These names are test material, not prescribed production content.
 
 The home page opens on its ordinary first row; no language shelf leads it.
 
-**2. Search for `hel`.**
+**2. Search for `helena`.**
 
-`Helbeck of Bannisdale` is first and `Helena` second; `Helena` is labelled
-`Português` and `Helbeck of Bannisdale` is not.
+`Helena's Path` is first and `Helena` second; `Helena` is labelled
+`Português` and `Helena's Path` is not.
 
 **3. Open the `Português` shelf and choose to read in Português.**
 
@@ -69,9 +72,9 @@ labelled: the title already names the language.
 The home page opens with the `Português` shelf: its title, then `Dom
 Casmurro` and `Helena`.
 
-**5. Search for `hel`.**
+**5. Search for `helena`.**
 
-`Helena` is now first, unlabelled; `Helbeck of Bannisdale` second, labelled
+`Helena` is now first, unlabelled; `Helena's Path` second, labelled
 `English`.
 
 **6. End the session and reopen the library.**
