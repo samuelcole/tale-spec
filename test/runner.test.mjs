@@ -83,6 +83,7 @@ test("every prose scenario has a matching executable plan", async () => {
     "finish-and-discover",
     "finish-and-leave",
     "follow-and-override",
+    "keep-outlives-the-screen",
     "kept-on-a-stalled-network",
     "kept-on-open",
     "leave-and-return",
@@ -100,6 +101,8 @@ test("every prose scenario has a matching executable plan", async () => {
     "position-and-motion",
     "reading-preferences",
     "voice-flourish-and-peek",
+    "voice-kept-in-part",
+    "voice-on-a-stalled-network",
     "voice-rides-along",
   ]);
 });

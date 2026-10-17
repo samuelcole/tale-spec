@@ -1,0 +1,52 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "keep-outlives-the-screen",
+  "title": "The keep outlives the screen",
+  "steps": [
+    {
+      "id": "play-with-slow-keep",
+      "action": { "op": "open-book-and-activate-transport", "book": "first", "clean": true, "network": "slow-later-sections" },
+      "expect": {
+        "state": { "equals": "book" },
+        "playControl": { "equals": "available" },
+        "transport": { "equals": "playing" },
+        "voiceKeep": { "equals": "in-flight" }
+      }
+    },
+    {
+      "id": "pause-mid-keep",
+      "action": { "op": "activate-transport" },
+      "expect": {
+        "transport": { "equals": "paused" },
+        "voiceKeep": { "equals": "in-flight" }
+      }
+    },
+    {
+      "id": "put-screen-away-and-return",
+      "action": { "op": "put-screen-away-and-return", "until": "past-keep-completion" },
+      "expect": {
+        "surfaceWasHidden": { "equals": true },
+        "stayedAwayPastIdleAllowance": { "equals": true },
+        "playControlState": { "equals": "plays" },
+        "voiceKeep": { "equals": "complete" },
+        "transport": { "equals": "paused" },
+        "sound": { "equals": "absent" }
+      }
+    },
+    {
+      "id": "play-through-offline",
+      "action": { "op": "end-session-set-network-open-and-play", "book": "first", "network": "unreachable" },
+      "expect": {
+        "state": { "equals": "book" },
+        "text": { "equals": "available" },
+        "playControl": { "equals": "available" },
+        "playControlState": { "equals": "plays" },
+        "secondsToFirstWord": { "lessThanOrEqual": 3 },
+        "transport": { "equals": "playing" },
+        "position": { "equals": "past-last-audio-seam" },
+        "narrationError": { "equals": "absent" }
+      }
+    }
+  ]
+}

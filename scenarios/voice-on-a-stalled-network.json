@@ -1,0 +1,146 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "voice-on-a-stalled-network",
+  "title": "The voice on a stalled network",
+  "steps": [
+    {
+      "id": "open-first-narrated-book",
+      "action": { "op": "open-book", "book": "first", "clean": true, "network": "reachable" },
+      "expect": {
+        "state": { "equals": "book" },
+        "cover": { "equals": "on-screen" },
+        "playControl": { "equals": "available" },
+        "playControlState": { "equals": "plays" },
+        "voiceKeepControl": { "equals": "absent" }
+      }
+    },
+    {
+      "id": "press-play-and-keep-voice",
+      "action": { "op": "activate-transport-and-wait-for-keep" },
+      "expect": {
+        "startingState": { "equals": "shown" },
+        "startingAccessible": { "equals": true },
+        "secondsToStartingState": { "lessThanOrEqual": 1 },
+        "transport": { "equals": "playing" },
+        "secondsToFirstWord": { "greaterThanOrEqual": 0 },
+        "positionAdvanced": { "equals": true },
+        "playbackWaitedForKeep": { "equals": false },
+        "voiceKeep": { "equals": "complete" },
+        "playControlState": { "equals": "plays" }
+      },
+      "capture": { "onlineSecondsToFirstWord": "secondsToFirstWord" }
+    },
+    {
+      "id": "pause",
+      "action": { "op": "activate-transport" },
+      "expect": {
+        "transport": { "equals": "paused" },
+        "sound": { "equals": "absent" }
+      }
+    },
+    {
+      "id": "open-second-book-without-playing",
+      "action": { "op": "end-session-set-network-and-open", "book": "second", "network": "reachable" },
+      "expect": {
+        "state": { "equals": "book" },
+        "playControl": { "equals": "available" },
+        "playControlState": { "equals": "plays" },
+        "transport": { "equals": "idle" },
+        "playActivated": { "equals": false }
+      }
+    },
+    {
+      "id": "end-and-stall",
+      "action": { "op": "end-session-and-set-network", "network": "stalled" },
+      "expect": {
+        "session": { "equals": "ended" },
+        "network": { "equals": "stalled" }
+      }
+    },
+    {
+      "id": "reopen-kept-book-stalled",
+      "action": { "op": "open-book", "book": "first" },
+      "expect": {
+        "secondsToOpen": { "lessThanOrEqual": 3 },
+        "state": { "equals": "book" },
+        "text": { "equals": "available" },
+        "cover": { "equals": "above-screen" },
+        "spinner": { "equals": false },
+        "error": { "equals": "absent" },
+        "secondsToPlayControl": { "lessThanOrEqual": 3 },
+        "playControl": { "equals": "available" },
+        "playControlState": { "equals": "plays" }
+      }
+    },
+    {
+      "id": "play-kept-voice-stalled",
+      "action": { "op": "activate-transport-and-wait-past-seam" },
+      "expect": {
+        "startingState": { "equals": "shown" },
+        "startingAccessible": { "equals": true },
+        "secondsToStartingState": { "lessThanOrEqual": 1 },
+        "secondsToFirstWord": { "lessThanOrEqual": 3 },
+        "transport": { "equals": "playing" },
+        "position": { "equals": "past-first-audio-seam" },
+        "narrationError": { "equals": "absent" }
+      }
+    },
+    {
+      "id": "pause-stalled",
+      "action": { "op": "activate-transport" },
+      "expect": {
+        "transport": { "equals": "paused" },
+        "sound": { "equals": "absent" }
+      }
+    },
+    {
+      "id": "open-unkept-voice-stalled",
+      "action": { "op": "end-session-and-open", "book": "second" },
+      "expect": {
+        "secondsToOpen": { "lessThanOrEqual": 3 },
+        "state": { "equals": "book" },
+        "text": { "equals": "available" },
+        "secondsToHonestControl": { "lessThanOrEqual": 12 },
+        "playControl": { "equals": "available" },
+        "playControlState": { "equals": "cant-play-here" },
+        "transport": { "equals": "idle" },
+        "sound": { "equals": "absent" }
+      }
+    },
+    {
+      "id": "press-cant-play-here",
+      "action": { "op": "activate-transport" },
+      "expect": {
+        "secondsToAnswer": { "lessThanOrEqual": 1 },
+        "answer": { "equals": "worded" },
+        "answerAccessible": { "equals": true },
+        "answerSays": { "equals": "voice-not-on-device" },
+        "playControl": { "equals": "available" },
+        "playControlState": { "equals": "cant-play-here" },
+        "transport": { "equals": "idle" },
+        "sound": { "equals": "absent" }
+      }
+    },
+    {
+      "id": "restore-network",
+      "action": { "op": "set-network-and-wait-for-voice", "network": "reachable" },
+      "expect": {
+        "playControl": { "equals": "available" },
+        "playControlState": { "equals": "plays" },
+        "transport": { "equals": "idle" },
+        "sound": { "equals": "absent" }
+      }
+    },
+    {
+      "id": "play-after-restore",
+      "action": { "op": "activate-transport-and-wait-for-playing" },
+      "expect": {
+        "startingState": { "equals": "shown" },
+        "secondsToStartingState": { "lessThanOrEqual": 1 },
+        "transport": { "equals": "playing" },
+        "secondsToFirstWord": { "greaterThanOrEqual": 0 }
+      }
+    }
+  ]
+}

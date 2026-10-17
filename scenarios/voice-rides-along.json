@@ -1,6 +1,6 @@
 {
   "format": "tale-surface-scenario",
-  "version": 1,
+  "version": 2,
   "id": "voice-rides-along",
   "title": "The voice rides along",
   "steps": [
@@ -54,8 +54,9 @@
         "state": { "equals": "book" },
         "text": { "equals": "available" },
         "transport": { "equals": "idle" },
-        "playControl": { "equals": "absent" },
-        "sound": { "equals": "absent" }
+        "playControl": { "equals": "available" },
+        "sound": { "equals": "absent" },
+        "playControlState": { "equals": "cant-play-here" }
       }
     },
     {
@@ -64,7 +65,8 @@
       "expect": {
         "transport": { "equals": "idle" },
         "playControl": { "equals": "available" },
-        "sound": { "equals": "absent" }
+        "sound": { "equals": "absent" },
+        "playControlState": { "equals": "plays" }
       }
     }
   ]

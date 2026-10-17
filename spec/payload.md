@@ -209,6 +209,12 @@ reader mid-session
 
 The read-along response uses the same cache and strong-validator rules. Its
 `ETag` covers the exact alignment bytes independently of the tale response.
+The same exception applies to it: a voice the reader has played and the client
+has kept, in whole or in part, is read from the keep first and revalidated in
+the background, so a network that never answers cannot hold a kept voice
+([`scenarios/voice-on-a-stalled-network.md`](scenarios/voice-on-a-stalled-network.md)).
+A newer alignment is kept for the next session, never swapped under a playing
+voice.
 
 ## Versioning
 
