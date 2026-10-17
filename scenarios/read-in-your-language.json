@@ -1,6 +1,6 @@
 {
   "format": "tale-surface-scenario",
-  "version": 2,
+  "version": 3,
   "id": "read-in-your-language",
   "title": "Read in your language",
   "steps": [
@@ -14,10 +14,10 @@
     },
     {
       "id": "search-in-english",
-      "action": { "op": "replace-library-query", "text": "hel" },
+      "action": { "op": "replace-library-query", "text": "helena" },
       "expect": {
         "state": { "equals": "library" },
-        "bookOrder": { "equals": ["Helbeck of Bannisdale", "Helena"] },
+        "bookOrder": { "equals": ["Helena's Path", "Helena"] },
         "bookLanguages": { "equals": [null, "Português"] }
       }
     },
@@ -42,10 +42,10 @@
     },
     {
       "id": "search-in-portuguese",
-      "action": { "op": "replace-library-query", "text": "hel" },
+      "action": { "op": "replace-library-query", "text": "helena" },
       "expect": {
         "state": { "equals": "library" },
-        "bookOrder": { "equals": ["Helena", "Helbeck of Bannisdale"] },
+        "bookOrder": { "equals": ["Helena", "Helena's Path"] },
         "bookLanguages": { "equals": [null, "English"] }
       }
     },
