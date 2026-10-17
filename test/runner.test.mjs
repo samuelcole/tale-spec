@@ -88,6 +88,7 @@ test("every prose scenario has a matching executable plan", async () => {
     "kept-on-open",
     "leave-and-return",
     "library-browse",
+    "library-language",
     "library-open",
     "library-search",
     "link-handoff",
