@@ -40,7 +40,7 @@ applies to it in full.
 
 - One signed-out device with no restored state, whose preferred language is
   Spanish.
-- An English fixture book at `/frankenstein-scenario`, long enough to read
+- An English fixture book at `/dracula-scenario`, long enough to read
   past its first block, as in `reading-preferences`.
 
 ## Steps

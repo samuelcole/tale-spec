@@ -9,7 +9,7 @@
       "action": { "op": "read-to-block-and-open-preferences", "clean": true, "deviceLanguage": "es" },
       "expect": {
         "preferences": { "equals": "open" },
-        "canonicalBook": { "equals": "/frankenstein-scenario" },
+        "canonicalBook": { "equals": "/dracula-scenario" },
         "interfaceLanguage": { "equals": "es" },
         "bookLanguage": { "equals": "en" }
       },
@@ -19,7 +19,7 @@
       "id": "choose-english",
       "action": { "op": "choose-interface-language", "language": "en" },
       "expect": {
-        "canonicalBook": { "equals": "/frankenstein-scenario" },
+        "canonicalBook": { "equals": "/dracula-scenario" },
         "interfaceLanguage": { "equals": "en" },
         "bookLanguage": { "equals": "en" },
         "savedFillPosition": { "equals": { "ref": "savedFill" } }
@@ -30,7 +30,7 @@
       "action": { "op": "end-open-and-open-preferences" },
       "expect": {
         "preferences": { "equals": "open" },
-        "canonicalBook": { "equals": "/frankenstein-scenario" },
+        "canonicalBook": { "equals": "/dracula-scenario" },
         "interfaceLanguage": { "equals": "en" },
         "readerBlock": { "equals": { "ref": "successor" } },
         "savedFillPosition": { "equals": { "ref": "savedFill" } }
@@ -40,7 +40,7 @@
       "id": "choose-spanish",
       "action": { "op": "choose-interface-language", "language": "es" },
       "expect": {
-        "canonicalBook": { "equals": "/frankenstein-scenario" },
+        "canonicalBook": { "equals": "/dracula-scenario" },
         "interfaceLanguage": { "equals": "es" },
         "bookLanguage": { "equals": "en" },
         "savedFillPosition": { "equals": { "ref": "savedFill" } }
