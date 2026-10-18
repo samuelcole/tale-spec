@@ -1,0 +1,89 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "address-speaks-its-language",
+  "title": "An address speaks its language",
+  "steps": [
+    {
+      "id": "spanish-device-plain-address",
+      "action": { "op": "open-book-address", "clean": true, "deviceLanguage": "es-MX", "address": "https://tale.fyi/dracula-scenario" },
+      "expect": {
+        "state": { "equals": "book" },
+        "canonicalBook": { "equals": "/dracula-scenario" },
+        "addressPath": { "equals": "/es/dracula-scenario" },
+        "interfaceLanguage": { "equals": "es" },
+        "bookLanguage": { "equals": "en" },
+        "englishAddress": { "equals": "https://tale.fyi/dracula-scenario" },
+        "spanishAddress": { "equals": "https://tale.fyi/es/dracula-scenario" },
+        "defaultAddress": { "equals": "https://tale.fyi/dracula-scenario" }
+      }
+    },
+    {
+      "id": "share-gives-the-plain-address",
+      "action": { "op": "share-book-link" },
+      "expect": {
+        "sharedUrl": { "equals": "https://tale.fyi/dracula-scenario" }
+      }
+    },
+    {
+      "id": "english-device-spanish-address",
+      "action": { "op": "open-book-address", "clean": true, "deviceLanguage": "en", "address": "https://tale.fyi/es/dracula-scenario" },
+      "expect": {
+        "state": { "equals": "book" },
+        "canonicalBook": { "equals": "/dracula-scenario" },
+        "addressPath": { "equals": "/es/dracula-scenario" },
+        "interfaceLanguage": { "equals": "es" },
+        "englishAddress": { "equals": "https://tale.fyi/dracula-scenario" },
+        "spanishAddress": { "equals": "https://tale.fyi/es/dracula-scenario" },
+        "defaultAddress": { "equals": "https://tale.fyi/dracula-scenario" }
+      }
+    },
+    {
+      "id": "read-at-the-spanish-address",
+      "action": { "op": "read-forward", "extent": "several-screens" },
+      "expect": {
+        "readingExtent": { "equals": "several-screens" },
+        "settled": { "equals": true }
+      },
+      "capture": { "successor": "successor" }
+    },
+    {
+      "id": "place-carries-to-the-plain-address",
+      "action": { "op": "end-session-and-open-address", "address": "https://tale.fyi/dracula-scenario" },
+      "expect": {
+        "state": { "equals": "book" },
+        "addressPath": { "equals": "/dracula-scenario" },
+        "interfaceLanguage": { "equals": "en" },
+        "readerBlock": { "equals": { "ref": "successor" } }
+      }
+    },
+    {
+      "id": "choose-spanish-moves-the-address",
+      "action": { "op": "choose-interface-language", "language": "es" },
+      "expect": {
+        "canonicalBook": { "equals": "/dracula-scenario" },
+        "addressPath": { "equals": "/es/dracula-scenario" },
+        "interfaceLanguage": { "equals": "es" }
+      }
+    },
+    {
+      "id": "choose-english-moves-it-back",
+      "action": { "op": "choose-interface-language", "language": "en" },
+      "expect": {
+        "canonicalBook": { "equals": "/dracula-scenario" },
+        "addressPath": { "equals": "/dracula-scenario" },
+        "interfaceLanguage": { "equals": "en" }
+      }
+    },
+    {
+      "id": "chosen-english-outranks-a-spanish-address",
+      "action": { "op": "end-session-and-open-address", "address": "https://tale.fyi/es/dracula-scenario" },
+      "expect": {
+        "state": { "equals": "book" },
+        "addressPath": { "equals": "/dracula-scenario" },
+        "interfaceLanguage": { "equals": "en" },
+        "readerBlock": { "equals": { "ref": "successor" } }
+      }
+    }
+  ]
+}

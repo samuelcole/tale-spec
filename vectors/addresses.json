@@ -1,6 +1,6 @@
 {
   "area": "addresses",
-  "version": 1,
+  "version": 2,
   "cases": [
     {
       "op": "route",
@@ -61,6 +61,42 @@
       "name": "a language opens its native shelf despite the web namespace",
       "input": { "url": "https://tale.fyi/language/PT" },
       "expected": { "kind": "browse", "browseKind": "language", "slug": "pt", "canonicalPath": "/language/pt" }
+    },
+    {
+      "op": "route",
+      "name": "a Spanish-interface address is the same book, tip and anchor",
+      "input": { "url": "https://tale.fyi/ES/Dracula/Tip-AbC#chapter-3-p14" },
+      "expected": { "kind": "reading", "door": "book", "visiblePath": "dracula/Tip-AbC", "canonicalPath": "dracula", "planTip": "Tip-AbC", "anchor": "chapter-3-p14" }
+    },
+    {
+      "op": "route",
+      "name": "a Spanish-interface address is the same authored tale",
+      "input": { "url": "https://tale.fyi/es/@Sam/My-Tale" },
+      "expected": { "kind": "reading", "door": "authored-tale", "visiblePath": "@sam/my-tale", "canonicalPath": "@sam/my-tale", "planTip": null, "anchor": null }
+    },
+    {
+      "op": "route",
+      "name": "a Spanish-interface address is the same shelf",
+      "input": { "url": "https://tale.fyi/es/eras/19th-Century" },
+      "expected": { "kind": "browse", "browseKind": "era", "slug": "19th-century", "canonicalPath": "/eras/19th-century" }
+    },
+    {
+      "op": "route",
+      "name": "the Spanish library stays in the browser",
+      "input": { "url": "https://tale.fyi/es" },
+      "expected": { "kind": "browser", "url": "https://tale.fyi/es" }
+    },
+    {
+      "op": "route",
+      "name": "a Spanish-interface web page stays unchanged in the browser",
+      "input": { "url": "https://tale.fyi/es/privacy" },
+      "expected": { "kind": "browser", "url": "https://tale.fyi/es/privacy" }
+    },
+    {
+      "op": "route",
+      "name": "only one interface prefix is dropped",
+      "input": { "url": "https://tale.fyi/es/es/dracula" },
+      "expected": { "kind": "browser", "url": "https://tale.fyi/es/es/dracula" }
     },
     {
       "op": "route",
