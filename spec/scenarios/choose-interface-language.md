@@ -9,7 +9,8 @@ Read [`README.md`](README.md) and
 [`interface-follows-the-device.md`](interface-follows-the-device.md) first;
 this scenario uses its rules and observations. Its reading-preferences
 surface and place observations are those of
-[`reading-preferences.md`](reading-preferences.md).
+[`reading-preferences.md`](reading-preferences.md) and
+[`leave-and-return.md`](leave-and-return.md).
 
 ## Portable rules
 
@@ -20,8 +21,11 @@ surface and place observations are those of
   needs no account and persists across relaunch. It takes precedence over the
   device's languages until the reader chooses again.
 - **What does not move.** Choosing never changes the open book, its address,
-  its language, or the reader's place. A platform may rebuild its screen to
-  apply the language; the reader still sees the same paragraph afterwards.
+  its language, or the reader's saved place. A platform may rebuild its screen
+  to apply the language; if it does, the reader lands where reopening the book
+  would land them (`reading-preferences`: the block after the one they chose),
+  and the saved place is untouched either way. `savedFillPosition` is that
+  saved place as the progress track draws it (`leave-and-return`).
 
 ## Platform note
 
@@ -43,27 +47,27 @@ applies to it in full.
 
 **1. Open the book, read to a block, and open the reading preferences.**
 
-The controls are Spanish; the book is English. The reader's place is
-captured.
+The controls are Spanish; the book is English. The reader's saved place, and
+the block reopening would land on, are captured.
 
 **2. Choose English.**
 
-The controls are English. The same book is open, still English, at the same
-place.
+The controls are English. The same book is open, still English, and the
+saved place has not moved.
 
 **3. End the session, reopen the book, and open the reading preferences.**
 
 The controls are still English, on a Spanish device: the choice persisted.
-The reader is at the same place.
+The reader is back at their place.
 
 **4. Choose Español.**
 
-The controls are Spanish; the same book, its language, and the place are
-unchanged.
+The controls are Spanish; the same book, its language, and the saved place
+are unchanged.
 
 **5. End the session, reopen the book, and open the reading preferences.**
 
-The controls are still Spanish.
+The controls are still Spanish, and the reader is back at their place.
 
 ## What this does not cover
 

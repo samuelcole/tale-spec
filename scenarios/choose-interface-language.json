@@ -13,7 +13,7 @@
         "interfaceLanguage": { "equals": "es" },
         "bookLanguage": { "equals": "en" }
       },
-      "capture": { "place": "readerBlock" }
+      "capture": { "successor": "successor", "savedFill": "savedFillPosition" }
     },
     {
       "id": "choose-english",
@@ -22,7 +22,7 @@
         "canonicalBook": { "equals": "/frankenstein-scenario" },
         "interfaceLanguage": { "equals": "en" },
         "bookLanguage": { "equals": "en" },
-        "readerBlock": { "equals": { "ref": "place" } }
+        "savedFillPosition": { "equals": { "ref": "savedFill" } }
       }
     },
     {
@@ -32,7 +32,8 @@
         "preferences": { "equals": "open" },
         "canonicalBook": { "equals": "/frankenstein-scenario" },
         "interfaceLanguage": { "equals": "en" },
-        "readerBlock": { "equals": { "ref": "place" } }
+        "readerBlock": { "equals": { "ref": "successor" } },
+        "savedFillPosition": { "equals": { "ref": "savedFill" } }
       }
     },
     {
@@ -42,7 +43,7 @@
         "canonicalBook": { "equals": "/frankenstein-scenario" },
         "interfaceLanguage": { "equals": "es" },
         "bookLanguage": { "equals": "en" },
-        "readerBlock": { "equals": { "ref": "place" } }
+        "savedFillPosition": { "equals": { "ref": "savedFill" } }
       }
     },
     {
@@ -51,7 +52,8 @@
       "expect": {
         "preferences": { "equals": "open" },
         "interfaceLanguage": { "equals": "es" },
-        "readerBlock": { "equals": { "ref": "place" } }
+        "readerBlock": { "equals": { "ref": "successor" } },
+        "savedFillPosition": { "equals": { "ref": "savedFill" } }
       }
     }
   ]
