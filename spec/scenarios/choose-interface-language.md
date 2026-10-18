@@ -24,11 +24,15 @@ surface and place observations are those of
   language, or the reader's saved place. On the web it moves the address to
   the chosen language's
   ([`address-speaks-its-language.md`](address-speaks-its-language.md)); the
-  book's identity is the same at either. A platform may rebuild its screen
-  to apply the language; if it does, the reader lands where reopening the book
-  would land them (`reading-preferences`: the block after the one they chose),
-  and the saved place is untouched either way. `savedFillPosition` is that
-  saved place as the progress track draws it (`leave-and-return`).
+  book's identity is the same at either. `savedFillPosition` is that saved
+  place as the progress track draws it (`leave-and-return`).
+- **Where the reader stays.** Choosing a language leaves the reader where they
+  chose it, like changing the text size or the theme: the reading preferences
+  stay open and the screen does not move — at the top of the book, with the
+  cover on screen, when that is where the preferences are. A platform may
+  rebuild its screen to apply the language; if it does, it restores both, and
+  never treats the choice as a reopening that carries the reader to their
+  saved place. Reopening later still does.
 
 ## Platform note
 
@@ -56,7 +60,8 @@ the block reopening would land on, are captured.
 **2. Choose English.**
 
 The controls are English. The same book is open, still English, and the
-saved place has not moved.
+saved place has not moved. The preferences are still open and the cover is
+still on screen: the reader is where they made the choice.
 
 **3. End the session, reopen the book, and open the reading preferences.**
 
@@ -66,7 +71,7 @@ The reader is back at their place.
 **4. Choose Español.**
 
 The controls are Spanish; the same book, its language, and the saved place
-are unchanged.
+are unchanged, and the reader is still at the open preferences.
 
 **5. End the session, reopen the book, and open the reading preferences.**
 
