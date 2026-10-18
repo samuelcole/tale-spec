@@ -133,6 +133,9 @@ every unfinished client its intentional red test immediately.
 - [`choose-interface-language.md`](choose-interface-language.md) — choose the
   interface language from the reading preferences; the choice outlives the
   session and leaves the book and the reader's place alone.
+- [`address-speaks-its-language.md`](address-speaks-its-language.md) — every
+  page has a Spanish address; the plain one follows the reader, a Spanish one
+  holds unless they chose English, and both are the same book and place.
 - [`finish-and-leave.md`](finish-and-leave.md) — finish the text, find its
   provenance and original year in a quiet colophon, then take the way home.
 - [`finish-and-discover.md`](finish-and-discover.md) — a finished book opens

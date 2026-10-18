@@ -56,10 +56,30 @@ The browse shapes above are the deliberate exceptions within `author`,
 `eras`, `genre`, `language`, and `readers`. Filesystem precedence on one client is not part of this
 contract.
 
+## Interface-language prefix
+
+A first segment naming one of Tale's translated interface languages other
+than English — today only `es` — is the address of that language's
+interface for the rest of the path (see
+[`scenarios/address-speaks-its-language.md`](scenarios/address-speaks-its-language.md)).
+It says what language the controls speak, never what language the book is
+in. `route` drops it and decides on the remainder: `/es/<book>` is the same
+reading door, identity, tip and anchor as `/<book>`, and `/es/eras/<slug>`
+the same shelf as `/eras/<slug>`. The prefix is matched case-insensitively
+and never appears in `visiblePath` or `canonicalPath`. `/es` alone is the
+library and stays in the browser, as `/` does; a remainder that is
+unsupported, or `browser`, returns `browser` with the original URL
+unchanged.
+
+Only one prefix is dropped: a remainder that starts with an interface
+prefix again is unsupported. Because of this rule no book, tale handle or
+list can be named `es`.
+
 ## Canonical passage URL
 
 `canonical-passage-url` accepts a server-resolved canonical path and an
-optional passage anchor. It returns an absolute `https://tale.fyi` URL for a
+optional passage anchor. It returns an absolute `https://tale.fyi` URL, never
+language-prefixed, for a
 bare book or an authored tale, lowercasing identity segments and preserving the
 anchor. Every other shape returns `null`. A plan tip never appears in an
 outbound passage URL.

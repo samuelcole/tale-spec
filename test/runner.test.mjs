@@ -76,6 +76,7 @@ test("every prose scenario has a matching executable plan", async () => {
     join(root, "scenarios"),
   );
   assert.deepEqual(ids, [
+    "address-speaks-its-language",
     "book-navigation",
     "choose-a-new-place",
     "choose-interface-language",
