@@ -36,8 +36,8 @@ The address rule itself is in [`../addresses.md`](../addresses.md),
   Spanish address moves to the plain one.
 - **Choosing moves the address.** Choosing a language takes the reader to
   that language's address for the same page.
-- **Sharing gives the plain address**, so whoever opens the link gets their
-  own language. An address copied out of the address bar is the reader's to
+- **A link Tale hands over is the plain address** — a copied passage, a
+  share — so whoever opens it gets their own language. An address copied out of the address bar is the reader's to
   share, and holds its language as above.
 - **Each page names both.** A page declares its English, Spanish and default
   addresses as alternates (`hreflang`); the default is the plain one.
@@ -48,7 +48,8 @@ The address rule itself is in [`../addresses.md`](../addresses.md),
   has settled, after any move.
 - `englishAddress`, `spanishAddress` and `defaultAddress` are the page's
   declared language alternates, absolute.
-- `sharedUrl` is what the book's share control hands over.
+- `copiedUrl` is the address a passage copy carries as it is written, before
+  any plan tip replaces it ([`../marks.md`](../marks.md)).
 - `canonicalBook`, `interfaceLanguage`, `bookLanguage` and `readerBlock` are
   as in the scenarios above.
 
@@ -69,9 +70,9 @@ The reader lands at `/es/dracula-scenario`, with Spanish controls around the
 English book. The page names `/dracula-scenario` as its English and default
 address and `/es/dracula-scenario` as its Spanish one.
 
-**2. Share the book.**
+**2. Copy a passage.**
 
-The link is `https://tale.fyi/dracula-scenario`, without the prefix.
+The copy carries `https://tale.fyi/dracula-scenario`, without the prefix.
 
 **3. On a fresh device whose preferred language is English, open
 `/es/dracula-scenario`.**

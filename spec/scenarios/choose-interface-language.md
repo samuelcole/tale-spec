@@ -20,8 +20,11 @@ surface and place observations are those of
 - **What persists.** The choice is local, like the theme and text size: it
   needs no account and persists across relaunch. It takes precedence over the
   device's languages until the reader chooses again.
-- **What does not move.** Choosing never changes the open book, its address,
-  its language, or the reader's saved place. A platform may rebuild its screen
+- **What does not move.** Choosing never changes the open book, its
+  language, or the reader's saved place. On the web it moves the address to
+  the chosen language's
+  ([`address-speaks-its-language.md`](address-speaks-its-language.md)); the
+  book's identity is the same at either. A platform may rebuild its screen
   to apply the language; if it does, the reader lands where reopening the book
   would land them (`reading-preferences`: the block after the one they chose),
   and the saved place is untouched either way. `savedFillPosition` is that

@@ -19,10 +19,10 @@
       }
     },
     {
-      "id": "share-gives-the-plain-address",
-      "action": { "op": "share-book-link" },
+      "id": "copy-gives-the-plain-address",
+      "action": { "op": "copy-passage" },
       "expect": {
-        "sharedUrl": { "equals": "https://tale.fyi/dracula-scenario" }
+        "copiedUrl": { "equals": "https://tale.fyi/dracula-scenario" }
       }
     },
     {
