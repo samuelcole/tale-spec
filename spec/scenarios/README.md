@@ -127,6 +127,12 @@ every unfinished client its intentional red test immediately.
 - [`read-in-your-language.md`](read-in-your-language.md) — choose the
   language you read in; home and search lead with it, and it outlives the
   session.
+- [`interface-follows-the-device.md`](interface-follows-the-device.md) — the
+  controls speak the device's language when Tale has it, English otherwise,
+  and never change the language of the book.
+- [`choose-interface-language.md`](choose-interface-language.md) — choose the
+  interface language from the reading preferences; the choice outlives the
+  session and leaves the book and the reader's place alone.
 - [`finish-and-leave.md`](finish-and-leave.md) — finish the text, find its
   provenance and original year in a quiet colophon, then take the way home.
 - [`finish-and-discover.md`](finish-and-discover.md) — a finished book opens

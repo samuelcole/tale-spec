@@ -1,0 +1,58 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "choose-interface-language",
+  "title": "Choose the interface language",
+  "steps": [
+    {
+      "id": "spanish-device-reading",
+      "action": { "op": "read-to-block-and-open-preferences", "clean": true, "deviceLanguage": "es" },
+      "expect": {
+        "preferences": { "equals": "open" },
+        "canonicalBook": { "equals": "/frankenstein-scenario" },
+        "interfaceLanguage": { "equals": "es" },
+        "bookLanguage": { "equals": "en" }
+      },
+      "capture": { "place": "readerBlock" }
+    },
+    {
+      "id": "choose-english",
+      "action": { "op": "choose-interface-language", "language": "en" },
+      "expect": {
+        "canonicalBook": { "equals": "/frankenstein-scenario" },
+        "interfaceLanguage": { "equals": "en" },
+        "bookLanguage": { "equals": "en" },
+        "readerBlock": { "equals": { "ref": "place" } }
+      }
+    },
+    {
+      "id": "english-outlives-the-session",
+      "action": { "op": "end-open-and-open-preferences" },
+      "expect": {
+        "preferences": { "equals": "open" },
+        "canonicalBook": { "equals": "/frankenstein-scenario" },
+        "interfaceLanguage": { "equals": "en" },
+        "readerBlock": { "equals": { "ref": "place" } }
+      }
+    },
+    {
+      "id": "choose-spanish",
+      "action": { "op": "choose-interface-language", "language": "es" },
+      "expect": {
+        "canonicalBook": { "equals": "/frankenstein-scenario" },
+        "interfaceLanguage": { "equals": "es" },
+        "bookLanguage": { "equals": "en" },
+        "readerBlock": { "equals": { "ref": "place" } }
+      }
+    },
+    {
+      "id": "spanish-outlives-the-session",
+      "action": { "op": "end-open-and-open-preferences" },
+      "expect": {
+        "preferences": { "equals": "open" },
+        "interfaceLanguage": { "equals": "es" },
+        "readerBlock": { "equals": { "ref": "place" } }
+      }
+    }
+  ]
+}
