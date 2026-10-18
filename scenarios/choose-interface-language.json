@@ -1,0 +1,60 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "choose-interface-language",
+  "title": "Choose the interface language",
+  "steps": [
+    {
+      "id": "spanish-device-reading",
+      "action": { "op": "read-to-block-and-open-preferences", "clean": true, "deviceLanguage": "es" },
+      "expect": {
+        "preferences": { "equals": "open" },
+        "canonicalBook": { "equals": "/dracula-scenario" },
+        "interfaceLanguage": { "equals": "es" },
+        "bookLanguage": { "equals": "en" }
+      },
+      "capture": { "successor": "successor", "savedFill": "savedFillPosition" }
+    },
+    {
+      "id": "choose-english",
+      "action": { "op": "choose-interface-language", "language": "en" },
+      "expect": {
+        "canonicalBook": { "equals": "/dracula-scenario" },
+        "interfaceLanguage": { "equals": "en" },
+        "bookLanguage": { "equals": "en" },
+        "savedFillPosition": { "equals": { "ref": "savedFill" } }
+      }
+    },
+    {
+      "id": "english-outlives-the-session",
+      "action": { "op": "end-open-and-open-preferences" },
+      "expect": {
+        "preferences": { "equals": "open" },
+        "canonicalBook": { "equals": "/dracula-scenario" },
+        "interfaceLanguage": { "equals": "en" },
+        "readerBlock": { "equals": { "ref": "successor" } },
+        "savedFillPosition": { "equals": { "ref": "savedFill" } }
+      }
+    },
+    {
+      "id": "choose-spanish",
+      "action": { "op": "choose-interface-language", "language": "es" },
+      "expect": {
+        "canonicalBook": { "equals": "/dracula-scenario" },
+        "interfaceLanguage": { "equals": "es" },
+        "bookLanguage": { "equals": "en" },
+        "savedFillPosition": { "equals": { "ref": "savedFill" } }
+      }
+    },
+    {
+      "id": "spanish-outlives-the-session",
+      "action": { "op": "end-open-and-open-preferences" },
+      "expect": {
+        "preferences": { "equals": "open" },
+        "interfaceLanguage": { "equals": "es" },
+        "readerBlock": { "equals": { "ref": "successor" } },
+        "savedFillPosition": { "equals": { "ref": "savedFill" } }
+      }
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "interface-follows-the-device",
+  "title": "The interface follows the device",
+  "steps": [
+    {
+      "id": "spanish-device",
+      "action": { "op": "open-library-search", "clean": true, "network": "reachable", "deviceLanguage": "es-MX" },
+      "expect": {
+        "state": { "equals": "library" },
+        "interfaceLanguage": { "equals": "es" }
+      }
+    },
+    {
+      "id": "english-book-stays-english",
+      "action": { "op": "open-book-address", "address": "https://tale.fyi/frankenstein-scenario" },
+      "expect": {
+        "state": { "equals": "book" },
+        "canonicalBook": { "equals": "/frankenstein-scenario" },
+        "interfaceLanguage": { "equals": "es" },
+        "bookLanguage": { "equals": "en" }
+      }
+    },
+    {
+      "id": "portuguese-book-stays-portuguese",
+      "action": { "op": "open-book-address", "address": "https://tale.fyi/dom-casmurro-scenario" },
+      "expect": {
+        "state": { "equals": "book" },
+        "canonicalBook": { "equals": "/dom-casmurro-scenario" },
+        "interfaceLanguage": { "equals": "es" },
+        "bookLanguage": { "equals": "pt" }
+      }
+    },
+    {
+      "id": "unsupported-device-language",
+      "action": { "op": "open-library-search", "clean": true, "network": "reachable", "deviceLanguage": "fr" },
+      "expect": {
+        "state": { "equals": "library" },
+        "interfaceLanguage": { "equals": "en" }
+      }
+    },
+    {
+      "id": "english-device",
+      "action": { "op": "open-library-search", "clean": true, "network": "reachable", "deviceLanguage": "en" },
+      "expect": {
+        "state": { "equals": "library" },
+        "interfaceLanguage": { "equals": "en" }
+      }
+    }
+  ]
+}
