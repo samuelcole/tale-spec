@@ -185,9 +185,21 @@ The referenced read-along response contains the timeline fields defined in
   "paras": [["chapter-1-p1", 12.3]],
   "phraseBegins": [12.3, 15.7],
   "phraseIndexes": [0, 1],
+  "guessedPhrases": [],
   "language": "en"
 }
 ```
+
+`guessedPhrases` is optional; absent and empty mean the same thing. It lists
+the absolute indexes of phrases whose aligned begin the producer scored below
+its confidence floor ([`timeline.md`](timeline.md), "Guessed phrases"). The
+reference producer's floor is a per-phrase alignment confidence of **0.5**.
+Measured on *Os Lusíadas* (7,049 phrases), phrases below 0.2 had an
+implausible duration — under a quarter or over three times the book's median —
+33% of the time, those between 0.2 and 0.5 18%, and those above 0.8 about 1%;
+phrases below 0.5 were also out of narration order 3% of the time against
+0.05% above it. Clients never apply a floor of their own: the producer decides
+what is guessed, so every client agrees.
 
 The client rejects an alignment whose version differs from the loaded tale;
 timings for one body must never drive another. Audio URLs, paragraph anchors,

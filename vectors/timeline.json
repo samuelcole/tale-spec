@@ -320,6 +320,58 @@
       "note": "Extra case: with no finite next boundary there is nothing to interpolate toward, so `within` is 0."
     },
     {
+      "op": "active-phrase-at",
+      "name": "a guessed phrase is reported as guessed",
+      "input": {
+        "phraseBegins": [
+          10,
+          14,
+          20,
+          30,
+          36
+        ],
+        "paraBegin": 10,
+        "nextParaBegin": 30,
+        "guessedPhrases": [
+          1
+        ],
+        "t": 17
+      },
+      "expected": {
+        "absoluteIndex": 1,
+        "relativeIndex": 1,
+        "total": 3,
+        "within": 0.5,
+        "guessed": true
+      }
+    },
+    {
+      "op": "active-phrase-at",
+      "name": "a confident phrase beside a guessed one is not guessed",
+      "input": {
+        "phraseBegins": [
+          10,
+          14,
+          20,
+          30,
+          36
+        ],
+        "paraBegin": 10,
+        "nextParaBegin": 30,
+        "guessedPhrases": [
+          1
+        ],
+        "t": 22
+      },
+      "expected": {
+        "absoluteIndex": 2,
+        "relativeIndex": 2,
+        "total": 3,
+        "within": 0.2,
+        "guessed": false
+      }
+    },
+    {
       "op": "phrase-progress",
       "name": "the first phrase already fills one third",
       "input": {
@@ -839,6 +891,36 @@
       },
       "expected": 4,
       "note": "Extra case: the phrase index is clamped into range before the word span is read."
+    },
+    {
+      "op": "word-index-at-phrase",
+      "name": "a guessed phrase has no word under the voice",
+      "input": {
+        "phraseIndex": 1,
+        "within": 0.5,
+        "phraseEnds": [
+          3,
+          7,
+          10
+        ],
+        "guessed": true
+      },
+      "expected": null
+    },
+    {
+      "op": "word-index-at-phrase",
+      "name": "a phrase not marked guessed selects its word as before",
+      "input": {
+        "phraseIndex": 1,
+        "within": 0.5,
+        "phraseEnds": [
+          3,
+          7,
+          10
+        ],
+        "guessed": false
+      },
+      "expected": 5
     },
     {
       "op": "time-at-word-index",
