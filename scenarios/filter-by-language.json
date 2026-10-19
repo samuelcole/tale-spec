@@ -1,0 +1,64 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "filter-by-language",
+  "title": "A shelf that mixes languages filters by them",
+  "steps": [
+    {
+      "id": "open-mixed-shelf",
+      "action": { "op": "open-browse-address", "clean": true, "network": "reachable", "address": "https://tale.fyi/author/victor-hugo-scenario" },
+      "expect": {
+        "state": { "equals": "shelf" },
+        "kind": { "equals": "author" },
+        "bookCount": { "equals": 3 },
+        "languageFilter": { "equals": ["English", "Français", "Português"] },
+        "languageFilterChosen": { "equals": "all" }
+      }
+    },
+    {
+      "id": "choose-french",
+      "action": { "op": "choose-shelf-language", "language": "Français" },
+      "expect": {
+        "state": { "equals": "shelf" },
+        "bookCount": { "equals": 1 },
+        "roster": { "equals": ["Notre-Dame de Paris"] },
+        "languageFilterChosen": { "equals": "Français" }
+      }
+    },
+    {
+      "id": "open-the-french-book",
+      "action": { "op": "activate-shelf-book", "position": 1 },
+      "expect": {
+        "state": { "equals": "book" },
+        "canonicalBook": { "equals": "/notre-dame-de-paris-scenario" }
+      }
+    },
+    {
+      "id": "return-keeps-the-filter",
+      "action": { "op": "return-to-browse-shelf" },
+      "expect": {
+        "state": { "equals": "shelf" },
+        "bookCount": { "equals": 1 },
+        "languageFilterChosen": { "equals": "Français" }
+      }
+    },
+    {
+      "id": "clear-the-filter",
+      "action": { "op": "choose-shelf-language", "language": "all" },
+      "expect": {
+        "state": { "equals": "shelf" },
+        "bookCount": { "equals": 3 },
+        "languageFilterChosen": { "equals": "all" }
+      }
+    },
+    {
+      "id": "one-language-shelf-has-no-filter",
+      "action": { "op": "open-browse-address", "address": "https://tale.fyi/language/pt" },
+      "expect": {
+        "state": { "equals": "shelf" },
+        "kind": { "equals": "language" },
+        "languageFilter": { "equals": "absent" }
+      }
+    }
+  ]
+}

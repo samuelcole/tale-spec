@@ -84,6 +84,7 @@ test("every prose scenario has a matching executable plan", async () => {
     "fetch-fails-honestly",
     "finish-and-discover",
     "finish-and-leave",
+    "filter-by-language",
     "follow-and-override",
     "interface-follows-the-device",
     "keep-outlives-the-screen",

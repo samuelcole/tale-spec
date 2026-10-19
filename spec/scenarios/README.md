@@ -133,6 +133,8 @@ every unfinished client its intentional red test immediately.
 - [`choose-interface-language.md`](choose-interface-language.md) — choose the
   interface language from the reading preferences; the choice outlives the
   session and leaves the book and the reader's place alone.
+- [`filter-by-language.md`](filter-by-language.md) — a shelf that mixes
+  languages offers a choice of them, by their own names, and narrows in place.
 - [`address-speaks-its-language.md`](address-speaks-its-language.md) — every
   page has a Spanish address; the plain one follows the reader, a Spanish one
   holds unless they chose English, and both are the same book and place.
