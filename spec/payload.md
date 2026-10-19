@@ -95,9 +95,22 @@ One JSON representation per tale:
   `path`, and its reading `href`. `path` has the same no-leading-slash form as
   the enclosing payload path and lets reading-state stores use the producer's
   identity without parsing the URL.
+  The producer prefers the book's own language when it chooses
+  recommendations: the same author in the book's language first, then other
+  books in that language, and only then books in other languages. A book in a
+  language with one book on Tale recommends what the general shelf offers.
   `genres` and `lists` preserve producer order. `era` is the original-year
   door when one exists. A payload without `discovery`, or with no populated
   discovery section, simply continues from the colophon without these doors.
+
+## Library index and browse rows
+
+Every row of the library index (`/tales.json`) and of every browse roster
+(`<shelf>/browse.json`) carries `language`, the same lowercase BCP-47 primary
+subtag as the book's payload. A row without it makes the index or the shelf
+malformed ([`scenarios/library-language.md`](scenarios/library-language.md)).
+A client groups, labels and filters by it; it never infers a language from a
+title or a byline.
 
 ## Content
 
