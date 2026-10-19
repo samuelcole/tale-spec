@@ -40,6 +40,7 @@ One JSON representation per tale:
   "discovery": {
     "recommendations": {
       "heading": "More by Bram Stoker",
+      "by": "Bram Stoker",
       "showAuthors": false,
       "items": [{
         "path": "the-jewel-of-seven-stars",
@@ -89,8 +90,13 @@ One JSON representation per tale:
 - Optional `discovery` carries the quiet doors after the final passage. The
   producer supplies every displayed label and canonical `href`; clients do not
   derive author slugs, genre identities, list paths, era addresses, or
-  recommendations. `recommendations.heading` and `showAuthors` own whether
-  each recommended row repeats its author. Every recommendation includes the
+  recommendations. `recommendations.by` is the author's display name when every
+  recommendation is by the book's own author, and absent otherwise; a client
+  writes the heading from it in its interface language ("More by Bram Stoker",
+  "Más de Bram Stoker"; without `by`, "Read next", "Para leer después").
+  `recommendations.heading` is the same heading in English, kept for clients
+  that predate `by`. `showAuthors` owns whether each recommended row repeats
+  its author. Every recommendation includes the
   synopsis that qualified it, its classification, its canonical reading
   `path`, and its reading `href`. `path` has the same no-leading-slash form as
   the enclosing payload path and lets reading-state stores use the producer's
