@@ -39,7 +39,7 @@ language, named by its own name).
 
 - A signed-out device with no restored state.
 - An author shelf at `/author/victor-hugo-scenario` whose roster is, in
-  producer order: `Notre-Dame of Paris` (English), `Notre-Dame de Paris`
+  producer order: `Notre-Dame` (English), `Notre-Dame de Paris`
   (French, at `/notre-dame-de-paris-scenario`), `O Corcunda de Notre-Dame`
   (Portuguese).
 - The `library-language` fixture's Portuguese shelf at `/language/pt`.
