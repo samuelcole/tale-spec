@@ -124,9 +124,11 @@ every unfinished client its intentional red test immediately.
 - [`library-language.md`](library-language.md) — a language is a shelf:
   search finds it by either name, its address opens it, and a book not in
   English says which language it is.
-- [`read-in-your-language.md`](read-in-your-language.md) — choose the
-  language you read in; home and search lead with it, and it outlives the
-  session.
+- [`read-in-your-language.md`](read-in-your-language.md) — one language
+  setting: the interface language leads home and search, and every book in
+  another language is tagged.
+- [`choose-language-from-a-shelf.md`](choose-language-from-a-shelf.md) — a
+  language's shelf offers to switch Tale to it, when Tale speaks it.
 - [`interface-follows-the-device.md`](interface-follows-the-device.md) — the
   controls speak the device's language when Tale has it, English otherwise,
   and never change the language of the book.

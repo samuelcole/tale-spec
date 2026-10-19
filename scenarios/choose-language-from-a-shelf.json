@@ -1,0 +1,49 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "choose-language-from-a-shelf",
+  "title": "Choose a language from its shelf",
+  "steps": [
+    {
+      "id": "a-guest-on-the-shelf",
+      "action": { "op": "open-browse-address", "clean": true, "network": "reachable", "deviceLanguage": "en", "address": "https://tale.fyi/language/pt" },
+      "expect": {
+        "state": { "equals": "shelf" },
+        "canonicalIdentity": { "equals": "/language/pt" },
+        "interfaceLanguage": { "equals": "en" },
+        "shelfLanguageControl": { "equals": "offered" },
+        "rosterLanguages": { "equals": ["Português", "Português"] }
+      }
+    },
+    {
+      "id": "use-tale-in-portuguese",
+      "action": { "op": "use-shelf-language" },
+      "expect": {
+        "state": { "equals": "shelf" },
+        "canonicalIdentity": { "equals": "/language/pt" },
+        "addressPath": { "equals": "/pt/language/pt" },
+        "interfaceLanguage": { "equals": "pt" },
+        "shelfLanguageControl": { "equals": "chosen" },
+        "rosterLanguages": { "equals": [null, null] }
+      }
+    },
+    {
+      "id": "home-leads-with-it",
+      "action": { "op": "return-to-library-search" },
+      "expect": {
+        "state": { "equals": "library" },
+        "interfaceLanguage": { "equals": "pt" },
+        "leadingShelf": { "equals": "Português" }
+      }
+    },
+    {
+      "id": "it-outlives-the-session",
+      "action": { "op": "end-session-and-open-library" },
+      "expect": {
+        "state": { "equals": "library" },
+        "interfaceLanguage": { "equals": "pt" },
+        "leadingShelf": { "equals": "Português" }
+      }
+    }
+  ]
+}

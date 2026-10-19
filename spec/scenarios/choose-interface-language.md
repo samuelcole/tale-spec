@@ -82,9 +82,10 @@ The controls are still Spanish, and the reader is back at their place.
 - Syncing the choice across a signed-in reader's devices.
 - Going back to "follow the device" after choosing: with two languages, the
   device's language is always one of the two choices.
-- The reading language of
-  [`read-in-your-language.md`](read-in-your-language.md), which this never
-  changes.
+- Choosing from a language's shelf: that is
+  [`choose-language-from-a-shelf.md`](choose-language-from-a-shelf.md), the
+  same choice offered in another place. The language chosen here also decides
+  what the library leads with ([`read-in-your-language.md`](read-in-your-language.md)).
 
 ## What the next scenario would extend
 
