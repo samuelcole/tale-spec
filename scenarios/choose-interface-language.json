@@ -1,6 +1,6 @@
 {
   "format": "tale-surface-scenario",
-  "version": 1,
+  "version": 2,
   "id": "choose-interface-language",
   "title": "Choose the interface language",
   "steps": [
@@ -9,6 +9,7 @@
       "action": { "op": "read-to-block-and-open-preferences", "clean": true, "deviceLanguage": "es" },
       "expect": {
         "preferences": { "equals": "open" },
+        "cover": { "equals": "on-screen" },
         "canonicalBook": { "equals": "/dracula-scenario" },
         "interfaceLanguage": { "equals": "es" },
         "bookLanguage": { "equals": "en" }
@@ -19,6 +20,8 @@
       "id": "choose-english",
       "action": { "op": "choose-interface-language", "language": "en" },
       "expect": {
+        "preferences": { "equals": "open" },
+        "cover": { "equals": "on-screen" },
         "canonicalBook": { "equals": "/dracula-scenario" },
         "interfaceLanguage": { "equals": "en" },
         "bookLanguage": { "equals": "en" },
@@ -40,6 +43,8 @@
       "id": "choose-spanish",
       "action": { "op": "choose-interface-language", "language": "es" },
       "expect": {
+        "preferences": { "equals": "open" },
+        "cover": { "equals": "on-screen" },
         "canonicalBook": { "equals": "/dracula-scenario" },
         "interfaceLanguage": { "equals": "es" },
         "bookLanguage": { "equals": "en" },
