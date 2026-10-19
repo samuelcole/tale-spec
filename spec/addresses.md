@@ -59,21 +59,21 @@ contract.
 ## Interface-language prefix
 
 A first segment naming one of Tale's translated interface languages other
-than English — today only `es` — is the address of that language's
+than English — today `es` and `pt` — is the address of that language's
 interface for the rest of the path (see
 [`scenarios/address-speaks-its-language.md`](scenarios/address-speaks-its-language.md)).
 It says what language the controls speak, never what language the book is
 in. `route` drops it and decides on the remainder: `/es/<book>` is the same
 reading door, identity, tip and anchor as `/<book>`, and `/es/eras/<slug>`
 the same shelf as `/eras/<slug>`. The prefix is matched case-insensitively
-and never appears in `visiblePath` or `canonicalPath`. `/es` alone is the
+and never appears in `visiblePath` or `canonicalPath`. `/es` or `/pt` alone is the
 library and stays in the browser, as `/` does; a remainder that is
 unsupported, or `browser`, returns `browser` with the original URL
 unchanged.
 
 Only one prefix is dropped: a remainder that starts with an interface
-prefix again is unsupported. Because of this rule no book, tale handle or
-list can be named `es`.
+prefix again is unsupported, whichever prefixes they are (`/pt/es/…` too). Because of
+this rule no book, tale handle or list can be named `es` or `pt`.
 
 ## Canonical passage URL
 

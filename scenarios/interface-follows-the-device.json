@@ -1,6 +1,6 @@
 {
   "format": "tale-surface-scenario",
-  "version": 1,
+  "version": 2,
   "id": "interface-follows-the-device",
   "title": "The interface follows the device",
   "steps": [
@@ -29,6 +29,16 @@
         "state": { "equals": "book" },
         "canonicalBook": { "equals": "/dom-casmurro-scenario" },
         "interfaceLanguage": { "equals": "es" },
+        "bookLanguage": { "equals": "pt" }
+      }
+    },
+    {
+      "id": "brazilian-device",
+      "action": { "op": "open-book-address", "clean": true, "deviceLanguage": "pt-BR", "address": "https://tale.fyi/dom-casmurro-scenario" },
+      "expect": {
+        "state": { "equals": "book" },
+        "canonicalBook": { "equals": "/dom-casmurro-scenario" },
+        "interfaceLanguage": { "equals": "pt" },
         "bookLanguage": { "equals": "pt" }
       }
     },
