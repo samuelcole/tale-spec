@@ -112,6 +112,18 @@
     },
     {
       "op": "route",
+      "name": "an Italian-interface address is the same book, tip and anchor",
+      "input": { "url": "https://tale.fyi/IT/Dracula/Tip-AbC#chapter-3-p14" },
+      "expected": { "kind": "reading", "door": "book", "visiblePath": "dracula/Tip-AbC", "canonicalPath": "dracula", "planTip": "Tip-AbC", "anchor": "chapter-3-p14" }
+    },
+    {
+      "op": "route",
+      "name": "the Italian library stays in the browser",
+      "input": { "url": "https://tale.fyi/it" },
+      "expected": { "kind": "browser", "url": "https://tale.fyi/it" }
+    },
+    {
+      "op": "route",
       "name": "only one interface prefix is dropped",
       "input": { "url": "https://tale.fyi/es/es/dracula" },
       "expected": { "kind": "browser", "url": "https://tale.fyi/es/es/dracula" }

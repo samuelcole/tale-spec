@@ -1,6 +1,6 @@
 {
   "format": "tale-surface-scenario",
-  "version": 2,
+  "version": 3,
   "id": "address-speaks-its-language",
   "title": "An address speaks its language",
   "steps": [
@@ -16,6 +16,7 @@
         "englishAddress": { "equals": "https://tale.fyi/dracula-scenario" },
         "spanishAddress": { "equals": "https://tale.fyi/es/dracula-scenario" },
         "portugueseAddress": { "equals": "https://tale.fyi/pt/dracula-scenario" },
+        "italianAddress": { "equals": "https://tale.fyi/it/dracula-scenario" },
         "defaultAddress": { "equals": "https://tale.fyi/dracula-scenario" }
       }
     },
@@ -38,6 +39,7 @@
         "englishAddress": { "equals": "https://tale.fyi/dracula-scenario" },
         "spanishAddress": { "equals": "https://tale.fyi/es/dracula-scenario" },
         "portugueseAddress": { "equals": "https://tale.fyi/pt/dracula-scenario" },
+        "italianAddress": { "equals": "https://tale.fyi/it/dracula-scenario" },
         "defaultAddress": { "equals": "https://tale.fyi/dracula-scenario" }
       }
     },
@@ -52,6 +54,7 @@
         "englishAddress": { "equals": "https://tale.fyi/dracula-scenario" },
         "spanishAddress": { "equals": "https://tale.fyi/es/dracula-scenario" },
         "portugueseAddress": { "equals": "https://tale.fyi/pt/dracula-scenario" },
+        "italianAddress": { "equals": "https://tale.fyi/it/dracula-scenario" },
         "defaultAddress": { "equals": "https://tale.fyi/dracula-scenario" }
       }
     },

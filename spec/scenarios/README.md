@@ -136,7 +136,7 @@ every unfinished client its intentional red test immediately.
 - [`filter-by-language.md`](filter-by-language.md) — a shelf that mixes
   languages offers a choice of them, by their own names, and narrows in place.
 - [`address-speaks-its-language.md`](address-speaks-its-language.md) — every
-  page has a Spanish and a Portuguese address; the plain one follows the
+  page has a Spanish, a Portuguese and an Italian address; the plain one follows the
   reader, a language's one holds unless they chose another, and all are the
   same book and place.
 - [`finish-and-leave.md`](finish-and-leave.md) — finish the text, find its
