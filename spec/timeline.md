@@ -24,6 +24,12 @@ A book's narration arrives as three things:
   the whole book, and optionally a parallel list of **phrase indexes** giving
   each one's original position inside its paragraph, so a phrase the narrator
   skipped does not shift the word geometry of the phrases after it.
+- **Guessed phrases** — optionally, an ascending list of absolute indexes into
+  the phrase begins whose timing the producer could not place with
+  confidence. A guessed phrase still has a begin, so it still bounds its
+  neighbours and still advances the staircase; what it lacks is a trustworthy
+  claim about *which words* are being spoken while it is active. Absent means
+  none are guessed.
 
 Anchor ids are opaque here. Clients receive them with the content and never
 generate them.
@@ -114,6 +120,10 @@ the following phrase's begin when the paragraph has one, otherwise
 `nextParaBegin`. It is clamped to 0..1. When that boundary is not finite (the
 open-ended last paragraph) or is not after the begin, `within` is 0: there is
 nothing to interpolate toward.
+
+When the input carries `guessedPhrases`, the result also carries `guessed`:
+whether `absoluteIndex` is in that list. Without the input the field is absent,
+so an older caller's results are unchanged.
 
 A `t` past `nextParaBegin` still resolves to the paragraph's last phrase, fully
 progressed. Callers decide which paragraph is current; this operation answers
@@ -351,10 +361,18 @@ changing a published URL.
 
 ### `word-index-at-phrase`
 
-Input `{phraseIndex, within, phraseEnds}`. Result: an integer word index
-within the paragraph, or null.
+Input `{phraseIndex, within, phraseEnds, guessed?}`. Result: an integer word
+index within the paragraph, or null.
 
-Null when `phraseEnds` is empty, or when the selected phrase holds no words.
+Null when `phraseEnds` is empty, when the selected phrase holds no words, or
+when `guessed` is true. **A guessed phrase has no word under the voice.**
+Interpolating inside it would point at words with a confidence the map does
+not have — on a measured book that is exactly where the highlight lands on
+words the narrator is not saying. While a guessed phrase is active, a client
+shows that this paragraph is being read and no particular word in it: the
+steady narration mark spans the paragraph rather than stopping at a word, and
+no phrase wash is drawn. The next confident phrase restores word-level
+emphasis.
 Otherwise clamp `phraseIndex` into range, take the phrase's word span
 `[start, end)` from the cumulative ends, clamp `within` to 0..1, and select
 
