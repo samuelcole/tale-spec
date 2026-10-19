@@ -2,8 +2,8 @@
 
 **The claim.** Every page has an address in each language Tale's interface
 speaks, that anyone can share and any search engine can index: the plain
-address is English, `/es/…` is Spanish, and `/pt/…` is Portuguese. A reader
-who prefers Spanish or Portuguese arrives at that language's address on
+address is English, `/es/…` is Spanish, `/pt/…` is Portuguese, and `/it/…`
+is Italian. A reader who prefers one of those arrives at that language's address on
 their own. A language's address holds for a reader who hasn't decided
 otherwise, and gives way only to a choice the reader made. Every address is
 the same book, with the same place in it.
@@ -18,7 +18,8 @@ The address rule itself is in [`../addresses.md`](../addresses.md),
 ## Portable rules
 
 - **One book, an address per language.** `/es/<path>` is the Spanish
-  interface's address for `/<path>`, and `/pt/<path>` the Portuguese one's. The prefix is never part of a book's identity:
+  interface's address for `/<path>`, `/pt/<path>` the Portuguese one's, and
+  `/it/<path>` the Italian one's. The prefix is never part of a book's identity:
   `canonicalBook` is the same at each, and so are the reading place, the
   kept copy, and marks.
 - **The prefix is the controls' language, never the book's.** Every book
@@ -27,7 +28,7 @@ The address rule itself is in [`../addresses.md`](../addresses.md),
   learner and the bilingual reader alike. A Spanish book's plain address is
   English controls around Spanish text.
 - **The plain address follows the reader.** Opened by a reader whose
-  interface language is Spanish or Portuguese (their choice, else their
+  interface language is Spanish, Portuguese or Italian (their choice, else their
   device's), it moves to that language's address. Otherwise it stays, in
   English.
 - **A language's address holds.** Opened by anyone who has not *chosen*
@@ -44,15 +45,15 @@ The address rule itself is in [`../addresses.md`](../addresses.md),
   share — so whoever opens it gets their own language. An address copied out of the address bar is the reader's to
   share, and holds its language as above.
 - **Each page names them all.** A page declares its English, Spanish,
-  Portuguese and default addresses as alternates (`hreflang`); the default
+  Portuguese, Italian and default addresses as alternates (`hreflang`); the default
   is the plain one.
 
 ## Observing it
 
 - `addressPath` is the path in the address the reader is at once the page
   has settled, after any move.
-- `englishAddress`, `spanishAddress`, `portugueseAddress` and
-  `defaultAddress` are the page's declared language alternates, absolute.
+- `englishAddress`, `spanishAddress`, `portugueseAddress`,
+  `italianAddress` and `defaultAddress` are the page's declared language alternates, absolute.
 - `copiedUrl` is the address a passage copy carries as it is written, before
   any plan tip replaces it ([`../marks.md`](../marks.md)).
 - `canonicalBook`, `interfaceLanguage`, `bookLanguage` and `readerBlock` are
@@ -73,8 +74,8 @@ These names are test material, not prescribed production content.
 
 The reader lands at `/es/dracula-scenario`, with Spanish controls around the
 English book. The page names `/dracula-scenario` as its English and default
-address, `/es/dracula-scenario` as its Spanish one and `/pt/dracula-scenario`
-as its Portuguese one.
+address, `/es/dracula-scenario` as its Spanish one, `/pt/dracula-scenario`
+as its Portuguese one and `/it/dracula-scenario` as its Italian one.
 
 **2. Copy a passage.**
 
@@ -115,7 +116,7 @@ at the same place.
 
 A native client has no address bar and takes its interface language from the
 operating system, so this scenario is the web's. The part every client
-shares — a `/es/…` or `/pt/…` link opens the same book as the plain one — is the
+shares — a `/es/…`, `/pt/…` or `/it/…` link opens the same book as the plain one — is the
 address rule in [`../addresses.md`](../addresses.md) and its vectors.
 
 ## What this does not cover
@@ -125,4 +126,4 @@ address rule in [`../addresses.md`](../addresses.md) and its vectors.
   serves which language, not wording.
 - The sitemap's alternates.
 - A further interface language; its prefix is the language's primary
-  subtag, as `es` and `pt` are.
+  subtag, as `es`, `pt` and `it` are.
