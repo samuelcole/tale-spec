@@ -31,10 +31,13 @@ prose owns the ordered actions and observations.
   match in another language still ranks above a weaker one in the reading
   language. Discovery results keep their place ahead of books.
 - **Labels.** A book row names its language, by that language's own name,
-  whenever it differs from the reading language — except on a language shelf,
-  where every book shares the shelf's language and the title already says it,
-  so no row is labelled. Elsewhere, with an English reading language, this is
-  exactly `library-language`'s rule.
+  whenever it differs from the interface language
+  ([`interface-follows-the-device.md`](interface-follows-the-device.md)),
+  everywhere a row appears, a language shelf included. The label tells a
+  reader the book is not in the language they are reading Tale in; choosing
+  a reading language changes which books lead, never which are labelled. It
+  is a tag, set apart from the byline and the synopsis, not more text beside
+  them. With an English interface this is exactly `library-language`'s rule.
 
 ## Setup
 
@@ -64,8 +67,8 @@ The home page opens on its ordinary first row; no language shelf leads it.
 
 **3. Open the `Português` shelf and choose to read in Português.**
 
-The shelf's control shows that Português is chosen. No row on the shelf is
-labelled: the title already names the language.
+The shelf's control shows that Português is chosen. Every row on the shelf
+is labelled `Português`: the interface is still English.
 
 **4. Return to the library.**
 
@@ -74,8 +77,8 @@ Casmurro` and `Helena`.
 
 **5. Search for `helena`.**
 
-`Helena` is now first, unlabelled; `Helena's Path` second, labelled
-`English`.
+`Helena` is now first, still labelled `Português`; `Helena's Path` second,
+unlabelled. The reading language moved the order, not the labels.
 
 **6. End the session and reopen the library.**
 
