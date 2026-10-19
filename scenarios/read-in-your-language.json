@@ -1,6 +1,6 @@
 {
   "format": "tale-surface-scenario",
-  "version": 3,
+  "version": 4,
   "id": "read-in-your-language",
   "title": "Read in your language",
   "steps": [
@@ -28,7 +28,7 @@
         "state": { "equals": "shelf" },
         "canonicalIdentity": { "equals": "/language/pt" },
         "readingLanguageControl": { "equals": "chosen" },
-        "rosterLanguages": { "equals": [null, null] }
+        "rosterLanguages": { "equals": ["Português", "Português"] }
       }
     },
     {
@@ -46,7 +46,7 @@
       "expect": {
         "state": { "equals": "library" },
         "bookOrder": { "equals": ["Helena", "Helena's Path"] },
-        "bookLanguages": { "equals": [null, "English"] }
+        "bookLanguages": { "equals": ["Português", null] }
       }
     },
     {

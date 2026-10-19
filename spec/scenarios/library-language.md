@@ -95,5 +95,5 @@ open a browser or web view.
 
 A reader chooses the language they read in. The choice persists across a
 relaunch; the home page leads with that language's shelf; among equally strong
-search matches, books in it come first; and book rows label every language but
-the chosen one.
+search matches, books in it come first. (Labels follow the interface
+language, not the reading one: see `read-in-your-language.md`.)
