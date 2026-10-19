@@ -94,6 +94,24 @@
     },
     {
       "op": "route",
+      "name": "a Portuguese-interface address is the same book, tip and anchor",
+      "input": { "url": "https://tale.fyi/PT/Dracula/Tip-AbC#chapter-3-p14" },
+      "expected": { "kind": "reading", "door": "book", "visiblePath": "dracula/Tip-AbC", "canonicalPath": "dracula", "planTip": "Tip-AbC", "anchor": "chapter-3-p14" }
+    },
+    {
+      "op": "route",
+      "name": "the Portuguese library stays in the browser",
+      "input": { "url": "https://tale.fyi/pt" },
+      "expected": { "kind": "browser", "url": "https://tale.fyi/pt" }
+    },
+    {
+      "op": "route",
+      "name": "a second, different interface prefix is not dropped",
+      "input": { "url": "https://tale.fyi/pt/es/dracula" },
+      "expected": { "kind": "browser", "url": "https://tale.fyi/pt/es/dracula" }
+    },
+    {
+      "op": "route",
       "name": "only one interface prefix is dropped",
       "input": { "url": "https://tale.fyi/es/es/dracula" },
       "expected": { "kind": "browser", "url": "https://tale.fyi/es/es/dracula" }

@@ -20,7 +20,8 @@ Spanish speaker may read English books.
   ([`choose-interface-language.md`](choose-interface-language.md)); otherwise
   the first of the device's preferred languages Tale's interface is
   translated into, compared by primary subtag; otherwise English. Today the
-  translations are English and Spanish.
+  translations are English, Spanish, and Portuguese. Tale's Portuguese is
+  written for Brazil, and any Portuguese device reaches it.
 - **What it covers.** The reading chrome: the library, shelves, the book
   page's controls, the player, marks, sharing, keeping a book offline, and
   the messages that explain a failure. It never covers a book's text, title,
@@ -58,13 +59,18 @@ The controls are still Spanish; the book is English.
 
 The controls are still Spanish; the book is Portuguese.
 
-**4. On a fresh device whose preferred language is French, open the
+**4. On a fresh device whose preferred language is Brazilian Portuguese
+(`pt-BR`), open `/dom-casmurro-scenario`.**
+
+The controls are in Portuguese, and so is the book.
+
+**5. On a fresh device whose preferred language is French, open the
 library.**
 
 The controls are in English: Tale has no French interface, and falls back to
 English rather than to some other language.
 
-**5. On a fresh device whose preferred language is English, open the
+**6. On a fresh device whose preferred language is English, open the
 library.**
 
 The controls are in English.
