@@ -1,0 +1,231 @@
+{
+  "area": "anchors",
+  "version": 1,
+  "cases": [
+    {
+      "op": "parse-anchor",
+      "name": "splits a stable anchor into key and hash",
+      "input": { "id": "k3f--8qz2mc" },
+      "expected": { "key": "k3f", "hash": "8qz2mc" }
+    },
+    {
+      "op": "parse-anchor",
+      "name": "a one-digit key is a key",
+      "input": { "id": "a--000000" },
+      "expected": { "key": "a", "hash": "000000" }
+    },
+    {
+      "op": "parse-anchor",
+      "name": "a key may begin with 0",
+      "input": { "id": "05--abcdef" },
+      "expected": { "key": "05", "hash": "abcdef" }
+    },
+    {
+      "op": "parse-anchor",
+      "name": "a key never ends in 0",
+      "input": { "id": "k30--8qz2mc" },
+      "expected": null
+    },
+    {
+      "op": "parse-anchor",
+      "name": "a key of only 0 is not a key",
+      "input": { "id": "0--abcdef" },
+      "expected": null
+    },
+    {
+      "op": "parse-anchor",
+      "name": "an empty key is not a key",
+      "input": { "id": "--8qz2mc" },
+      "expected": null
+    },
+    {
+      "op": "parse-anchor",
+      "name": "a legacy positional id is not a stable anchor",
+      "input": { "id": "chapter-3-p14" },
+      "expected": null
+    },
+    {
+      "op": "parse-anchor",
+      "name": "a slug with a six-letter last word is not a stable anchor",
+      "input": { "id": "part-second" },
+      "expected": null
+    },
+    {
+      "op": "parse-anchor",
+      "name": "the hash is exactly six digits",
+      "input": { "id": "k3f--8qz2m" },
+      "expected": null
+    },
+    {
+      "op": "parse-anchor",
+      "name": "anchors are lowercase",
+      "input": { "id": "K3F--8QZ2MC" },
+      "expected": null
+    },
+    {
+      "op": "compare-anchor-keys",
+      "name": "a shorter key that is a prefix comes first",
+      "input": { "a": "a--111111", "b": "a1--222222" },
+      "expected": -1
+    },
+    {
+      "op": "compare-anchor-keys",
+      "name": "a longer key can still come first",
+      "input": { "a": "a1--222222", "b": "b--111111" },
+      "expected": -1
+    },
+    {
+      "op": "compare-anchor-keys",
+      "name": "digits come before letters",
+      "input": { "a": "9z--111111", "b": "a--222222" },
+      "expected": -1
+    },
+    {
+      "op": "compare-anchor-keys",
+      "name": "later keys compare after",
+      "input": { "a": "h1--111111", "b": "h--222222" },
+      "expected": 1
+    },
+    {
+      "op": "compare-anchor-keys",
+      "name": "the hash plays no part",
+      "input": { "a": "hh--zzzzzz", "b": "hh--dddddd" },
+      "expected": 0
+    },
+    {
+      "op": "resolve-anchor",
+      "name": "an anchor in the edition is exact",
+      "input": {
+        "target": "h--cccccc",
+        "anchors": ["2--aaaaaa", "9--bbbbbb", "h--cccccc", "hh--dddddd", "q--eeeeee"],
+        "names": { "chapter-1": "2--aaaaaa", "chapter-2": "h--cccccc" },
+        "aliases": { "chapter-1-p1": "9--bbbbbb", "chapter-1-p2": "a--ffffff" }
+      },
+      "expected": { "id": "h--cccccc", "match": "exact" }
+    },
+    {
+      "op": "resolve-anchor",
+      "name": "a name lands on its block",
+      "input": {
+        "target": "chapter-2",
+        "anchors": ["2--aaaaaa", "9--bbbbbb", "h--cccccc", "hh--dddddd", "q--eeeeee"],
+        "names": { "chapter-1": "2--aaaaaa", "chapter-2": "h--cccccc" },
+        "aliases": { "chapter-1-p1": "9--bbbbbb", "chapter-1-p2": "a--ffffff" }
+      },
+      "expected": { "id": "h--cccccc", "match": "name" }
+    },
+    {
+      "op": "resolve-anchor",
+      "name": "a legacy id lands through its alias",
+      "input": {
+        "target": "chapter-1-p1",
+        "anchors": ["2--aaaaaa", "9--bbbbbb", "h--cccccc", "hh--dddddd", "q--eeeeee"],
+        "names": { "chapter-1": "2--aaaaaa", "chapter-2": "h--cccccc" },
+        "aliases": { "chapter-1-p1": "9--bbbbbb", "chapter-1-p2": "a--ffffff" }
+      },
+      "expected": { "id": "9--bbbbbb", "match": "alias" }
+    },
+    {
+      "op": "resolve-anchor",
+      "name": "an alias whose block was later removed is placed and still reports alias",
+      "input": {
+        "target": "chapter-1-p2",
+        "anchors": ["2--aaaaaa", "9--bbbbbb", "h--cccccc", "hh--dddddd", "q--eeeeee"],
+        "names": { "chapter-1": "2--aaaaaa", "chapter-2": "h--cccccc" },
+        "aliases": { "chapter-1-p1": "9--bbbbbb", "chapter-1-p2": "a--ffffff" }
+      },
+      "expected": { "id": "9--bbbbbb", "match": "alias" }
+    },
+    {
+      "op": "resolve-anchor",
+      "name": "an edited block keeps its key, so its old anchor is placed on it",
+      "input": {
+        "target": "hh--zzzzzz",
+        "anchors": ["2--aaaaaa", "9--bbbbbb", "h--cccccc", "hh--dddddd", "q--eeeeee"]
+      },
+      "expected": { "id": "hh--dddddd", "match": "placed" }
+    },
+    {
+      "op": "resolve-anchor",
+      "name": "a removed block's anchor is placed on the block before its place",
+      "input": {
+        "target": "m--123456",
+        "anchors": ["2--aaaaaa", "9--bbbbbb", "h--cccccc", "hh--dddddd", "q--eeeeee"]
+      },
+      "expected": { "id": "hh--dddddd", "match": "placed" }
+    },
+    {
+      "op": "resolve-anchor",
+      "name": "placement compares keys as fractions, not as lengths",
+      "input": {
+        "target": "h1--000000",
+        "anchors": ["2--aaaaaa", "9--bbbbbb", "h--cccccc", "hh--dddddd", "q--eeeeee"]
+      },
+      "expected": { "id": "h--cccccc", "match": "placed" }
+    },
+    {
+      "op": "resolve-anchor",
+      "name": "an anchor before every block is placed on the first",
+      "input": {
+        "target": "1--123456",
+        "anchors": ["2--aaaaaa", "9--bbbbbb", "h--cccccc", "hh--dddddd", "q--eeeeee"]
+      },
+      "expected": { "id": "2--aaaaaa", "match": "placed" }
+    },
+    {
+      "op": "resolve-anchor",
+      "name": "an anchor after every block is placed on the last",
+      "input": {
+        "target": "z--123456",
+        "anchors": ["2--aaaaaa", "9--bbbbbb", "h--cccccc", "hh--dddddd", "q--eeeeee"]
+      },
+      "expected": { "id": "q--eeeeee", "match": "placed" }
+    },
+    {
+      "op": "resolve-anchor",
+      "name": "an unknown legacy id lands nowhere",
+      "input": {
+        "target": "chapter-9-p4",
+        "anchors": ["2--aaaaaa", "9--bbbbbb", "h--cccccc", "hh--dddddd", "q--eeeeee"],
+        "names": { "chapter-1": "2--aaaaaa", "chapter-2": "h--cccccc" },
+        "aliases": { "chapter-1-p1": "9--bbbbbb", "chapter-1-p2": "a--ffffff" }
+      },
+      "expected": { "id": null, "match": "none" }
+    },
+    {
+      "op": "resolve-anchor",
+      "name": "an unknown name lands nowhere",
+      "input": {
+        "target": "epilogue",
+        "anchors": ["2--aaaaaa", "9--bbbbbb", "h--cccccc", "hh--dddddd", "q--eeeeee"],
+        "names": { "chapter-1": "2--aaaaaa", "chapter-2": "h--cccccc" }
+      },
+      "expected": { "id": null, "match": "none" }
+    },
+    {
+      "op": "resolve-anchor",
+      "name": "names and aliases are optional",
+      "input": {
+        "target": "chapter-1",
+        "anchors": ["2--aaaaaa", "9--bbbbbb"]
+      },
+      "expected": { "id": null, "match": "none" }
+    },
+    {
+      "op": "resolve-anchor",
+      "name": "an empty edition resolves a stable anchor to nothing",
+      "input": { "target": "a--111111", "anchors": [] },
+      "expected": { "id": null, "match": "none" }
+    },
+    {
+      "op": "resolve-anchor",
+      "name": "an empty edition resolves an alias to nothing",
+      "input": {
+        "target": "chapter-1-p1",
+        "anchors": [],
+        "aliases": { "chapter-1-p1": "a--111111" }
+      },
+      "expected": { "id": null, "match": "none" }
+    }
+  ]
+}

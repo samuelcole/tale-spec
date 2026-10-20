@@ -39,6 +39,9 @@ the foundation carve-out are in [`AGENTS.md`](AGENTS.md).
   - [`spec/timeline.md`](spec/timeline.md) — the whole-book audio timeline:
     section starts, phrase lookup, and the word cut that keeps a highlight
     on the word being spoken.
+  - [`spec/anchors.md`](spec/anchors.md) — anchors that survive new
+    editions: the `{key}--{hash}` grammar, names, the legacy alias table, and
+    the one rule a client uses to land an anchor it holds.
   - [`spec/payload.md`](spec/payload.md) — the content API response contract:
     the exhaustive sanitized sections shared by web and native readers,
     version-bound narration, and content-addressed HTTP validation.
@@ -216,7 +219,9 @@ different sides of a semantic change are two products.
 - **Anchor identifier generation.** Clients receive anchor ids with the
   content (in the payload of `spec/payload.md`); they never generate them.
   A reading system with two anchor generators has two contracts, so the
-  generator stays server-side and out of scope here.
+  generator stays server-side and out of scope here. What a producer
+  promises about anchors across editions, and how a client resolves one, is
+  in scope: [`spec/anchors.md`](spec/anchors.md).
 - **Restore retirement** — how a reading layer retires its own restore when a
   platform later applies a competing restored scroll offset.
 - **Destructive confirmation** — the two-press arm-then-fire machine for

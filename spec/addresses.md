@@ -13,7 +13,9 @@ addresses, never a second set of links.
 
 Only `https://tale.fyi` without credentials or an explicit port enters the
 native address space. Query items do not change a Tale identity. A nonempty
-fragment is a decoded, case-sensitive passage anchor.
+fragment is a decoded, case-sensitive passage anchor: a block's id, its name,
+or a legacy id, resolved against the loaded edition under
+[`anchors.md`](anchors.md).
 
 Path segments are percent-decoded independently. An empty segment, dot
 segment, encoded slash, or encoded backslash makes the address unsupported;
