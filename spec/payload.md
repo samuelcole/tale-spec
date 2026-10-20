@@ -57,11 +57,15 @@ One JSON representation per tale:
   },
   "sections": [
     {
-      "id": "chapter-1",
+      "id": "1--3fq0ab",
       "title": "I",
-      "html": "<section id=\"chapter-1\"><header><h2>I</h2>...</section>"
+      "html": "<section id=\"1--3fq0ab\" data-name=\"chapter-1\"><header><h2>I</h2>...</section>"
     }
-  ]
+  ],
+  "anchorAliases": {
+    "chapter-1": "1--3fq0ab",
+    "chapter-1-p1": "12--8qz2mc"
+  }
 }
 ```
 
@@ -129,6 +133,17 @@ title or a byline.
 - `id` is the section anchor verbatim from the sanitized markup. `title` is its
   display title or `null`. Paragraph and other descendant anchors remain in
   `html`, likewise verbatim.
+- Every addressable block's `id` is a stable anchor, and a block may carry a
+  readable name in `data-name` ([`anchors.md`](anchors.md)). A client reads an
+  anchor's key only to resolve an anchor it holds against this edition, under
+  that document's rule. It never mints, renumbers or repairs one.
+- Optional `anchorAliases` is the book's legacy alias table: every positional
+  id the book served before it moved to stable anchors, mapped to the stable
+  anchor its block received then. It is absent for a book that was born with
+  stable anchors. It is kept forever, and a client resolves a legacy id held in
+  a link, a position, a plan or a kept book through it
+  ([`anchors.md`](anchors.md)). It is not body: it does not enter
+  `contentVersion`, and the response `ETag` covers it.
 - Content consumers preserve text and document order even when they do not yet
   provide platform-specific styling for a recognized HTML element. A client
   that cannot safely consume the declared schema fails explicitly; it never
@@ -142,21 +157,22 @@ web renders, their anchors are verbatim, and `contentVersion` changes when a
 note changes. Nothing about them is a schema addition.
 
 - A note reference is a same-document fragment link carried in the prose where
-  the author set it: `<a href="#note-1" id="noteref-1">1</a>`. Its text — the
+  the author set it: `<a href="#note-1" data-name="noteref-1">1</a>`. Its text — the
   note's number — is book content, not client chrome.
 - The notes themselves are an ordinary trailing section — in curated books,
   `<section id="endnotes">` titled "Endnotes" — holding an ordered list whose
-  items are `<li id="note-1">` wrapping the note's paragraphs, each paragraph
-  with its own generated anchor, and ending with the way back:
+  items are `<li data-name="note-1">` wrapping the note's paragraphs, each
+  item and paragraph with its own stable anchor, and ending with the way back:
   `<a href="#noteref-1">↩︎</a>`.
-- The relationship is nothing beyond those two fragment links: ids verbatim,
-  resolvable in both directions within one document. Clients resolve them with
-  `is-same-document-fragment-link` ([`reader.md`](reader.md)) and never parse,
-  renumber, or regenerate them.
+- The relationship is nothing beyond those two fragment links: names
+  verbatim, resolvable in both directions within one document. Clients
+  recognize them with `is-same-document-fragment-link` ([`reader.md`](reader.md))
+  and land them by name under [`anchors.md`](anchors.md); they never renumber
+  or regenerate them.
 - The `note-`/`noteref-` naming is Standard Ebooks' vocabulary, preserved
-  verbatim by the curated import, and the reference web implementation styles
-  references by that id prefix. A published tale may carry any valid anchors;
-  the fragment-link mechanism, not the naming, is the contract.
+  verbatim by the curated import as names, and the reference web implementation
+  styles references by that name prefix. A published tale may carry any valid
+  names; the fragment-link mechanism, not the naming, is the contract.
 - What activating a reference does to reading progress is fixed by
   [`intent.md`](intent.md): the activation is a `link-click`, and the movement
   it causes is a programmatic scroll that never advances the mark.

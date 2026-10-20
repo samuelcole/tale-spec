@@ -35,7 +35,11 @@ vector disagree, the vector is the bug report.
 - **`furthest`** — the anchor id of the deepest paragraph the reader has
   reached. It is an *inclusive high-water mark, not a cursor*: it names the
   last paragraph read, the tale opens after it, and re-reading earlier text
-  never moves it back. Absent means no position has been recorded.
+  never moves it back. Absent means no position has been recorded. A stored
+  `furthest` from an earlier edition is resolved against the loaded one under
+  [`anchors.md`](anchors.md), and positions are compared by the document
+  order of the blocks they resolve to. Resolving never rewrites it: the
+  stored anchor changes only when the reader reads past it.
 - **`percent`** — 0–100, that position as a fraction of the whole tale.
   Stored because it is the only position measure comparable without the
   paragraph order in hand: an index can render progress, and two records can

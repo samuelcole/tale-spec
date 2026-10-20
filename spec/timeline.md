@@ -31,8 +31,10 @@ A book's narration arrives as three things:
   claim about *which words* are being spoken while it is active. Absent means
   none are guessed.
 
-Anchor ids are opaque here. Clients receive them with the content and never
-generate them.
+Anchor ids are taken as given here. Clients receive them with the content and
+never generate them. An alignment names the anchors of exactly the edition its
+`contentVersion` names, so its anchors match that edition exactly and are never
+resolved by name, alias or placement ([`anchors.md`](anchors.md)).
 
 ## The whole-book clock
 

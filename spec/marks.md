@@ -20,7 +20,10 @@ An ID is exactly eight cryptographically random bytes encoded as unpadded
 base64url: eleven case-sensitive `A-Z`, `a-z`, `0-9`, `_`, or `-` characters.
 Clients do not translate, lowercase, or replace one after minting. The anchor
 is one the tale payload supplied; offline input passes the same bounds and
-validation as online input before it enters the local chain.
+validation as online input before it enters the local chain. A mark keeps its
+anchor forever, like every other part of an immutable node. Each edition the
+mark meets resolves it under [`anchors.md`](anchors.md), so a mark on a passage
+a later edition edits or moves still lands at its place.
 
 Minting is enough for the originating client to use the mark immediately. It
 must, with no network:

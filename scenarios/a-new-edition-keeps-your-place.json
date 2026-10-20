@@ -1,0 +1,90 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "a-new-edition-keeps-your-place",
+  "title": "A new edition keeps your place",
+  "steps": [
+    {
+      "id": "open-first-edition",
+      "action": { "op": "open-book", "clean": true, "edition": 1 },
+      "expect": {
+        "cover": { "equals": "on-screen" },
+        "position": { "equals": "start" }
+      }
+    },
+    {
+      "id": "read-to-the-first-passage",
+      "action": { "op": "read-to-block", "block": "Q" },
+      "expect": { "settled": { "equals": true } }
+    },
+    {
+      "id": "mark-the-first-passage",
+      "action": { "op": "mark-passage", "passage": "Q" },
+      "expect": {
+        "markedPassages": { "equals": ["Q"] },
+        "planUrl": { "equals": "available" }
+      }
+    },
+    {
+      "id": "read-on-and-stop",
+      "action": { "op": "read-forward", "extent": "several-screens" },
+      "expect": { "settled": { "equals": true } },
+      "capture": { "stoppedAt": "topBlock", "successor": "successor" }
+    },
+    {
+      "id": "the-migration-keeps-the-position",
+      "action": { "op": "end-session-publish-edition-and-open-book", "edition": 2 },
+      "expect": {
+        "cover": { "equals": "above-screen" },
+        "topBlock": { "equals": { "ref": "successor" } },
+        "dimBoundary": { "equals": { "ref": "stoppedAt" } }
+      }
+    },
+    {
+      "id": "the-migration-keeps-the-plan",
+      "action": { "op": "end-session-and-open-current-plan" },
+      "expect": {
+        "topBlock": { "equals": "Q" },
+        "markedPassages": { "equals": ["Q"] },
+        "dimBoundary": { "equals": { "ref": "stoppedAt" } }
+      }
+    },
+    {
+      "id": "read-to-the-second-passage",
+      "action": { "op": "read-to-block", "block": "R" },
+      "expect": { "settled": { "equals": true } }
+    },
+    {
+      "id": "mark-the-second-passage",
+      "action": { "op": "mark-passage", "passage": "R" },
+      "expect": {
+        "markedPassages": { "equals": ["Q", "R"] },
+        "planUrl": { "equals": "available" }
+      }
+    },
+    {
+      "id": "read-on-and-stop-again",
+      "action": { "op": "read-forward", "extent": "several-screens" },
+      "expect": { "settled": { "equals": true } },
+      "capture": { "stoppedAgainAt": "topBlock", "successorAgain": "successor" }
+    },
+    {
+      "id": "an-edited-passage-keeps-its-mark",
+      "action": { "op": "end-session-publish-edition-and-open-current-plan", "edition": 3 },
+      "expect": {
+        "topBlock": { "equals": "R" },
+        "markedPassages": { "equals": ["Q", "R"] },
+        "dimBoundary": { "equals": { "ref": "stoppedAgainAt" } }
+      }
+    },
+    {
+      "id": "the-later-edition-keeps-the-position",
+      "action": { "op": "end-session-and-open-book" },
+      "expect": {
+        "cover": { "equals": "above-screen" },
+        "topBlock": { "equals": { "ref": "successorAgain" } },
+        "dimBoundary": { "equals": { "ref": "stoppedAgainAt" } }
+      }
+    }
+  ]
+}
