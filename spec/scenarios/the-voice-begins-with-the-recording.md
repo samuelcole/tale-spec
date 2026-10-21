@@ -35,44 +35,55 @@ may translate and what it may not weaken.
 ## The transport
 
 This is the product's playing surface, as
-[`play-and-pocket.md`](play-and-pocket.md) defines it. Two observations are
-new here, and both are read from the position the surface reports:
+[`play-and-pocket.md`](play-and-pocket.md) defines it: the play control, and
+the paragraph the voice visibly occupies. A recording's opening carries no
+paragraph. `narrated-paragraph-at` names none there, so nothing is lit until
+the voice reaches timed text. That makes the opening visible without a clock:
+a press that began in the opening lights nothing at first. A press that began
+at a paragraph lights it at once.
 
-- `voiceSection` is the recording section that position falls in, counted
-  from 0.
-- `voiceBegan` is where the first position the playing surface reported
-  stands:
-  - `at-recording-start` if it is within 1 second of its section's start, and
-    before that section's first narrated paragraph;
-  - `inside-reading-block` if it is inside the narrated span of the paragraph
-    at the top of the settled screen;
-  - `elsewhere` otherwise.
+The scenario adds three observations, all read from that surface after the
+transport shows playing:
 
-The adapter compares positions only against the fixture's own published
-section runtimes and paragraph begins. It never reads the player's internals.
+- `litAtStart` is what the page lights at the first observation after the
+  transport shows playing: `nothing` or `a-paragraph`.
+- `firstLit` is the fixture role of the first paragraph lit after that:
+  `first-narrated-of-first-recording`, `first-narrated-of-second-recording`
+  (**H**), `later-in-second-recording` (**L**), or `other`.
+- `pageHeld` is `true` when the paragraph at the top of the settled screen is
+  unchanged from the press until `firstLit` lights. The page does not follow
+  a voice that is reading nothing, and in particular it does not go back to
+  the previous recording's last paragraph.
+
+The fixture's gap of at least 5 seconds before each recording's first
+narrated paragraph is what makes `nothing` observable rather than a race.
+The exact second a press begins at is `voice-start`'s, and its vectors pin
+it. The surface proves the reader-visible consequence: the opening is heard,
+and the right paragraph lights after it.
 
 ## Steps
 
 **1. Open the book.** It opens at its cover, with its play control.
 
-**2. Press play.** The voice plays from the very start of the first recording,
-before the first narrated paragraph. The highlight may wait for timed text.
-The sound does not.
+**2. Press play.** The voice plays the first recording's opening. Nothing is
+lit while it does. Then the first recording's first narrated paragraph
+lights.
 
 **3. Pause.**
 
 **4. Read to H**, the first narrated paragraph of the second recording, and
 settle.
 
-**5. Press play.** The voice plays from the start of the second recording,
-before **H**'s own begin. The reader hears that recording's announcement.
+**5. Press play.** The voice plays the second recording's announcement.
+Nothing is lit, and the page stays on **H**; it does not go back to the
+previous recording's last paragraph. Then **H** lights.
 
 **6. Pause.**
 
 **7. Read on to L** and settle.
 
-**8. Press play.** The voice begins inside **L**'s narrated span, in the second
-recording. Mid-recording, nothing before the reading place is replayed.
+**8. Press play.** **L** lights at once. Mid-recording, nothing before the
+reading place is replayed.
 
 ## What this scenario does not cover
 
@@ -80,7 +91,7 @@ recording. Mid-recording, nothing before the reading place is replayed.
   [`play-and-pocket.md`](play-and-pocket.md)'s business. It is untouched here.
 - **A recording whose first narrated paragraph begins at 0.** The rule gives
   the same second either way, so there is nothing to observe.
-- **Highlight timing during an untimed opening.** The voice plays it. Whether
-  and how the page follows a voice that is ahead of the timed text is not
-  decided here.
+- **Words inside an untimed opening.** Nothing is lit while the voice reads
+  paragraphs the alignment left untimed. Lighting them is the alignment's job,
+  not this scenario's.
 - **The device matrix.** Declared per platform, not here.

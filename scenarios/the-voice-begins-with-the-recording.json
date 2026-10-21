@@ -18,8 +18,8 @@
       "action": { "op": "activate-transport-and-wait-for-playing" },
       "expect": {
         "transport": { "equals": "playing" },
-        "voiceSection": { "equals": 0 },
-        "voiceBegan": { "equals": "at-recording-start" }
+        "litAtStart": { "equals": "nothing" },
+        "firstLit": { "equals": "first-narrated-of-first-recording" }
       }
     },
     {
@@ -42,8 +42,9 @@
       "action": { "op": "activate-transport-and-wait-for-playing" },
       "expect": {
         "transport": { "equals": "playing" },
-        "voiceSection": { "equals": 1 },
-        "voiceBegan": { "equals": "at-recording-start" }
+        "litAtStart": { "equals": "nothing" },
+        "pageHeld": { "equals": true },
+        "firstLit": { "equals": "first-narrated-of-second-recording" }
       }
     },
     {
@@ -59,17 +60,15 @@
       "expect": {
         "cover": { "equals": "above-screen" },
         "settled": { "equals": true }
-      },
-      "capture": { "readingBlock": "topBlock" }
+      }
     },
     {
       "id": "play-from-inside-the-recording",
       "action": { "op": "activate-transport-and-wait-for-playing" },
       "expect": {
         "transport": { "equals": "playing" },
-        "voiceSection": { "equals": 1 },
-        "voiceBlock": { "equals": { "ref": "readingBlock" } },
-        "voiceBegan": { "equals": "inside-reading-block" }
+        "litAtStart": { "equals": "a-paragraph" },
+        "firstLit": { "equals": "later-in-second-recording" }
       }
     }
   ]

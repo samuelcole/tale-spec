@@ -1606,6 +1606,239 @@
         ]
       },
       "expected": null
+    },
+    {
+      "op": "voice-start",
+      "name": "begins at the reading paragraph when the recording has no sections",
+      "input": {
+        "paras": [
+          [
+            "p2",
+            44.3
+          ],
+          [
+            "p3",
+            47.4
+          ]
+        ],
+        "orderedAnchors": [
+          "p1",
+          "p2",
+          "p3",
+          "p4",
+          "p5"
+        ],
+        "anchor": "p1",
+        "sectionStarts": []
+      },
+      "expected": 44.3
+    },
+    {
+      "op": "narrated-paragraph-at",
+      "name": "names nothing before the first narrated paragraph of the first recording",
+      "input": {
+        "paras": [
+          [
+            "p1",
+            10
+          ],
+          [
+            "p2",
+            30
+          ],
+          [
+            "p4",
+            345
+          ],
+          [
+            "p5",
+            360
+          ]
+        ],
+        "sectionStarts": [
+          0,
+          335
+        ],
+        "t": 5
+      },
+      "expected": null
+    },
+    {
+      "op": "narrated-paragraph-at",
+      "name": "names the last paragraph begun inside a recording",
+      "input": {
+        "paras": [
+          [
+            "p1",
+            10
+          ],
+          [
+            "p2",
+            30
+          ],
+          [
+            "p4",
+            345
+          ],
+          [
+            "p5",
+            360
+          ]
+        ],
+        "sectionStarts": [
+          0,
+          335
+        ],
+        "t": 31
+      },
+      "expected": "p2"
+    },
+    {
+      "op": "narrated-paragraph-at",
+      "name": "names nothing inside a later recording's opening",
+      "input": {
+        "paras": [
+          [
+            "p1",
+            10
+          ],
+          [
+            "p2",
+            30
+          ],
+          [
+            "p4",
+            345
+          ],
+          [
+            "p5",
+            360
+          ]
+        ],
+        "sectionStarts": [
+          0,
+          335
+        ],
+        "t": 340
+      },
+      "expected": null
+    },
+    {
+      "op": "narrated-paragraph-at",
+      "name": "does not carry the previous recording's last paragraph into the next recording",
+      "input": {
+        "paras": [
+          [
+            "p1",
+            10
+          ],
+          [
+            "p2",
+            30
+          ],
+          [
+            "p4",
+            345
+          ],
+          [
+            "p5",
+            360
+          ]
+        ],
+        "sectionStarts": [
+          0,
+          335
+        ],
+        "t": 335
+      },
+      "expected": null
+    },
+    {
+      "op": "narrated-paragraph-at",
+      "name": "names a later recording's first narrated paragraph from its begin",
+      "input": {
+        "paras": [
+          [
+            "p1",
+            10
+          ],
+          [
+            "p2",
+            30
+          ],
+          [
+            "p4",
+            345
+          ],
+          [
+            "p5",
+            360
+          ]
+        ],
+        "sectionStarts": [
+          0,
+          335
+        ],
+        "t": 345
+      },
+      "expected": "p4"
+    },
+    {
+      "op": "narrated-paragraph-at",
+      "name": "names a paragraph from its exact begin",
+      "input": {
+        "paras": [
+          [
+            "p1",
+            10
+          ],
+          [
+            "p2",
+            30
+          ],
+          [
+            "p4",
+            345
+          ],
+          [
+            "p5",
+            360
+          ]
+        ],
+        "sectionStarts": [
+          0,
+          335
+        ],
+        "t": 360
+      },
+      "expected": "p5"
+    },
+    {
+      "op": "narrated-paragraph-at",
+      "name": "with no sections names the last paragraph begun",
+      "input": {
+        "paras": [
+          [
+            "p1",
+            10
+          ],
+          [
+            "p2",
+            30
+          ],
+          [
+            "p4",
+            345
+          ],
+          [
+            "p5",
+            360
+          ]
+        ],
+        "sectionStarts": [],
+        "t": 340
+      },
+      "expected": "p2"
     }
   ]
 }

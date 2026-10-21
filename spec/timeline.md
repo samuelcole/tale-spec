@@ -216,7 +216,8 @@ Let `b` be `begin-at-or-after-anchor` over the same `paras`,
 `orderedAnchors` and `anchor`. If `b` is null, the result is null. Otherwise
 let `s` be the start of the section that holds `b`: `sectionStarts` at
 `floor-index(sectionStarts, b)`. If no pair in `paras` has a begin in
-`[s, b)`, the result is `s`. Otherwise it is `b`.
+`[s, b)`, the result is `s`. Otherwise it is `b`. A recording with no
+sections has no start to begin at, and the result is `b`.
 
 In words: the voice begins where reading stands, except that a press landing
 on a recording's first narrated paragraph begins with the recording itself.
@@ -235,8 +236,30 @@ for timed text.
 
 This is where a press of play begins: the transport's own start, a resume at
 the mark, and a "start reading here". `begin-at-or-after-anchor` remains the
-rule for placing the voice inside a paragraph (`follow-scroll`) and for every
-question about which paragraph is narrated.
+rule for placing the voice inside a paragraph (`follow-scroll`).
+
+### `narrated-paragraph-at`
+
+Input `{paras, sectionStarts, t}`. Result: the anchor of the paragraph the
+voice is reading at whole-book second `t`, or null.
+
+Let `i` be `floor-index` over the begins of `paras` at `t`. If `i` is `-1`,
+the result is null. Let `s` be the start of the section that holds `t`,
+`sectionStarts` at `floor-index(sectionStarts, t)`. If `paras[i]`'s begin is
+before `s`, the result is null. Otherwise it is `paras[i]`'s anchor. With no
+sections, nothing is before a section's start.
+
+In words: the narrated paragraph is the last one begun, except inside a
+recording's opening. From a section's start until its first narrated
+paragraph, the recording speaks words the text does not carry: an
+announcement, a chapter's spoken title, or an opening the alignment left
+untimed. No paragraph is narrated there. Nothing is lit, the page does not
+follow, and hearing credits nothing. The last paragraph of the previous
+recording is finished. It is not carried into the next recording's
+announcement.
+
+This is the narrated paragraph everywhere a client asks "what is the voice
+reading": the highlight, follow, and the hearing credit.
 
 ## The word cut
 
