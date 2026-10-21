@@ -1715,6 +1715,107 @@
       "expected": 44.3
     },
     {
+      "op": "voice-start",
+      "name": "begins a book's first recording at its start when stray phrases come before the first paragraph",
+      "input": {
+        "paras": [
+          [
+            "p2",
+            40.4
+          ],
+          [
+            "p3",
+            64.3
+          ]
+        ],
+        "orderedAnchors": [
+          "p1",
+          "p2",
+          "p3",
+          "p4"
+        ],
+        "anchor": "p1",
+        "sectionStarts": [
+          0,
+          1163
+        ],
+        "phraseBegins": [
+          13.4,
+          34.7,
+          40.4,
+          46,
+          64.3
+        ]
+      },
+      "expected": 0
+    },
+    {
+      "op": "voice-start",
+      "name": "begins a reading paragraph in the first recording despite stray phrases before the book's first paragraph",
+      "input": {
+        "paras": [
+          [
+            "p2",
+            40.4
+          ],
+          [
+            "p3",
+            64.3
+          ]
+        ],
+        "orderedAnchors": [
+          "p1",
+          "p2",
+          "p3",
+          "p4"
+        ],
+        "anchor": "p3",
+        "sectionStarts": [
+          0,
+          1163
+        ],
+        "phraseBegins": [
+          13.4,
+          34.7,
+          40.4,
+          46,
+          64.3
+        ]
+      },
+      "expected": 64.3
+    },
+    {
+      "op": "voice-start",
+      "name": "does not set aside a phrase before a later recording's first paragraph",
+      "input": {
+        "paras": [
+          [
+            "p1",
+            5
+          ],
+          [
+            "p2",
+            400
+          ]
+        ],
+        "orderedAnchors": [
+          "p1",
+          "p2"
+        ],
+        "anchor": "p2",
+        "sectionStarts": [
+          0,
+          335
+        ],
+        "phraseBegins": [
+          5,
+          340,
+          400
+        ]
+      },
+      "expected": 400
+    },
+    {
       "op": "narrated-paragraph-at",
       "name": "names nothing before the first phrase of the first recording",
       "input": {
@@ -2049,6 +2150,64 @@
         "t": 340
       },
       "expected": "p2"
+    },
+    {
+      "op": "narrated-paragraph-at",
+      "name": "lights the first paragraph once it begins, past stray phrases before it",
+      "input": {
+        "paras": [
+          [
+            "p2",
+            40.4
+          ],
+          [
+            "p3",
+            64.3
+          ]
+        ],
+        "sectionStarts": [
+          0,
+          1163
+        ],
+        "phraseBegins": [
+          13.4,
+          34.7,
+          40.4,
+          46,
+          64.3
+        ],
+        "t": 41
+      },
+      "expected": "p2"
+    },
+    {
+      "op": "narrated-paragraph-at",
+      "name": "lights nothing over stray phrases before the book's first paragraph",
+      "input": {
+        "paras": [
+          [
+            "p2",
+            40.4
+          ],
+          [
+            "p3",
+            64.3
+          ]
+        ],
+        "sectionStarts": [
+          0,
+          1163
+        ],
+        "phraseBegins": [
+          13.4,
+          34.7,
+          40.4,
+          46,
+          64.3
+        ],
+        "t": 35
+      },
+      "expected": null
     }
   ]
 }
