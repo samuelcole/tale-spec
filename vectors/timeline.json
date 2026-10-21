@@ -1433,6 +1433,12 @@
         "sectionStarts": [
           0,
           335
+        ],
+        "phraseBegins": [
+          44.3,
+          45.9,
+          47.4,
+          50.0
         ]
       },
       "expected": 0
@@ -1462,13 +1468,19 @@
         "sectionStarts": [
           0,
           335
+        ],
+        "phraseBegins": [
+          44.3,
+          45.9,
+          47.4,
+          50.0
         ]
       },
       "expected": 47.4
     },
     {
       "op": "voice-start",
-      "name": "begins a later recording at its start when reading stands on its first narrated paragraph",
+      "name": "begins a later recording at its start when reading stands where its opening ends",
       "input": {
         "paras": [
           [
@@ -1495,6 +1507,14 @@
         "sectionStarts": [
           0,
           335
+        ],
+        "phraseBegins": [
+          10,
+          20,
+          30,
+          40,
+          345,
+          350
         ]
       },
       "expected": 335
@@ -1524,13 +1544,18 @@
         "sectionStarts": [
           0,
           335
+        ],
+        "phraseBegins": [
+          10,
+          20,
+          345
         ]
       },
       "expected": 335
     },
     {
       "op": "voice-start",
-      "name": "lands exactly on a section start that is also the paragraph's begin",
+      "name": "lands exactly on a section start whose first phrase begins there",
       "input": {
         "paras": [
           [
@@ -1553,9 +1578,53 @@
         "sectionStarts": [
           0,
           335
+        ],
+        "phraseBegins": [
+          0,
+          335
         ]
       },
       "expected": 335
+    },
+    {
+      "op": "voice-start",
+      "name": "begins at the paragraph after one carried across a seam, replaying nothing",
+      "input": {
+        "paras": [
+          [
+            "p1",
+            10
+          ],
+          [
+            "p2",
+            300
+          ],
+          [
+            "p3",
+            350
+          ]
+        ],
+        "orderedAnchors": [
+          "p1",
+          "p2",
+          "p3",
+          "p4",
+          "p5"
+        ],
+        "anchor": "p3",
+        "sectionStarts": [
+          0,
+          335
+        ],
+        "phraseBegins": [
+          10,
+          300,
+          320,
+          336,
+          350
+        ]
+      },
+      "expected": 350
     },
     {
       "op": "voice-start",
@@ -1578,6 +1647,9 @@
         "sectionStarts": [
           0,
           335
+        ],
+        "phraseBegins": [
+          10
         ]
       },
       "expected": null
@@ -1603,6 +1675,9 @@
         "sectionStarts": [
           0,
           335
+        ],
+        "phraseBegins": [
+          10
         ]
       },
       "expected": null
@@ -1629,13 +1704,19 @@
           "p5"
         ],
         "anchor": "p1",
-        "sectionStarts": []
+        "sectionStarts": [],
+        "phraseBegins": [
+          44.3,
+          45.9,
+          47.4,
+          50.0
+        ]
       },
       "expected": 44.3
     },
     {
       "op": "narrated-paragraph-at",
-      "name": "names nothing before the first narrated paragraph of the first recording",
+      "name": "names nothing before the first phrase of the first recording",
       "input": {
         "paras": [
           [
@@ -1658,6 +1739,15 @@
         "sectionStarts": [
           0,
           335
+        ],
+        "phraseBegins": [
+          10,
+          20,
+          30,
+          40,
+          345,
+          352,
+          360
         ],
         "t": 5
       },
@@ -1689,6 +1779,15 @@
           0,
           335
         ],
+        "phraseBegins": [
+          10,
+          20,
+          30,
+          40,
+          345,
+          352,
+          360
+        ],
         "t": 31
       },
       "expected": "p2"
@@ -1718,6 +1817,15 @@
         "sectionStarts": [
           0,
           335
+        ],
+        "phraseBegins": [
+          10,
+          20,
+          30,
+          40,
+          345,
+          352,
+          360
         ],
         "t": 340
       },
@@ -1749,6 +1857,15 @@
           0,
           335
         ],
+        "phraseBegins": [
+          10,
+          20,
+          30,
+          40,
+          345,
+          352,
+          360
+        ],
         "t": 335
       },
       "expected": null
@@ -1778,6 +1895,15 @@
         "sectionStarts": [
           0,
           335
+        ],
+        "phraseBegins": [
+          10,
+          20,
+          30,
+          40,
+          345,
+          352,
+          360
         ],
         "t": 345
       },
@@ -1809,9 +1935,84 @@
           0,
           335
         ],
+        "phraseBegins": [
+          10,
+          20,
+          30,
+          40,
+          345,
+          352,
+          360
+        ],
         "t": 360
       },
       "expected": "p5"
+    },
+    {
+      "op": "narrated-paragraph-at",
+      "name": "keeps a paragraph carried across a seam lit once its continuation begins",
+      "input": {
+        "paras": [
+          [
+            "p1",
+            10
+          ],
+          [
+            "p2",
+            300
+          ],
+          [
+            "p3",
+            350
+          ]
+        ],
+        "sectionStarts": [
+          0,
+          335
+        ],
+        "phraseBegins": [
+          10,
+          300,
+          320,
+          336,
+          350
+        ],
+        "t": 337
+      },
+      "expected": "p2"
+    },
+    {
+      "op": "narrated-paragraph-at",
+      "name": "names nothing in the opening before a carried paragraph's continuation",
+      "input": {
+        "paras": [
+          [
+            "p1",
+            10
+          ],
+          [
+            "p2",
+            300
+          ],
+          [
+            "p3",
+            350
+          ]
+        ],
+        "sectionStarts": [
+          0,
+          335
+        ],
+        "phraseBegins": [
+          10,
+          300,
+          320,
+          336,
+          350
+        ],
+        "t": 335.5
+      },
+      "expected": null
     },
     {
       "op": "narrated-paragraph-at",
@@ -1836,6 +2037,15 @@
           ]
         ],
         "sectionStarts": [],
+        "phraseBegins": [
+          10,
+          20,
+          30,
+          40,
+          345,
+          352,
+          360
+        ],
         "t": 340
       },
       "expected": "p2"

@@ -21,7 +21,9 @@ rendered or accessible product surface.
 - The narrated fixture from `play-and-pocket`, with a first narrated paragraph
   long enough for follow-scroll to move the page before narration enters the
   next paragraph, and later aligned paragraphs on both sides of an audio-section
-  seam.
+  seam. The narrator carries a paragraph across that seam: the next section's
+  first phrase begins at its start, so the crossing has no opening and
+  `continuous` is observable.
 - Ordinary reading conditions: default type size, no plan marks open, no
   passage fragment, and narration initially paused.
 
@@ -81,7 +83,11 @@ under the ordinary reading rules.
 Press play. Narration resolves the first aligned paragraph at or after **Q**,
 lights it, and resumes follow from there. A same-paragraph pause and play would
 instead preserve the exact lit position. Continuous playback across an audio
-section keeps the voice lit and following without a reader-visible seam.
+section keeps the voice lit and following without a reader-visible seam,
+except for the next recording's own opening (`narrated-paragraph-at` in
+[`spec/timeline.md`](../timeline.md)). Where a recording opens with words the
+text does not carry, nothing is lit and the page holds until its first timed
+phrase. A paragraph the narrator carried across the seam stays lit.
 
 ## Required starting result
 
