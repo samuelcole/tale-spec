@@ -40,7 +40,6 @@
         "litAtStart": { "equals": "a-paragraph" },
         "firstLit": { "equals": "S" },
         "pageHeld": { "equals": true },
-        "topBlock": { "equals": "S" },
         "sWording": { "equals": "edition-2" },
         "playerNoteFailure": { "equals": "never-shown" }
       }

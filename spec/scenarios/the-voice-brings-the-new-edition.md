@@ -75,10 +75,11 @@ from the keep and resumes as [`open-and-read.md`](open-and-read.md) fixes, so
 S, the paragraph after P, is at the top of the screen. S still has edition 1's
 wording. Edition 2 has arrived or is arriving in the background, and it waits.
 
-**4. Press play.** The transport shows playing, and S lights at once. S is
-still at the top of the screen, now in edition 2's wording. Before the voice
-began, the page did not move to the cover, to the inserted paragraph, or to
-any other paragraph. From the press on, the control never says the voice
+**4. Press play.** The transport shows playing, and S lights at once, now in
+edition 2's wording. From the press until S lit, S stayed at the top of the
+screen (`pageHeld`). The page did not move to the cover, to the inserted
+paragraph, or to any other paragraph. Once S lights, the voice's own follow
+may move the page as [`play-and-pocket.md`](play-and-pocket.md) allows. From the press on, the control never says the voice
 wasn't sent, or any other failure.
 
 **5. Pause.**
