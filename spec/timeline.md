@@ -209,8 +209,9 @@ pointed at.
 ### A recording's opening
 
 A section's **opening** runs from its start up to its first phrase begin: the
-first value of `phraseBegins` that is at or after the section's start, or the
-section's end when no phrase begins in it. In the opening the recording speaks
+first value of `phraseBegins` that is at or after both the section's start and
+the book's first paragraph begin, or the section's end when no such phrase
+begins in it. In the opening the recording speaks
 words the text does not carry: a volunteer's announcement of the work, the
 reader and the project, a chapter's spoken title, or an opening the alignment
 left untimed. A section whose first phrase begins exactly at its start has an
@@ -220,6 +221,14 @@ The opening is measured in phrases, not paragraphs. A paragraph the narrator
 carried across a seam has phrases in both sections. Its continuation begins
 the next section, so that section's opening ends where the continuation
 starts, and the paragraph is still being read.
+
+A phrase that begins before the book's first paragraph begin belongs to no
+paragraph in `paras`. The alignment placed some of an untimed paragraph's words
+and not the paragraph, so the payload cannot say what was spoken there. Such a
+**stray phrase** never ends an opening: a book whose first paragraphs went
+untimed still opens with its announcement. Later in the book, a stray phrase is
+indistinguishable from a paragraph carried across a seam, so only those before
+the first paragraph begin are set aside.
 
 ### `voice-start`
 
@@ -231,8 +240,9 @@ press of play begins, or null.
 Let `b` be `begin-at-or-after-anchor` over the same `paras`,
 `orderedAnchors` and `anchor`. If `b` is null, the result is null. Otherwise
 let `s` be the start of the section that holds `b`: `sectionStarts` at
-`floor-index(sectionStarts, b)`. If no value in `phraseBegins` lies in
-`[s, b)`, then `b` ends that section's opening and the result is `s`.
+`floor-index(sectionStarts, b)`, and let `f` be the smallest begin in
+`paras`. If no value in `phraseBegins` lies in `[max(s, f), b)`, then `b` ends
+that section's opening and the result is `s`.
 Otherwise the result is `b`. A recording with no sections has no start to
 begin at, and the result is `b`.
 
@@ -260,8 +270,9 @@ paragraph the voice is reading at whole-book second `t`, or null.
 
 Let `i` be `floor-index` over the begins of `paras` at `t`. If `i` is `-1`,
 the result is null. Let `s` be the start of the section that holds `t`,
-`sectionStarts` at `floor-index(sectionStarts, t)`. If no value in
-`phraseBegins` lies in `[s, t]`, then `t` is inside that section's opening
+`sectionStarts` at `floor-index(sectionStarts, t)`, and `f` the smallest
+begin in `paras`. If no value in `phraseBegins` lies in `[max(s, f), t]`, then
+`t` is inside that section's opening
 and the result is null. Otherwise it is `paras[i]`'s anchor. With no
 sections, there is no opening.
 
