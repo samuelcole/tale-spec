@@ -11,7 +11,7 @@ The pieces with prose already: the payload declares narration only when
 playable audio and a usable alignment exist, fetched lazily on the first play
 gesture ([`spec/payload.md`](../payload.md), "Narration and alignment");
 where the voice starts is `voice-start` and where it stands is
-`floor-index` over the paragraph begins, both in
+`narrated-paragraph-at`, both in
 [`spec/timeline.md`](../timeline.md) with their vectors; and the mark's own
 rules are [`spec/progress.md`](../progress.md)'s. What no area yet fixes —
 a play/pause machine, the app running with the screen away — this scenario
@@ -99,8 +99,9 @@ state; this scenario fixes only that it exists and is accessible.
 The transport shows playing, and the voice stands inside **P**'s narrated
 span: playback began where reading stands — not at the top of the book, not
 at zero, not at wherever a player last stopped. This is `voice-start` at the
-surface: **P** lies inside the recording, past its first narrated paragraph,
-so the press begins at **P**'s own begin. A press from the top of a recording
+surface: **P** lies inside its recording, with timed phrases before it in the
+same section, so the recording's opening ends before **P** and the press
+begins at **P**'s own begin. The fixture's **P** must be such a paragraph. A press from the top of a recording
 begins with the recording itself, which is
 [`the-voice-begins-with-the-recording.md`](the-voice-begins-with-the-recording.md).
 

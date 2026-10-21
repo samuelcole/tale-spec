@@ -27,7 +27,9 @@ may translate and what it may not weaken.
   [`voice-rides-along.md`](voice-rides-along.md).
 - The first book's recording runs in **at least three short sections**, and
   its pinned alignment fixes which paragraph the third section begins in, so
-  the stop in step 4 is a known position. The second book is narrated too; it
+  the stop in step 4 is a known position. The third section's first phrase
+  begins at its start (the narrator carried a paragraph across that seam), so
+  the section has no opening and a paragraph is lit at its first second. The second book is narrated too; it
   is opened online and never played.
 - The content service is reachable when the scenario begins, and ordinary
   reading conditions hold throughout.
@@ -57,8 +59,10 @@ stalled or gone:
 - The transport shows paused, and the voice's position stands at that
   section's start, with nothing of the section spoken: on the surface, the
   position the control speaks is the section's first second, and the lit
-  paragraph is the one the section begins in. Nothing before it is repeated
-  and nothing after it is skipped to.
+  paragraph is the one the section begins in: `narrated-paragraph-at` at that
+  second, which is nothing when that second is inside the section's opening.
+  Nothing
+  before it is repeated and nothing after it is skipped to.
 - The control says so, in words exposed to the accessibility surface: the rest
   of the voice isn't on this device yet. Wording is the client's.
 - The text stays readable. The reader's ordinary reading gesture still moves

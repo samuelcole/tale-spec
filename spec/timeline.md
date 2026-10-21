@@ -206,28 +206,43 @@ there, an unaligned one starts at the next words the recording actually
 contains, and a reader is never dropped into silence or above the text they
 pointed at.
 
+### A recording's opening
+
+A section's **opening** runs from its start up to its first phrase begin: the
+first value of `phraseBegins` that is at or after the section's start, or the
+section's end when no phrase begins in it. In the opening the recording speaks
+words the text does not carry: a volunteer's announcement of the work, the
+reader and the project, a chapter's spoken title, or an opening the alignment
+left untimed. A section whose first phrase begins exactly at its start has an
+empty opening.
+
+The opening is measured in phrases, not paragraphs. A paragraph the narrator
+carried across a seam has phrases in both sections. Its continuation begins
+the next section, so that section's opening ends where the continuation
+starts, and the paragraph is still being read.
+
 ### `voice-start`
 
-Input `{paras, orderedAnchors, anchor, sectionStarts}`, where `sectionStarts`
-is `section-starts` over the recording. Result: the whole-book second where
-a press of play begins, or null.
+Input `{paras, orderedAnchors, anchor, sectionStarts, phraseBegins}`, where
+`sectionStarts` is `section-starts` over the recording and `phraseBegins` is
+every phrase's begin in ascending order. Result: the whole-book second where a
+press of play begins, or null.
 
 Let `b` be `begin-at-or-after-anchor` over the same `paras`,
 `orderedAnchors` and `anchor`. If `b` is null, the result is null. Otherwise
 let `s` be the start of the section that holds `b`: `sectionStarts` at
-`floor-index(sectionStarts, b)`. If no pair in `paras` has a begin in
-`[s, b)`, the result is `s`. Otherwise it is `b`. A recording with no
-sections has no start to begin at, and the result is `b`.
+`floor-index(sectionStarts, b)`. If no value in `phraseBegins` lies in
+`[s, b)`, then `b` ends that section's opening and the result is `s`.
+Otherwise the result is `b`. A recording with no sections has no start to
+begin at, and the result is `b`.
 
 In words: the voice begins where reading stands, except that a press landing
-on a recording's first narrated paragraph begins with the recording itself.
-A recording opens with words the text does not carry — a volunteer's
-announcement of the work, the reader and the project, a chapter's spoken
-title — and those belong to the reader as much as the prose does. They are
-the volunteers' and the project's own credit, so a press from the top of a
-book, or from the head of a recording, plays them rather than skipping past
-them to the first aligned sentence. Mid-recording, nothing before `b` is
-replayed: a reader who stopped inside a chapter resumes inside it.
+where a recording's opening ends begins with the recording itself. The words
+of an opening belong to the reader as much as the prose does. They are the
+volunteers' and the project's own credit, so a press from the top of a book,
+or from the head of a recording, plays them rather than skipping past them to
+the first aligned sentence. Mid-recording, nothing before `b` is replayed: a
+reader who stopped inside a chapter resumes inside it.
 
 The same rule covers an opening the alignment left untimed. If a section's
 first paragraphs carry no begin, the press still starts at the section, and
@@ -240,23 +255,22 @@ rule for placing the voice inside a paragraph (`follow-scroll`).
 
 ### `narrated-paragraph-at`
 
-Input `{paras, sectionStarts, t}`. Result: the anchor of the paragraph the
-voice is reading at whole-book second `t`, or null.
+Input `{paras, sectionStarts, phraseBegins, t}`. Result: the anchor of the
+paragraph the voice is reading at whole-book second `t`, or null.
 
 Let `i` be `floor-index` over the begins of `paras` at `t`. If `i` is `-1`,
 the result is null. Let `s` be the start of the section that holds `t`,
-`sectionStarts` at `floor-index(sectionStarts, t)`. If `paras[i]`'s begin is
-before `s`, the result is null. Otherwise it is `paras[i]`'s anchor. With no
-sections, nothing is before a section's start.
+`sectionStarts` at `floor-index(sectionStarts, t)`. If no value in
+`phraseBegins` lies in `[s, t]`, then `t` is inside that section's opening
+and the result is null. Otherwise it is `paras[i]`'s anchor. With no
+sections, there is no opening.
 
 In words: the narrated paragraph is the last one begun, except inside a
-recording's opening. From a section's start until its first narrated
-paragraph, the recording speaks words the text does not carry: an
-announcement, a chapter's spoken title, or an opening the alignment left
-untimed. No paragraph is narrated there. Nothing is lit, the page does not
-follow, and hearing credits nothing. The last paragraph of the previous
-recording is finished. It is not carried into the next recording's
-announcement.
+recording's opening. No paragraph is narrated there. Nothing is lit, the
+page does not follow, and hearing credits nothing. The last paragraph of the
+previous recording is finished; it is not carried into the next recording's
+announcement. A paragraph carried across a seam with no opening between is
+still narrated: its continuation's phrase ends the opening at once.
 
 This is the narrated paragraph everywhere a client asks "what is the voice
 reading": the highlight, follow, and the hearing credit.
