@@ -251,7 +251,11 @@ started and the client has kept
 the keep at once and revalidates through the validators in the background. A
 newer representation is kept for the next open and never replaces text under a
 reader mid-session
-([`scenarios/kept-on-a-stalled-network.md`](scenarios/kept-on-a-stalled-network.md)). A missing or unreadable public tale is
+([`scenarios/kept-on-a-stalled-network.md`](scenarios/kept-on-a-stalled-network.md)).
+The one exception is a press of play whose alignment names the newer body: the
+voice can only follow the text it was timed to, so the press brings that body
+onto the screen at the reader's place, and the voice plays there
+([`scenarios/the-voice-brings-the-new-edition.md`](scenarios/the-voice-brings-the-new-edition.md)). A missing or unreadable public tale is
 `404`, never an empty successful payload.
 
 The read-along response uses the same cache and strong-validator rules. Its

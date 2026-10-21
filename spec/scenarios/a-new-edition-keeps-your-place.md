@@ -100,6 +100,8 @@ None of these landings is a reading. Steps 5 and 8 are placements, as
   that deletes a marked passage.
 - **Narration across editions.** An alignment always names its own edition
   exactly ([`timeline.md`](../timeline.md)), so it has nothing to resolve.
+  A press of play on a kept older edition brings the new one, by
+  [`the-voice-brings-the-new-edition.md`](the-voice-brings-the-new-edition.md).
 - **Kept books on a device that has not seen the new edition.** The keep rules
   ([`kept-on-open.md`](kept-on-open.md)) decide which edition is read. This
   scenario reads whichever edition is current.
