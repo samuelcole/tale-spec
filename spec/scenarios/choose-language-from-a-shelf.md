@@ -33,10 +33,11 @@ with that explanation.
 
 Such a client offers the control only when that setting can make the choice.
 On iOS and iPadOS, Settings › Tale shows a Language row only when the device
-has more than one preferred language. Even then, the row lists only the
-device's preferred languages that Tale speaks. So the shelf offers to use Tale
-in a language only when that language is among the device's preferred
-languages. Otherwise the shelf offers no control: a control that opens a page
+has more than one preferred language; with one, the page has nothing to
+choose. The shelf offers to use Tale in a language only when that language is
+among the device's preferred languages. Tale then is not already in it, so the
+device has at least two, the row is there, and the language is the first it
+suggests. Otherwise the shelf offers no control: a control that opens a page
 with nothing to choose sends the reader nowhere. The shelf of the language
 Tale already speaks still shows it chosen.
 
