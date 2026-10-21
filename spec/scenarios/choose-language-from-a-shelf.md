@@ -31,6 +31,16 @@ per-app language setting (see `choose-interface-language`) may have this
 control open that setting instead, and declares this scenario not applicable
 with that explanation.
 
+Such a client offers the control only when that setting can make the choice.
+On iOS and iPadOS, Settings › Tale shows a Language row only when the device
+has more than one preferred language; with one, the page has nothing to
+choose. The shelf offers to use Tale in a language only when that language is
+among the device's preferred languages. Tale then is not already in it, so the
+device has at least two, the row is there, and the language is the first it
+suggests. Otherwise the shelf offers no control: a control that opens a page
+with nothing to choose sends the reader nowhere. The shelf of the language
+Tale already speaks still shows it chosen.
+
 ## Setup
 
 The fixture library of `read-in-your-language`, on a fresh device whose
