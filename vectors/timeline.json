@@ -1407,6 +1407,205 @@
       },
       "expected": false,
       "note": "Extra case: digits are outside the alphabet in every language, so nothing survives."
+    },
+    {
+      "op": "voice-start",
+      "name": "begins a book's first recording at its start, before the first aligned paragraph",
+      "input": {
+        "paras": [
+          [
+            "p2",
+            44.3
+          ],
+          [
+            "p3",
+            47.4
+          ]
+        ],
+        "orderedAnchors": [
+          "p1",
+          "p2",
+          "p3",
+          "p4",
+          "p5"
+        ],
+        "anchor": "p1",
+        "sectionStarts": [
+          0,
+          335
+        ]
+      },
+      "expected": 0
+    },
+    {
+      "op": "voice-start",
+      "name": "begins mid-recording exactly at the reading paragraph",
+      "input": {
+        "paras": [
+          [
+            "p2",
+            44.3
+          ],
+          [
+            "p3",
+            47.4
+          ]
+        ],
+        "orderedAnchors": [
+          "p1",
+          "p2",
+          "p3",
+          "p4",
+          "p5"
+        ],
+        "anchor": "p3",
+        "sectionStarts": [
+          0,
+          335
+        ]
+      },
+      "expected": 47.4
+    },
+    {
+      "op": "voice-start",
+      "name": "begins a later recording at its start when reading stands on its first narrated paragraph",
+      "input": {
+        "paras": [
+          [
+            "p1",
+            10
+          ],
+          [
+            "p2",
+            30
+          ],
+          [
+            "p4",
+            345
+          ]
+        ],
+        "orderedAnchors": [
+          "p1",
+          "p2",
+          "p3",
+          "p4",
+          "p5"
+        ],
+        "anchor": "p4",
+        "sectionStarts": [
+          0,
+          335
+        ]
+      },
+      "expected": 335
+    },
+    {
+      "op": "voice-start",
+      "name": "walks an unaligned anchor forward, then begins that recording at its start",
+      "input": {
+        "paras": [
+          [
+            "p1",
+            10
+          ],
+          [
+            "p4",
+            345
+          ]
+        ],
+        "orderedAnchors": [
+          "p1",
+          "p2",
+          "p3",
+          "p4",
+          "p5"
+        ],
+        "anchor": "p2",
+        "sectionStarts": [
+          0,
+          335
+        ]
+      },
+      "expected": 335
+    },
+    {
+      "op": "voice-start",
+      "name": "lands exactly on a section start that is also the paragraph's begin",
+      "input": {
+        "paras": [
+          [
+            "p1",
+            0
+          ],
+          [
+            "p2",
+            335
+          ]
+        ],
+        "orderedAnchors": [
+          "p1",
+          "p2",
+          "p3",
+          "p4",
+          "p5"
+        ],
+        "anchor": "p2",
+        "sectionStarts": [
+          0,
+          335
+        ]
+      },
+      "expected": 335
+    },
+    {
+      "op": "voice-start",
+      "name": "returns null when no narration follows the anchor",
+      "input": {
+        "paras": [
+          [
+            "p1",
+            10
+          ]
+        ],
+        "orderedAnchors": [
+          "p1",
+          "p2",
+          "p3",
+          "p4",
+          "p5"
+        ],
+        "anchor": "p3",
+        "sectionStarts": [
+          0,
+          335
+        ]
+      },
+      "expected": null
+    },
+    {
+      "op": "voice-start",
+      "name": "returns null for an anchor absent from the document",
+      "input": {
+        "paras": [
+          [
+            "p1",
+            10
+          ]
+        ],
+        "orderedAnchors": [
+          "p1",
+          "p2",
+          "p3",
+          "p4",
+          "p5"
+        ],
+        "anchor": "p9",
+        "sectionStarts": [
+          0,
+          335
+        ]
+      },
+      "expected": null
     }
   ]
 }

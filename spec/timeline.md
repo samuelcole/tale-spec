@@ -206,6 +206,38 @@ there, an unaligned one starts at the next words the recording actually
 contains, and a reader is never dropped into silence or above the text they
 pointed at.
 
+### `voice-start`
+
+Input `{paras, orderedAnchors, anchor, sectionStarts}`, where `sectionStarts`
+is `section-starts` over the recording. Result: the whole-book second where
+a press of play begins, or null.
+
+Let `b` be `begin-at-or-after-anchor` over the same `paras`,
+`orderedAnchors` and `anchor`. If `b` is null, the result is null. Otherwise
+let `s` be the start of the section that holds `b`: `sectionStarts` at
+`floor-index(sectionStarts, b)`. If no pair in `paras` has a begin in
+`[s, b)`, the result is `s`. Otherwise it is `b`.
+
+In words: the voice begins where reading stands, except that a press landing
+on a recording's first narrated paragraph begins with the recording itself.
+A recording opens with words the text does not carry — a volunteer's
+announcement of the work, the reader and the project, a chapter's spoken
+title — and those belong to the reader as much as the prose does. They are
+the volunteers' and the project's own credit, so a press from the top of a
+book, or from the head of a recording, plays them rather than skipping past
+them to the first aligned sentence. Mid-recording, nothing before `b` is
+replayed: a reader who stopped inside a chapter resumes inside it.
+
+The same rule covers an opening the alignment left untimed. If a section's
+first paragraphs carry no begin, the press still starts at the section, and
+the reader hears every word the recording holds. Only the highlight waits
+for timed text.
+
+This is where a press of play begins: the transport's own start, a resume at
+the mark, and a "start reading here". `begin-at-or-after-anchor` remains the
+rule for placing the voice inside a paragraph (`follow-scroll`) and for every
+question about which paragraph is narrated.
+
 ## The word cut
 
 Between a phrase's timing and a highlight sits one more question: which words

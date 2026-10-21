@@ -1,0 +1,76 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "the-voice-begins-with-the-recording",
+  "title": "The voice begins with the recording",
+  "steps": [
+    {
+      "id": "open-at-the-cover",
+      "action": { "op": "open-book", "clean": true },
+      "expect": {
+        "state": { "equals": "book" },
+        "cover": { "equals": "on-screen" },
+        "playControl": { "equals": "available" }
+      }
+    },
+    {
+      "id": "play-from-the-cover",
+      "action": { "op": "activate-transport-and-wait-for-playing" },
+      "expect": {
+        "transport": { "equals": "playing" },
+        "voiceSection": { "equals": 0 },
+        "voiceBegan": { "equals": "at-recording-start" }
+      }
+    },
+    {
+      "id": "pause-at-the-cover",
+      "action": { "op": "activate-transport" },
+      "expect": {
+        "transport": { "equals": "paused" }
+      }
+    },
+    {
+      "id": "read-to-a-recording-head",
+      "action": { "op": "read-to-block", "block": "first-narrated-of-second-recording" },
+      "expect": {
+        "cover": { "equals": "above-screen" },
+        "settled": { "equals": true }
+      }
+    },
+    {
+      "id": "play-from-a-recording-head",
+      "action": { "op": "activate-transport-and-wait-for-playing" },
+      "expect": {
+        "transport": { "equals": "playing" },
+        "voiceSection": { "equals": 1 },
+        "voiceBegan": { "equals": "at-recording-start" }
+      }
+    },
+    {
+      "id": "pause-at-the-recording-head",
+      "action": { "op": "activate-transport" },
+      "expect": {
+        "transport": { "equals": "paused" }
+      }
+    },
+    {
+      "id": "read-into-the-recording",
+      "action": { "op": "read-to-block", "block": "later-in-second-recording" },
+      "expect": {
+        "cover": { "equals": "above-screen" },
+        "settled": { "equals": true }
+      },
+      "capture": { "readingBlock": "topBlock" }
+    },
+    {
+      "id": "play-from-inside-the-recording",
+      "action": { "op": "activate-transport-and-wait-for-playing" },
+      "expect": {
+        "transport": { "equals": "playing" },
+        "voiceSection": { "equals": 1 },
+        "voiceBlock": { "equals": { "ref": "readingBlock" } },
+        "voiceBegan": { "equals": "inside-reading-block" }
+      }
+    }
+  ]
+}
