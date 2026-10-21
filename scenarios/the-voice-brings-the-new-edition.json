@@ -1,0 +1,53 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "the-voice-brings-the-new-edition",
+  "title": "The voice brings the new edition",
+  "steps": [
+    {
+      "id": "open-first-edition",
+      "action": { "op": "open-book", "clean": true, "edition": 1 },
+      "expect": {
+        "state": { "equals": "book" },
+        "cover": { "equals": "on-screen" },
+        "playControl": { "equals": "available" }
+      }
+    },
+    {
+      "id": "read-to-the-passage",
+      "action": { "op": "read-to-block", "block": "P" },
+      "expect": {
+        "cover": { "equals": "above-screen" },
+        "settled": { "equals": true },
+        "topBlock": { "equals": "P" }
+      }
+    },
+    {
+      "id": "the-keep-opens-the-old-edition",
+      "action": { "op": "end-session-publish-edition-and-open-book", "edition": 2 },
+      "expect": {
+        "state": { "equals": "book" },
+        "topBlock": { "equals": "S" },
+        "sWording": { "equals": "edition-1" },
+        "playControl": { "equals": "available" }
+      }
+    },
+    {
+      "id": "play-brings-the-new-edition",
+      "action": { "op": "activate-transport-and-wait-for-playing" },
+      "expect": {
+        "transport": { "equals": "playing" },
+        "litAtStart": { "equals": "a-paragraph" },
+        "firstLit": { "equals": "S" },
+        "pageHeld": { "equals": true },
+        "sWording": { "equals": "edition-2" },
+        "playerNoteFailure": { "equals": "never-shown" }
+      }
+    },
+    {
+      "id": "pause",
+      "action": { "op": "activate-transport" },
+      "expect": { "transport": { "equals": "paused" } }
+    }
+  ]
+}
