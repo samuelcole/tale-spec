@@ -37,7 +37,10 @@ these anchors need not be aligned. A
 
 At a media time, the **narrated paragraph** is the record with the greatest
 `begin` less than or equal to that time. All trace media times are at or after
-the first begin. An exact begin belongs to the new paragraph. This definition
+the first begin of the section that holds them, so the record is the
+timeline area's `narrated-paragraph-at` too. A recording's opening, where
+`narrated-paragraph-at` names nothing, is outside this area's traces. An
+exact begin belongs to the new paragraph. This definition
 is also how an implementation validates a `follow-scroll` target.
 
 The **begin at or after an anchor** is the timeline area's

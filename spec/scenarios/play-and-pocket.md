@@ -10,7 +10,7 @@ reading moves it, so the book opens where the voice reached.
 The pieces with prose already: the payload declares narration only when
 playable audio and a usable alignment exist, fetched lazily on the first play
 gesture ([`spec/payload.md`](../payload.md), "Narration and alignment");
-where the voice starts is `begin-at-or-after-anchor` and where it stands is
+where the voice starts is `voice-start` and where it stands is
 `floor-index` over the paragraph begins, both in
 [`spec/timeline.md`](../timeline.md) with their vectors; and the mark's own
 rules are [`spec/progress.md`](../progress.md)'s. What no area yet fixes —
@@ -98,8 +98,11 @@ state; this scenario fixes only that it exists and is accessible.
 
 The transport shows playing, and the voice stands inside **P**'s narrated
 span: playback began where reading stands — not at the top of the book, not
-at zero, not at wherever a player last stopped. This is
-`begin-at-or-after-anchor` at the surface.
+at zero, not at wherever a player last stopped. This is `voice-start` at the
+surface: **P** lies inside the recording, past its first narrated paragraph,
+so the press begins at **P**'s own begin. A press from the top of a recording
+begins with the recording itself, which is
+[`the-voice-begins-with-the-recording.md`](the-voice-begins-with-the-recording.md).
 
 **2. Put the screen away, and stay away past the recording's first seam.**
 
