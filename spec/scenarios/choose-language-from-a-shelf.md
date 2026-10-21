@@ -41,6 +41,15 @@ suggests. Otherwise the shelf offers no control: a control that opens a page
 with nothing to choose sends the reader nowhere. The shelf of the language
 Tale already speaks still shows it chosen.
 
+On macOS, an app's own settings page holds no language. The per-app setting is
+System Settings › General › Language & Region, under Applications, so on the
+Mac the control opens that pane, with the same rule for when it is offered.
+Whatever the platform, the control must open the place where the choice is
+made. A client that cannot open it offers no control, because a control that
+opens nothing is worse than none. The client's own check of this note presses
+the control and observes that the setting came forward, not only that the
+control is shown.
+
 ## Setup
 
 The fixture library of `read-in-your-language`, on a fresh device whose
