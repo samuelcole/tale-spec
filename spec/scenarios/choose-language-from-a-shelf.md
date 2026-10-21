@@ -46,9 +46,7 @@ System Settings › General › Language & Region, under Applications, so on the
 Mac the control opens that pane, with the same rule for when it is offered.
 Whatever the platform, the control must open the place where the choice is
 made. A client that cannot open it offers no control, because a control that
-opens nothing is worse than none. The client's own check of this note presses
-the control and observes that the setting came forward, not only that the
-control is shown.
+opens nothing is worse than none.
 
 ## Setup
 
