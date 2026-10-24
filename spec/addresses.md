@@ -17,6 +17,12 @@ fragment is a decoded, case-sensitive passage anchor: a block's id, its name,
 or a legacy id, resolved against the loaded edition under
 [`anchors.md`](anchors.md).
 
+Two quotation forms open a reading address at the paragraph holding some
+words instead of at an anchor ([`scenarios/open-at-a-quote.md`](scenarios/open-at-a-quote.md)):
+a `find` query item, and a fragment that begins with the directive `:~:text=`.
+A fragment beginning `:~:` is a fragment directive, never a passage anchor.
+Neither form changes the address's identity.
+
 Path segments are percent-decoded independently. An empty segment, dot
 segment, encoded slash, or encoded backslash makes the address unsupported;
 decoding must never change the route's shape.
