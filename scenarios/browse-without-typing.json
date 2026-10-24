@@ -1,0 +1,93 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "browse-without-typing",
+  "title": "The library can be browsed without typing",
+  "steps": [
+    {
+      "id": "open-blank-library",
+      "action": { "op": "open-library", "clean": true, "network": "reachable", "deviceLanguage": "en" },
+      "expect": { "state": { "equals": "library" }, "query": { "equals": "" }, "browseFeatured": { "equals": ["Gothic"] }, "browseDirectories": { "equals": ["/genres", "/eras", "/authors", "/lists"] } }
+    },
+    {
+      "id": "open-featured-genre",
+      "action": { "op": "activate-browse-featured", "title": "Gothic" },
+      "expect": { "state": { "equals": "shelf" }, "kind": { "equals": "genre" }, "canonicalIdentity": { "equals": "/genre/gothic" }, "title": { "equals": "Gothic" }, "bookCount": { "equals": 2 }, "roster": { "equals": ["Frankenstein", "The Last Man"] } }
+    },
+    {
+      "id": "return-from-featured-genre",
+      "action": { "op": "return-to-library" },
+      "expect": { "state": { "equals": "library" }, "query": { "equals": "" }, "browseFeatured": { "equals": ["Gothic"] }, "browseDirectories": { "equals": ["/genres", "/eras", "/authors", "/lists"] } }
+    },
+    {
+      "id": "open-genre-directory",
+      "action": { "op": "activate-browse-directory", "identity": "/genres" },
+      "expect": { "state": { "equals": "directory" }, "kind": { "equals": "genre" }, "canonicalIdentity": { "equals": "/genres" }, "groupLabels": { "equals": [null] }, "entries": { "equals": ["Gothic", "Science fiction"] }, "entryCounts": { "equals": [2, 1] } }
+    },
+    {
+      "id": "open-directory-entry",
+      "action": { "op": "activate-directory-entry", "title": "Gothic" },
+      "expect": { "state": { "equals": "shelf" }, "kind": { "equals": "genre" }, "canonicalIdentity": { "equals": "/genre/gothic" }, "title": { "equals": "Gothic" }, "bookCount": { "equals": 2 } }
+    },
+    {
+      "id": "return-to-genre-directory",
+      "action": { "op": "return-to-directory" },
+      "expect": { "state": { "equals": "directory" }, "canonicalIdentity": { "equals": "/genres" }, "entries": { "equals": ["Gothic", "Science fiction"] } }
+    },
+    {
+      "id": "return-from-genre-directory",
+      "action": { "op": "return-to-library" },
+      "expect": { "state": { "equals": "library" }, "query": { "equals": "" }, "browseDirectories": { "equals": ["/genres", "/eras", "/authors", "/lists"] } }
+    },
+    {
+      "id": "open-era-directory",
+      "action": { "op": "activate-browse-directory", "identity": "/eras" },
+      "expect": { "state": { "equals": "directory" }, "kind": { "equals": "era" }, "canonicalIdentity": { "equals": "/eras" }, "groupLabels": { "equals": [null] }, "entries": { "equals": ["18th century", "19th century"] }, "entryCounts": { "equals": [1, 2] } }
+    },
+    {
+      "id": "open-author-directory",
+      "action": { "op": "return-and-activate-browse-directory", "identity": "/authors" },
+      "expect": { "state": { "equals": "directory" }, "kind": { "equals": "author" }, "canonicalIdentity": { "equals": "/authors" }, "groupLabels": { "equals": [null] }, "entries": { "equals": ["Mary Shelley", "Ann Radcliffe"] }, "entryCounts": { "equals": [2, 1] } }
+    },
+    {
+      "id": "open-list-directory",
+      "action": { "op": "return-and-activate-browse-directory", "identity": "/lists" },
+      "expect": { "state": { "equals": "directory" }, "kind": { "equals": "list" }, "canonicalIdentity": { "equals": "/lists" }, "groupLabels": { "equals": ["shelves", null] }, "entries": { "equals": ["Gothic monsters", "A journal's picks"] }, "entryCounts": { "equals": [2, 1] }, "entryCurators": { "equals": [null, "@scenario-journal"] } }
+    },
+    {
+      "id": "browse-line-yields-to-a-query",
+      "action": { "op": "return-and-replace-library-query", "text": "gothic" },
+      "expect": { "state": { "equals": "library" }, "query": { "equals": "gothic" }, "browseLineVisible": { "equals": false } }
+    },
+    {
+      "id": "browse-line-returns-when-cleared",
+      "action": { "op": "replace-library-query", "text": "" },
+      "expect": { "state": { "equals": "library" }, "query": { "equals": "" }, "browseLineVisible": { "equals": true }, "browseFeatured": { "equals": ["Gothic"] }, "browseDirectories": { "equals": ["/genres", "/eras", "/authors", "/lists"] } }
+    },
+    {
+      "id": "open-genre-directory-address",
+      "action": { "op": "open-browse-address", "address": "https://tale.fyi/genres" },
+      "expect": { "state": { "equals": "directory" }, "canonicalIdentity": { "equals": "/genres" }, "entries": { "equals": ["Gothic", "Science fiction"] }, "webFallback": { "equals": false } }
+    },
+    {
+      "id": "open-era-directory-address",
+      "action": { "op": "open-browse-address", "address": "https://tale.fyi/eras" },
+      "expect": { "state": { "equals": "directory" }, "canonicalIdentity": { "equals": "/eras" }, "entries": { "equals": ["18th century", "19th century"] }, "webFallback": { "equals": false } }
+    },
+    {
+      "id": "open-author-directory-address",
+      "action": { "op": "open-browse-address", "address": "https://tale.fyi/authors" },
+      "expect": { "state": { "equals": "directory" }, "canonicalIdentity": { "equals": "/authors" }, "entries": { "equals": ["Mary Shelley", "Ann Radcliffe"] }, "webFallback": { "equals": false } }
+    },
+    {
+      "id": "open-list-directory-address",
+      "action": { "op": "open-browse-address", "address": "https://tale.fyi/lists" },
+      "expect": { "state": { "equals": "directory" }, "canonicalIdentity": { "equals": "/lists" }, "groupLabels": { "equals": ["shelves", null] }, "entries": { "equals": ["Gothic monsters", "A journal's picks"] }, "webFallback": { "equals": false } }
+    },
+    {
+      "id": "unavailable-directory",
+      "action": { "op": "open-browse-address", "address": "https://tale.fyi/eras", "fixture": "directory-unavailable" },
+      "expect": { "state": { "equals": "library" }, "native": { "equals": true }, "retry": { "equals": true }, "webFallback": { "equals": false } }
+    }
+  ]
+}

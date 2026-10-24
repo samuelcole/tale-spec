@@ -79,6 +79,7 @@ test("every prose scenario has a matching executable plan", async () => {
     "a-new-edition-keeps-your-place",
     "address-speaks-its-language",
     "book-navigation",
+    "browse-without-typing",
     "choose-a-new-place",
     "choose-interface-language",
     "choose-language-from-a-shelf",
