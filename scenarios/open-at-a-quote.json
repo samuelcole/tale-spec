@@ -1,0 +1,33 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "open-at-a-quote",
+  "title": "A quoted passage opens where the quote is",
+  "steps": [
+    {
+      "id": "find-query-opens-at-the-quote",
+      "action": { "op": "open-reading-address", "clean": true, "address": "https://tale.fyi/the-wonderful-wizard-of-oz?find=no%20place%20like%20HOME" },
+      "expect": { "state": { "equals": "reading" }, "topBlock": { "equals": "H" }, "quotedBlock": { "equals": "H" }, "address": { "equals": "passage-url:H" }, "notFoundNotice": { "equals": false } }
+    },
+    {
+      "id": "text-fragment-opens-at-the-quote",
+      "action": { "op": "open-reading-address", "clean": true, "address": "https://tale.fyi/the-wonderful-wizard-of-oz#:~:text=%22There%20is%20no%20place%20like%20home" },
+      "expect": { "state": { "equals": "reading" }, "topBlock": { "equals": "H" }, "quotedBlock": { "equals": "H" }, "address": { "equals": "passage-url:H" } }
+    },
+    {
+      "id": "first-occurrence-wins",
+      "action": { "op": "open-reading-address", "clean": true, "address": "https://tale.fyi/the-wonderful-wizard-of-oz?find=the%20emerald%20city" },
+      "expect": { "state": { "equals": "reading" }, "topBlock": { "equals": "E" }, "quotedBlock": { "equals": "E" } }
+    },
+    {
+      "id": "missing-quote-find-opens-plainly",
+      "action": { "op": "open-reading-address", "clean": true, "address": "https://tale.fyi/the-wonderful-wizard-of-oz?find=no%20place%20like%20the%20moon" },
+      "expect": { "state": { "equals": "reading" }, "atCover": { "equals": true }, "quotedBlock": { "equals": null }, "notFoundNotice": { "equals": true } }
+    },
+    {
+      "id": "missing-quote-fragment-opens-plainly",
+      "action": { "op": "open-reading-address", "clean": true, "address": "https://tale.fyi/the-wonderful-wizard-of-oz#:~:text=no%20place%20like%20the%20moon" },
+      "expect": { "state": { "equals": "reading" }, "atCover": { "equals": true }, "quotedBlock": { "equals": null }, "notFoundNotice": { "equals": true } }
+    }
+  ]
+}
