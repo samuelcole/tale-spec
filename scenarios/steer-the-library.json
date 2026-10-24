@@ -1,0 +1,33 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "steer-the-library",
+  "title": "The library has a steering surface",
+  "steps": [
+    {
+      "id": "open-undocked",
+      "action": { "op": "open-library", "clean": true, "network": "reachable", "deviceLanguage": "en" },
+      "expect": { "state": { "equals": "library" }, "steeringDocked": { "equals": false }, "steeringOrder": { "equals": ["search", "featured", "directories"] }, "browseFeatured": { "equals": ["Science fiction"] }, "headerVisible": { "equals": true }, "steeringHomeVisible": { "equals": false } }
+    },
+    {
+      "id": "scroll-docks",
+      "action": { "op": "scroll-library", "screens": 2 },
+      "expect": { "state": { "equals": "library" }, "headerVisible": { "equals": false }, "steeringDocked": { "equals": true }, "steeringHomeVisible": { "equals": true }, "steeringHomeLabel": { "equals": "tale.fyi" }, "browseFeaturedVisible": { "equals": false }, "browseDirectories": { "equals": ["/genres", "/eras", "/authors", "/languages", "/lists"] }, "readingRowMovedByDock": { "equals": false } }
+    },
+    {
+      "id": "docked-search-filters",
+      "action": { "op": "replace-library-query", "text": "frankenstein" },
+      "expect": { "state": { "equals": "library" }, "query": { "equals": "frankenstein" }, "results": { "equals": ["Frankenstein"] } }
+    },
+    {
+      "id": "home-returns-to-the-top",
+      "action": { "op": "activate-steering-home" },
+      "expect": { "state": { "equals": "library" }, "query": { "equals": "" }, "steeringDocked": { "equals": false }, "headerVisible": { "equals": true }, "browseFeaturedVisible": { "equals": true } }
+    },
+    {
+      "id": "scroll-down-and-back",
+      "action": { "op": "scroll-library-down-and-back", "screens": 2 },
+      "expect": { "state": { "equals": "library" }, "dockedOnTheWayDown": { "equals": true }, "steeringDocked": { "equals": false }, "headerVisible": { "equals": true }, "browseFeaturedVisible": { "equals": true } }
+    }
+  ]
+}
