@@ -51,6 +51,14 @@ changes the book's identity.
   only in the part of the text that loads first.
 - **Locally.** The quote is matched against the edition the client has. Tale
   never sends a reader's quote anywhere else.
+- **For anything that only fetches the page.** Tale, the producer, answers a
+  `find` address over HTTP with the match already resolved: the response's
+  HTML names the matched paragraph's text and its canonical passage URL, or
+  says plainly that nothing matched. So an assistant or tool that can fetch a
+  URL but not run a reader still leaves with a working passage link. The
+  response is not indexed (`noindex`) and canonicalizes to the book. This is
+  checked at the website's HTTP boundary, not as a client surface step; a text
+  fragment never reaches a server, so it has no such response.
 
 ## Setup
 
