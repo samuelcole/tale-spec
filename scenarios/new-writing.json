@@ -20,7 +20,7 @@
       "expect": { "state": { "equals": "library" }, "query": { "equals": "" }, "browseNewWriting": { "equals": true } }
     },
     {
-      "id": "search-finds-both-classics-first",
+      "id": "search-finds-both-catalog-first",
       "action": { "op": "replace-library-query", "text": "frankenstein" },
       "expect": { "state": { "equals": "library" }, "resultGroupLabels": { "equals": [null, "new writing"] }, "results": { "equals": ["Frankenstein", "After Frankenstein"] } }
     },
@@ -30,7 +30,7 @@
       "expect": { "state": { "equals": "library" }, "resultGroupLabels": { "equals": ["new writing"] }, "results": { "equals": ["A Quiet Draft"] } }
     },
     {
-      "id": "author-directory-stays-classics",
+      "id": "author-directory-stays-catalog",
       "action": { "op": "clear-and-activate-browse-directory", "identity": "/authors" },
       "expect": { "state": { "equals": "directory" }, "canonicalIdentity": { "equals": "/authors" }, "entries": { "equals": ["Mary Shelley", "Ann Radcliffe"] } }
     },

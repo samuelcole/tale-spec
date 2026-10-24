@@ -1,13 +1,15 @@
 # Scenario: new writing has a door of its own
 
-**The claim.** Tale's library is the classics. Writing that people publish on
-Tale themselves is a different thing, and it gets its own door instead of
-sitting among two thousand public-domain books with nothing to tell them apart.
-A reader browsing the classics never meets a stranger's draft by accident; a
-reader looking for new writing finds all of it in one place, newest first; and
-search still finds either, saying which is which (Sam, 2026-10-24:
-"ugc/modern authors versus the classics seems like a big thing to separate
-out").
+**The claim.** Tale's library is meant to hold, eventually, all the fiction
+ever written. The public domain is simply where it starts. Writing that people
+publish first on Tale is a different thing from a book Tale catalogs, and it
+gets a door of its own instead of sitting among thousands of catalogued books
+with nothing to tell them apart. A reader browsing the catalog never meets a
+stranger's draft by accident; a reader looking for new writing finds all of it
+in one place, newest first; and search still finds either, saying which is
+which (Sam, 2026-10-24: "ugc/modern authors versus the classics seems like a
+big thing to separate out", and: "tale's library is eventually all fiction
+ever written, the classics were just available to start").
 
 Read [`README.md`](README.md) first, then
 [`library-search.md`](library-search.md) and
@@ -20,7 +22,7 @@ navigation, and observe only the visible or accessible surface.
 ## Portable rules
 
 - **The producer says which is which.** Every library index row carries
-  `collection`, `classics` or `new-writing`
+  `collection`, `catalog` or `new-writing`
   ([`../payload.md`](../payload.md), "Library index and browse rows"). A
   client groups by it. It never infers the collection from a path, a handle,
   a byline or the presence of a recording.
@@ -31,12 +33,12 @@ navigation, and observe only the visible or accessible surface.
   `new-writing`. It serves the `library-browse` shelf payload shape. Its roster
   is every published piece of new writing, newest first, in the producer's
   order, and each row names its writer as its byline.
-- **Search shows classics first.** When a query matches both collections,
-  the classics results come first with no group label, then a group labelled
+- **Search shows the catalog first.** When a query matches both
+  collections, the catalog's results come first with no group label, then a group labelled
   `new writing` with the new writing results. When a query matches only new
   writing, that group appears alone, still labelled. Matching is
   `library-search`'s, unchanged.
-- **The classics browse stays classics.** The directories of
+- **Browsing the catalog stays in the catalog.** The directories of
   `browse-without-typing` and the blank library's rows never include new
   writing or name its writers.
 
@@ -69,7 +71,7 @@ returns to the blank library.
 
 **3. Type `frankenstein`.**
 
-The classics result `Frankenstein` comes first, with no group label. Below it
+The catalog result `Frankenstein` comes first, with no group label. Below it
 a group labelled `new writing` holds `After Frankenstein`.
 
 **4. Replace the query with `quiet`.**
@@ -91,7 +93,7 @@ open a browser or web view.
 - Who may publish, how a piece is written, edited or unpublished, or any
   moderation. Those belong to the writing surface, not the library.
 - Pagination of a long new writing shelf, or sorting it any other way.
-- Which classics count toward the library's size on the web home page; that
+- Which books count toward the library's size on the web home page; that
   is the reference implementation's copy.
 
 ## What the next scenario would extend
