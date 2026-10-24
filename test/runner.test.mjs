@@ -85,6 +85,7 @@ test("every prose scenario has a matching executable plan", async () => {
     "choose-language-from-a-shelf",
     "clear-the-search",
     "fetch-fails-honestly",
+    "filter-a-directory",
     "filter-by-language",
     "finish-and-discover",
     "finish-and-leave",
