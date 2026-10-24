@@ -28,7 +28,18 @@ entries, and observe only the visible or accessible surface.
   point while reading, through one control. Its words and shape belong to the
   client.
 - **Where the reader is.** While reading, the entry for the section that holds
-  the reading line is marked as current. At the cover, no entry is current.
+  the reading line is marked as current, with the time left in that section
+  (Sam, 2026-10-24: "where you are in the book, with time left in the current
+  chapter"). At the cover, no entry is current and no time is shown.
+- **Time left.** One time, by the same rule as a book page's:
+  - **Narrated book** (an aligned read-along): the recording time from the
+    reading line to the section's end, measured on the read-along timing.
+  - **Every other book:** the words from the reading line to the section's
+    end, at 250 words a minute.
+
+  It's shown in minutes, rounded up, and never as zero while words remain
+  (`~1 min left` at the least). A client computes it from the edition and
+  read-along it already has, by this rule, so every client agrees.
 - **Opening an entry.** The book moves to the start of that section, with its
   heading at the reading line. The address becomes that section's canonical
   passage URL (`/<book>#<section id>`). It is ordinary reading movement: the
@@ -50,7 +61,8 @@ entries, and observe only the visible or accessible surface.
   - `Chapter III`.
 
   Each titled section holds several paragraphs. `Letter I`'s anchor is
-  `letter-1` and `Chapter II`'s is `chapter-2`.
+  `letter-1` and `Chapter II`'s is `chapter-2`. The book is not narrated,
+  and `Chapter II` is 2,000 words long, eight minutes in all.
 
 These names are test material, not prescribed production content.
 
@@ -68,7 +80,8 @@ is the canonical passage URL for `chapter-2`.
 
 **3. Read forward a few paragraphs, then open the contents again.**
 
-`Chapter II` is the current entry.
+`Chapter II` is the current entry, showing the time left in it by the rule
+above. It's less than the whole of `Chapter II` and never zero.
 
 **4. Activate `Letter I`.**
 

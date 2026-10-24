@@ -7,7 +7,7 @@
     {
       "id": "contents-from-the-cover",
       "action": { "op": "open-book-and-contents", "clean": true },
-      "expect": { "state": { "equals": "contents" }, "contentsEntries": { "equals": ["Letter I", "Chapter I", "Chapter II", "Chapter III"] }, "contentsCurrent": { "equals": null } }
+      "expect": { "state": { "equals": "contents" }, "contentsEntries": { "equals": ["Letter I", "Chapter I", "Chapter II", "Chapter III"] }, "contentsCurrent": { "equals": null }, "currentTimeLeftShown": { "equals": false } }
     },
     {
       "id": "open-a-chapter",
@@ -17,7 +17,7 @@
     {
       "id": "current-follows-reading",
       "action": { "op": "read-forward-and-open-contents", "extent": "a-few-paragraphs" },
-      "expect": { "state": { "equals": "contents" }, "contentsCurrent": { "equals": "Chapter II" } }
+      "expect": { "state": { "equals": "contents" }, "contentsCurrent": { "equals": "Chapter II" }, "currentTimeLeftMinutes": { "between": [1, 7] } }
     },
     {
       "id": "open-an-earlier-section",
