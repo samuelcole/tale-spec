@@ -7,7 +7,7 @@
     {
       "id": "open-blank-library",
       "action": { "op": "open-library", "clean": true, "network": "reachable", "deviceLanguage": "en" },
-      "expect": { "state": { "equals": "library" }, "query": { "equals": "" }, "browseFeatured": { "equals": ["Science fiction"] }, "browseDirectories": { "equals": ["/genres", "/eras", "/authors", "/lists"] } }
+      "expect": { "state": { "equals": "library" }, "query": { "equals": "" }, "browseFeatured": { "equals": ["Science fiction"] }, "browseDirectories": { "equals": ["/genres", "/eras", "/authors", "/languages", "/lists"] } }
     },
     {
       "id": "open-featured-genre",
@@ -17,7 +17,7 @@
     {
       "id": "return-from-featured-genre",
       "action": { "op": "return-to-library" },
-      "expect": { "state": { "equals": "library" }, "query": { "equals": "" }, "browseFeatured": { "equals": ["Science fiction"] }, "browseDirectories": { "equals": ["/genres", "/eras", "/authors", "/lists"] } }
+      "expect": { "state": { "equals": "library" }, "query": { "equals": "" }, "browseFeatured": { "equals": ["Science fiction"] }, "browseDirectories": { "equals": ["/genres", "/eras", "/authors", "/languages", "/lists"] } }
     },
     {
       "id": "open-genre-directory",
@@ -37,7 +37,7 @@
     {
       "id": "return-from-genre-directory",
       "action": { "op": "return-to-library" },
-      "expect": { "state": { "equals": "library" }, "query": { "equals": "" }, "browseDirectories": { "equals": ["/genres", "/eras", "/authors", "/lists"] } }
+      "expect": { "state": { "equals": "library" }, "query": { "equals": "" }, "browseDirectories": { "equals": ["/genres", "/eras", "/authors", "/languages", "/lists"] } }
     },
     {
       "id": "open-era-directory",
@@ -48,6 +48,11 @@
       "id": "open-author-directory",
       "action": { "op": "return-and-activate-browse-directory", "identity": "/authors" },
       "expect": { "state": { "equals": "directory" }, "kind": { "equals": "author" }, "canonicalIdentity": { "equals": "/authors" }, "groupLabels": { "equals": [null] }, "entries": { "equals": ["Mary Shelley", "Ann Radcliffe"] }, "entryCounts": { "equals": [2, 1] } }
+    },
+    {
+      "id": "open-language-directory",
+      "action": { "op": "return-and-activate-browse-directory", "identity": "/languages" },
+      "expect": { "state": { "equals": "directory" }, "kind": { "equals": "language" }, "canonicalIdentity": { "equals": "/languages" }, "groupLabels": { "equals": [null] }, "entries": { "equals": ["English", "Português"] }, "entryCounts": { "equals": [3, 1] } }
     },
     {
       "id": "open-list-directory",
@@ -62,7 +67,7 @@
     {
       "id": "browse-line-returns-when-cleared",
       "action": { "op": "replace-library-query", "text": "" },
-      "expect": { "state": { "equals": "library" }, "query": { "equals": "" }, "browseLineVisible": { "equals": true }, "browseFeatured": { "equals": ["Science fiction"] }, "browseDirectories": { "equals": ["/genres", "/eras", "/authors", "/lists"] } }
+      "expect": { "state": { "equals": "library" }, "query": { "equals": "" }, "browseLineVisible": { "equals": true }, "browseFeatured": { "equals": ["Science fiction"] }, "browseDirectories": { "equals": ["/genres", "/eras", "/authors", "/languages", "/lists"] } }
     },
     {
       "id": "open-genre-directory-address",
@@ -78,6 +83,11 @@
       "id": "open-author-directory-address",
       "action": { "op": "open-browse-address", "address": "https://tale.fyi/authors" },
       "expect": { "state": { "equals": "directory" }, "canonicalIdentity": { "equals": "/authors" }, "entries": { "equals": ["Mary Shelley", "Ann Radcliffe"] }, "webFallback": { "equals": false } }
+    },
+    {
+      "id": "open-language-directory-address",
+      "action": { "op": "open-browse-address", "address": "https://tale.fyi/languages" },
+      "expect": { "state": { "equals": "directory" }, "canonicalIdentity": { "equals": "/languages" }, "entries": { "equals": ["English", "Português"] }, "webFallback": { "equals": false } }
     },
     {
       "id": "open-list-directory-address",
