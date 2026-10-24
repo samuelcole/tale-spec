@@ -144,8 +144,9 @@ web.
 
 - Which genres are featured, how many there are, or what the curated list
   groups are called in production. Those are Tale's content.
-- Pagination of very long directories, searching within a directory, or any
-  sort a reader chooses.
+- Pagination of very long directories, or any sort a reader chooses.
+  Filtering a long directory by typing is
+  [`filter-a-directory.md`](filter-a-directory.md).
 - Creating, editing or grouping a list. A curated list's group is authored by
   Tale; a list someone curates themselves is never given a group label.
 - The shelves themselves; `library-browse` owns them.
