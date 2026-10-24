@@ -7,17 +7,17 @@
     {
       "id": "open-blank-library",
       "action": { "op": "open-library", "clean": true, "network": "reachable", "deviceLanguage": "en" },
-      "expect": { "state": { "equals": "library" }, "query": { "equals": "" }, "browseFeatured": { "equals": ["Gothic"] }, "browseDirectories": { "equals": ["/genres", "/eras", "/authors", "/lists"] } }
+      "expect": { "state": { "equals": "library" }, "query": { "equals": "" }, "browseFeatured": { "equals": ["Science fiction"] }, "browseDirectories": { "equals": ["/genres", "/eras", "/authors", "/lists"] } }
     },
     {
       "id": "open-featured-genre",
-      "action": { "op": "activate-browse-featured", "title": "Gothic" },
-      "expect": { "state": { "equals": "shelf" }, "kind": { "equals": "genre" }, "canonicalIdentity": { "equals": "/genre/gothic" }, "title": { "equals": "Gothic" }, "bookCount": { "equals": 2 }, "roster": { "equals": ["Frankenstein", "The Last Man"] } }
+      "action": { "op": "activate-browse-featured", "title": "Science fiction" },
+      "expect": { "state": { "equals": "shelf" }, "kind": { "equals": "genre" }, "canonicalIdentity": { "equals": "/genre/science-fiction" }, "title": { "equals": "Science fiction" }, "bookCount": { "equals": 1 }, "roster": { "equals": ["The Last Man"] } }
     },
     {
       "id": "return-from-featured-genre",
       "action": { "op": "return-to-library" },
-      "expect": { "state": { "equals": "library" }, "query": { "equals": "" }, "browseFeatured": { "equals": ["Gothic"] }, "browseDirectories": { "equals": ["/genres", "/eras", "/authors", "/lists"] } }
+      "expect": { "state": { "equals": "library" }, "query": { "equals": "" }, "browseFeatured": { "equals": ["Science fiction"] }, "browseDirectories": { "equals": ["/genres", "/eras", "/authors", "/lists"] } }
     },
     {
       "id": "open-genre-directory",
@@ -62,7 +62,7 @@
     {
       "id": "browse-line-returns-when-cleared",
       "action": { "op": "replace-library-query", "text": "" },
-      "expect": { "state": { "equals": "library" }, "query": { "equals": "" }, "browseLineVisible": { "equals": true }, "browseFeatured": { "equals": ["Gothic"] }, "browseDirectories": { "equals": ["/genres", "/eras", "/authors", "/lists"] } }
+      "expect": { "state": { "equals": "library" }, "query": { "equals": "" }, "browseLineVisible": { "equals": true }, "browseFeatured": { "equals": ["Science fiction"] }, "browseDirectories": { "equals": ["/genres", "/eras", "/authors", "/lists"] } }
     },
     {
       "id": "open-genre-directory-address",

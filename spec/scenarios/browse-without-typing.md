@@ -60,8 +60,9 @@ cleared.
   English.
 - The fixture library of `library-browse`, with these additions served by the
   directory payloads:
-  - genres: `Gothic` (2 books) and `Science fiction` (1 book); `featured` is
-    `Gothic` alone;
+  - genres: `Gothic` (2 books) and `Science fiction` (1 book, `The Last
+    Man`); `featured` is `Science fiction` alone, so the browse line is not
+    the directory's first entry by count;
   - eras: `18th century` (1 book) and `19th century` (2 books);
   - authors: `Mary Shelley` (2 books) and `Ann Radcliffe` (1 book);
   - lists: a curated group labelled `shelves` holding `Gothic monsters`
@@ -78,14 +79,15 @@ These names are test material, not prescribed production content.
 
 **1. Open the library on a fresh device.**
 
-The browse line shows the featured genre `Gothic` and the four directory links
-in order: genres, eras, authors, lists.
+The browse line shows the featured genre `Science fiction`, not `Gothic`, and
+the four directory links in order: genres, eras, authors, lists.
 
 **2. Activate the featured genre, then go back.**
 
-The native genre shelf opens with canonical identity `/genre/gothic`, title
-`Gothic` and the `library-browse` two-book roster. Back returns to the blank
-library with the browse line unchanged.
+The native genre shelf opens with canonical identity
+`/genre/science-fiction`, title `Science fiction` and the one-book roster
+`The Last Man`. Back returns to the blank library with the browse line
+unchanged.
 
 **3. Activate the genres directory link.**
 
