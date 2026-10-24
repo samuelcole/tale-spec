@@ -1,0 +1,28 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "book-contents",
+  "title": "A book has a table of contents",
+  "steps": [
+    {
+      "id": "contents-from-the-cover",
+      "action": { "op": "open-book-and-contents", "clean": true },
+      "expect": { "state": { "equals": "contents" }, "contentsEntries": { "equals": ["Letter I", "Chapter I", "Chapter II", "Chapter III"] }, "contentsCurrent": { "equals": null }, "currentTimeLeftShown": { "equals": false } }
+    },
+    {
+      "id": "open-a-chapter",
+      "action": { "op": "activate-contents-entry", "title": "Chapter II" },
+      "expect": { "state": { "equals": "reading" }, "topBlock": { "equals": "chapter-2" }, "address": { "equals": "passage-url:chapter-2" } }
+    },
+    {
+      "id": "current-follows-reading",
+      "action": { "op": "read-forward-and-open-contents", "extent": "a-few-paragraphs" },
+      "expect": { "state": { "equals": "contents" }, "contentsCurrent": { "equals": "Chapter II" }, "currentTimeLeftMinutes": { "between": [1, 7] } }
+    },
+    {
+      "id": "open-an-earlier-section",
+      "action": { "op": "activate-contents-entry-and-reopen", "title": "Letter I" },
+      "expect": { "topBlock": { "equals": "letter-1" }, "contentsCurrent": { "equals": "Letter I" } }
+    }
+  ]
+}
