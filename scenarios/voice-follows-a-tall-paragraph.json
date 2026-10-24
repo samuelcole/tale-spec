@@ -1,0 +1,29 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "voice-follows-a-tall-paragraph",
+  "title": "The voice keeps its words on screen through a tall paragraph",
+  "steps": [
+    {
+      "id": "start-in-the-tall-paragraph",
+      "action": { "op": "open-at-and-play", "clean": true, "network": "reachable", "paragraph": "T", "at": "start" },
+      "capture": { "scrollAtStart": "scrollTop" },
+      "expect": { "narrating": { "equals": true }, "narratedParagraph": { "equals": "T" }, "spokenPhraseInView": { "equals": true } }
+    },
+    {
+      "id": "follow-to-the-middle",
+      "action": { "op": "seek-narration-within", "paragraph": "T", "fraction": 0.5 },
+      "expect": { "narratedParagraph": { "equals": "T" }, "spokenPhraseInView": { "equals": true }, "scrollTop": { "notEquals": { "ref": "scrollAtStart" } } }
+    },
+    {
+      "id": "follow-to-the-end",
+      "action": { "op": "seek-narration-within", "paragraph": "T", "fraction": "last-phrase" },
+      "expect": { "narratedParagraph": { "equals": "T" }, "spokenPhraseInView": { "equals": true }, "spokenPhraseLeftViewWhilePlaying": { "equals": false } }
+    },
+    {
+      "id": "reader-scrolls-away",
+      "action": { "op": "scroll-away-while-narrating", "screens": 2 },
+      "expect": { "followScrollEngaged": { "equals": false }, "pageMovedByNarration": { "equals": false } }
+    }
+  ]
+}
