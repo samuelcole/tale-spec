@@ -115,6 +115,7 @@ test("every prose scenario has a matching executable plan", async () => {
     "the-voice-begins-with-the-recording",
     "the-voice-brings-the-new-edition",
     "voice-flourish-and-peek",
+    "voice-follows-a-tall-paragraph",
     "voice-kept-in-part",
     "voice-on-a-stalled-network",
     "voice-rides-along",
