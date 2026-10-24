@@ -20,6 +20,21 @@ non-decreasing — the scan below stops early and relies on it.
 A paragraph whose top lands exactly on `viewportTop` is inside it; one whose
 top lands exactly on `viewportBottom` is not.
 
+**The reading line is under the reader's bar.** `viewportTop` is the top of
+the *reading* viewport: the window's top edge plus the reader bar's resting
+height, called the bar inset. The bar is the reader's one piece of chrome
+while reading (Sam, 2026-10-24), and it can hide as the reader scrolls
+forward and return on a scroll up. The inset stays the same whether the bar is
+shown or hidden, so a hidden bar never moves the reading line, and a returning
+bar never moves the reader's place.
+- Every operation below takes and returns viewport coordinates in this sense.
+- A placement's returned top is where the reading line should be. The caller
+  scrolls its container to that value minus the inset.
+- A client without a bar has an inset of zero, which is the rule as it was
+  before.
+- Clients agree on what the inset means (the bar's resting height), not on
+  its pixel value.
+
 **Indexes** are 0-based positions in `bounds`. As an operation's *result*,
 `-1` means "no paragraph" — nowhere, no boundary, no mark. As an operation's
 *input*, `-1` is the same thing: a reader who has never started.
