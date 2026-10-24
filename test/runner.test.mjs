@@ -100,6 +100,7 @@ test("every prose scenario has a matching executable plan", async () => {
     "library-search",
     "link-handoff",
     "mark-offline-and-sync",
+    "new-writing",
     "note-and-back",
     "open-and-read",
     "payload-presentation",

@@ -53,6 +53,10 @@ The blank library shows, above or beside its search input:
 - five directory links, in this order: genres, eras, authors, languages,
   lists.
 
+The line then ends with a link to new writing, which
+[`new-writing.md`](new-writing.md) owns; it is not a directory, and this
+scenario does not observe it.
+
 The labels are in the interface language. The line is present on a fresh
 device with no started books, and it stays present after a book has been
 started. It disappears while a query is typed and returns when the query is
