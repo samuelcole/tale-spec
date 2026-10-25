@@ -131,7 +131,11 @@ title or a byline.
   the producing service. Native clients never run authored input through a
   second sanitizer and never generate, normalize, or repair an anchor.
 - `id` is the section anchor verbatim from the sanitized markup. `title` is its
-  display title or `null`. Paragraph and other descendant anchors remain in
+  display title or `null`. Optional `depth` is how deeply the edition nests the
+  section: `0` for a top-level section, `1` for one inside a part or a book,
+  and so on. The producer sets it from the edition's own structure; absent
+  means `0`. A client uses it to show the book's outline and never derives it
+  itself. Paragraph and other descendant anchors remain in
   `html`, likewise verbatim.
 - Every addressable block's `id` is a stable anchor, and a block may carry a
   readable name in `data-name` ([`anchors.md`](anchors.md)). A client reads an
