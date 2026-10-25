@@ -29,8 +29,9 @@ panel, but the disclosure and every choice are ordinary accessible controls.
 **1. Read to P, let the page settle, and open reading preferences.**
 
 The same quiet disclosure that opened the controls remains visibly open. It
-offers a sample of the book face, book text size at `default`, and appearance
-at `system`. Capture the selected paragraph P, its successor U, the rendered
+offers book text size at `default` and appearance at `system`. It carries no
+sample sentence: the book's own text stays in view while the preferences are
+open, and that text is the preview (Sam, 2026-10-24). Capture the selected paragraph P, its successor U, the rendered
 default body size, and the starting appearance A.
 
 **2. Increase book text size once.**
