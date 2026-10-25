@@ -122,6 +122,13 @@ malformed ([`scenarios/library-language.md`](scenarios/library-language.md)).
 A client groups, labels and filters by it; it never infers a language from a
 title or a byline.
 
+Every row of the library index also carries `collection`: `catalog` for a
+book Tale catalogs, `new-writing` for a piece someone published first on Tale
+([`scenarios/new-writing.md`](scenarios/new-writing.md)). A library index row
+without it is malformed. A client groups search results and keeps its browse
+surfaces by it; it never infers the collection from a path, a handle, a byline
+or a recording.
+
 ## Content
 
 - `sections` is the complete, ordered, sanitized reader body. Its `html` is
