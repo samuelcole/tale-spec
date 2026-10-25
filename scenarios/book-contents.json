@@ -4,25 +4,12 @@
   "id": "book-contents",
   "title": "A book has a table of contents",
   "steps": [
-    {
-      "id": "contents-from-the-cover",
-      "action": { "op": "open-book-and-contents", "clean": true },
-      "expect": { "state": { "equals": "contents" }, "contentsEntries": { "equals": ["Letter I", "Chapter I", "Chapter II", "Chapter III"] }, "contentsCurrent": { "equals": null }, "currentTimeLeftShown": { "equals": false } }
-    },
-    {
-      "id": "open-a-chapter",
-      "action": { "op": "activate-contents-entry", "title": "Chapter II" },
-      "expect": { "state": { "equals": "reading" }, "topBlock": { "equals": "chapter-2" }, "address": { "equals": "passage-url:chapter-2" } }
-    },
-    {
-      "id": "current-follows-reading",
-      "action": { "op": "read-forward-and-open-contents", "extent": "a-few-paragraphs" },
-      "expect": { "state": { "equals": "contents" }, "contentsCurrent": { "equals": "Chapter II" }, "currentTimeLeftMinutes": { "between": [1, 7] } }
-    },
-    {
-      "id": "open-an-earlier-section",
-      "action": { "op": "activate-contents-entry-and-reopen", "title": "Letter I" },
-      "expect": { "topBlock": { "equals": "letter-1" }, "contentsCurrent": { "equals": "Letter I" } }
-    }
+    {"id": "contents-from-the-cover", "action": {"op": "open-book-and-contents", "clean": true}, "expect": {"state": {"equals": "contents"}, "contentsEntries": {"equals": ["Letter I", "Chapter I", "Chapter II", "Chapter III", "Part Two", "Chapter IV", "Chapter V"]}, "contentsCurrent": {"equals": null}, "currentTimeLeftShown": {"equals": false}, "contentsDepths": {"equals": [0, 0, 0, 0, 0, 1, 1]}}},
+    {"id": "open-a-chapter", "action": {"op": "activate-contents-entry", "title": "Chapter II"}, "expect": {"state": {"equals": "reading"}, "topBlock": {"equals": "chapter-2"}, "address": {"equals": "passage-url:chapter-2"}}},
+    {"id": "current-follows-reading", "action": {"op": "read-forward-and-open-contents", "extent": "a-few-paragraphs"}, "expect": {"state": {"equals": "contents"}, "contentsCurrent": {"equals": "Chapter II"}, "currentTimeLeftMinutes": {"between": [1, 7]}}},
+    {"id": "open-an-earlier-section", "action": {"op": "activate-contents-entry-and-reopen", "title": "Letter I"}, "expect": {"topBlock": {"equals": "letter-1"}, "contentsCurrent": {"equals": "Letter I"}}},
+    {"id": "a-part-holds-its-chapters", "action": {"op": "activate-contents-entry-and-reopen", "title": "Part Two"}, "expect": {"contentsCurrent": {"equals": "Part Two"}, "currentTimeLeftMinutes": {"between": [8, 9]}}},
+    {"id": "open-a-nested-chapter", "action": {"op": "activate-contents-entry", "title": "Chapter IV"}, "expect": {"state": {"equals": "reading"}, "topBlock": {"equals": "chapter-4"}}},
+    {"id": "current-is-innermost", "action": {"op": "read-forward-and-open-contents", "extent": "a-few-paragraphs"}, "expect": {"state": {"equals": "contents"}, "contentsCurrent": {"equals": "Chapter IV"}, "currentTimeLeftMinutes": {"between": [1, 3]}}}
   ]
 }
