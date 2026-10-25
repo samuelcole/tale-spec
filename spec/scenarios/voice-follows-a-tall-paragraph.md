@@ -58,8 +58,17 @@ the page's scroll position is different from step 1's.
 **3. Seek the narration to T's last phrase.**
 
 The spoken phrase is inside the reading viewport. At no point between steps 1
-and 3 did the spoken phrase leave it; the adapter samples the phrase's
-position at least every 250 ms while narration plays.
+and 3 did the spoken phrase leave it.
+
+**Sampling.** While narration plays, the adapter samples the phrase's position
+every 250 ms or more often, and does nothing else between two samples. Some
+harnesses can't always read the screen that fast (a single XCUITest frame
+read can occasionally take longer). A gap longer than 250 ms caused by the
+harness's own read is a measured limit of that harness, not a failure. The
+adapter reports the gap distribution with its result: the number of samples,
+the median, the 99th percentile, the longest gap and how many gaps exceeded
+250 ms. Every sample it did take must find the phrase inside the reading
+viewport (Sam, 2026-10-25).
 
 **4. Scroll the page away by hand while narration continues.**
 
