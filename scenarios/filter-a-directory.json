@@ -1,6 +1,6 @@
 {
   "format": "tale-surface-scenario",
-  "version": 3,
+  "version": 4,
   "id": "filter-a-directory",
   "title": "A long directory can be narrowed by typing",
   "steps": [
@@ -16,8 +16,8 @@
     },
     {
       "id": "filter-keeps-producer-order",
-      "action": { "op": "replace-directory-filter", "text": "a" },
-      "expect": { "state": { "equals": "directory" }, "entries": { "equals": ["Mark Twain", "Mary Shelley", "Ann Radcliffe", "Charlotte Brontë"] } }
+      "action": { "op": "replace-directory-filter", "text": "ar" },
+      "expect": { "state": { "equals": "directory" }, "entries": { "equals": ["Mark Twain", "Mary Shelley", "Charlotte Brontë"] } }
     },
     {
       "id": "filter-folds-case-and-accents",

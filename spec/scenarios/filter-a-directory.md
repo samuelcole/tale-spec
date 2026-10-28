@@ -66,8 +66,10 @@ Disconnect the network after the directory has loaded, then type. Only
 `Mark Twain` is shown. Keep the network disconnected through the accent and
 no-match checks: filtering depends only on the loaded payload.
 
-Replace the filter with `a`: all four names match, still in the producer's
-count order, not alphabetical or relevance order.
+Replace the filter with `ar`: `Mark Twain`, `Mary Shelley` and `Charlotte
+Brontë` match, still in the producer's count order, not alphabetical or
+relevance order. `Ann Radcliffe` is gone, so an unfiltered page cannot satisfy
+this check.
 
 **3. Replace the filter with `  BRONTE  `.**
 
@@ -125,6 +127,14 @@ an earlier draft must sync the executable plan and translate its network
 changes through their real test environment; no reader-state migration is
 needed. Clients additionally verify that typing attempts no network requests,
 since an offline response alone cannot prove no request was attempted.
+
+## Version 4 non-vacuous order check
+
+Version 4 narrows the multiple-match query to `ar`, excluding Radcliffe while
+keeping three names whose producer order differs from alphabetical order.
+This catches both an unfiltered page and a client that sorts only after some
+entries have been hidden. The underlying filtering and ordering rules are
+unchanged; only the executable evidence is strengthened.
 
 ## What this does not cover
 
