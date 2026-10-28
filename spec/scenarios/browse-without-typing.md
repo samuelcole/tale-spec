@@ -35,8 +35,11 @@ count, most first, each titled by its own name as its `/language/<tag>`
 shelf is ([`library-language.md`](library-language.md)); lists in Tale's curated
 groups, followed by lists people curate themselves, newest first, in a group
 with no label. Clients render the order they are given. They do not sort,
-group, count, filter or derive entries, and they do not infer a directory
-from the smaller discovery indexes.
+group, count or derive entries, and they do not infer a directory from the
+smaller discovery indexes. The local narrowing defined by
+[`filter-a-directory.md`](filter-a-directory.md) is the one filtering exception:
+it hides nonmatching entries and empty groups without changing their order or
+membership in the producer's payload.
 
 The genre directory payload also names an ordered `featured` subset of its
 entries. The library's browse line shows exactly that subset, in that order.

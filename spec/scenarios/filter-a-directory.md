@@ -40,8 +40,10 @@ observe only the visible or accessible surface.
 - One signed-out device with no restored navigation state, preferred language
   English.
 - The fixture library of `browse-without-typing`, whose author directory is
-  extended to `Mark Twain` (3 books), `Mary Shelley` (2 books), `Charlotte
-  Brontë` (1 book) and `Ann Radcliffe` (1 book), in that order. Its list
+  extended to `Mark Twain` (3 books), `Mary Shelley` (2 books), `Ann
+  Radcliffe` (1 book) and `Charlotte Brontë` (1 book), in that order. The
+  producer orders equal book counts by displayed title; filtering keeps that
+  order. Its list
   directory and genre directory are unchanged.
 - `/author/mark-twain` serves the `library-browse` shelf payload shape.
 
@@ -52,7 +54,7 @@ These names are test material, not prescribed production content.
 **1. Open the author directory.**
 
 It offers a filter input, empty. All four entries are shown in order: `Mark
-Twain`, `Mary Shelley`, `Charlotte Brontë`, `Ann Radcliffe`.
+Twain`, `Mary Shelley`, `Ann Radcliffe`, `Charlotte Brontë`.
 
 **2. Type `twain`.**
 
@@ -88,6 +90,14 @@ group and its label are gone.
 **9. Open the genre directory.**
 
 It offers no filter input.
+
+## Version 2 fixture correction
+
+Version 1's draft expected Brontë before Radcliffe despite their equal book
+counts. Version 2 corrects the fixture order to the reference producer's
+count-then-title order; it does not change the ordering rule or any payload.
+Clients pinned to the earlier draft must sync the corrected plan. No reader
+state or shared address needs migration.
 
 ## What this does not cover
 

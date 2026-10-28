@@ -1,13 +1,13 @@
 {
   "format": "tale-surface-scenario",
-  "version": 1,
+  "version": 2,
   "id": "filter-a-directory",
   "title": "A long directory can be narrowed by typing",
   "steps": [
     {
       "id": "open-author-directory",
       "action": { "op": "open-browse-address", "address": "https://tale.fyi/authors" },
-      "expect": { "state": { "equals": "directory" }, "canonicalIdentity": { "equals": "/authors" }, "directoryFilterVisible": { "equals": true }, "directoryFilter": { "equals": "" }, "entries": { "equals": ["Mark Twain", "Mary Shelley", "Charlotte Brontë", "Ann Radcliffe"] } }
+      "expect": { "state": { "equals": "directory" }, "canonicalIdentity": { "equals": "/authors" }, "directoryFilterVisible": { "equals": true }, "directoryFilter": { "equals": "" }, "entries": { "equals": ["Mark Twain", "Mary Shelley", "Ann Radcliffe", "Charlotte Brontë"] } }
     },
     {
       "id": "filter-by-surname",
@@ -27,7 +27,7 @@
     {
       "id": "clear-restores-order",
       "action": { "op": "replace-directory-filter", "text": "" },
-      "expect": { "state": { "equals": "directory" }, "directoryFilter": { "equals": "" }, "entries": { "equals": ["Mark Twain", "Mary Shelley", "Charlotte Brontë", "Ann Radcliffe"] } }
+      "expect": { "state": { "equals": "directory" }, "directoryFilter": { "equals": "" }, "entries": { "equals": ["Mark Twain", "Mary Shelley", "Ann Radcliffe", "Charlotte Brontë"] } }
     },
     {
       "id": "open-filtered-entry",
