@@ -1,18 +1,23 @@
 {
   "format": "tale-surface-scenario",
-  "version": 2,
+  "version": 3,
   "id": "filter-a-directory",
   "title": "A long directory can be narrowed by typing",
   "steps": [
     {
       "id": "open-author-directory",
-      "action": { "op": "open-browse-address", "address": "https://tale.fyi/authors" },
+      "action": { "op": "open-browse-address", "clean": true, "network": "reachable", "address": "https://tale.fyi/authors" },
       "expect": { "state": { "equals": "directory" }, "canonicalIdentity": { "equals": "/authors" }, "directoryFilterVisible": { "equals": true }, "directoryFilter": { "equals": "" }, "entries": { "equals": ["Mark Twain", "Mary Shelley", "Ann Radcliffe", "Charlotte Brontë"] } }
     },
     {
       "id": "filter-by-surname",
-      "action": { "op": "replace-directory-filter", "text": "twain" },
+      "action": { "op": "replace-directory-filter", "text": "twain", "network": "unreachable" },
       "expect": { "state": { "equals": "directory" }, "directoryFilter": { "equals": "twain" }, "entries": { "equals": ["Mark Twain"] } }
+    },
+    {
+      "id": "filter-keeps-producer-order",
+      "action": { "op": "replace-directory-filter", "text": "a" },
+      "expect": { "state": { "equals": "directory" }, "entries": { "equals": ["Mark Twain", "Mary Shelley", "Ann Radcliffe", "Charlotte Brontë"] } }
     },
     {
       "id": "filter-folds-case-and-accents",
@@ -26,7 +31,7 @@
     },
     {
       "id": "clear-restores-order",
-      "action": { "op": "replace-directory-filter", "text": "" },
+      "action": { "op": "replace-directory-filter", "text": "", "network": "reachable" },
       "expect": { "state": { "equals": "directory" }, "directoryFilter": { "equals": "" }, "entries": { "equals": ["Mark Twain", "Mary Shelley", "Ann Radcliffe", "Charlotte Brontë"] } }
     },
     {
@@ -48,6 +53,16 @@
       "id": "filter-matches-curator",
       "action": { "op": "replace-directory-filter", "text": "scenario-journal" },
       "expect": { "state": { "equals": "directory" }, "entries": { "equals": ["A journal's picks"] } }
+    },
+    {
+      "id": "filter-words-span-title-and-curator",
+      "action": { "op": "replace-directory-filter", "text": "picks scenario-journal" },
+      "expect": { "state": { "equals": "directory" }, "entries": { "equals": ["A journal's picks"] }, "groupLabels": { "equals": [null] } }
+    },
+    {
+      "id": "filter-keeps-labelled-group",
+      "action": { "op": "replace-directory-filter", "text": "gothic" },
+      "expect": { "state": { "equals": "directory" }, "entries": { "equals": ["Gothic monsters"] }, "groupLabels": { "equals": ["shelves"] } }
     },
     {
       "id": "short-directory-has-no-filter",

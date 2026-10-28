@@ -23,7 +23,9 @@ observe only the visible or accessible surface.
   none.
 - **Matching is the library's.** An entry matches under `library-search`'s
   alphabet and word rule, applied to its displayed title and, on a list that
-  names one, its displayed curator. There is no second search alphabet.
+  names one, its displayed curator. Every word must occur in one of those
+  fields, and different words may match different fields. There is no second
+  search alphabet.
 - **Narrowing, not navigating.** Filtering hides the entries that don't match.
   The reader stays on the same directory, the remaining entries keep the
   producer's order and grouping, and a group left with no entries disappears
@@ -39,7 +41,9 @@ observe only the visible or accessible surface.
 
 - One signed-out device with no restored navigation state, preferred language
   English.
-- The fixture library of `browse-without-typing`, whose author directory is
+- A scenario-specific extension of `browse-without-typing`'s fixture library,
+  selected only for this scenario (not added to the original scenario's run).
+  Its author directory is
   extended to `Mark Twain` (3 books), `Mary Shelley` (2 books), `Ann
   Radcliffe` (1 book) and `Charlotte Brontë` (1 book), in that order. The
   producer orders equal book counts by displayed title; filtering keeps that
@@ -58,7 +62,12 @@ Twain`, `Mary Shelley`, `Ann Radcliffe`, `Charlotte Brontë`.
 
 **2. Type `twain`.**
 
-Only `Mark Twain` is shown.
+Disconnect the network after the directory has loaded, then type. Only
+`Mark Twain` is shown. Keep the network disconnected through the accent and
+no-match checks: filtering depends only on the loaded payload.
+
+Replace the filter with `a`: all four names match, still in the producer's
+count order, not alphabetical or relevance order.
 
 **3. Replace the filter with `  BRONTE  `.**
 
@@ -71,7 +80,8 @@ input still holds `zzz`.
 
 **5. Clear the filter.**
 
-All four entries return, in the same order as step 1.
+Reconnect the network before clearing. All four entries return, in the same
+order as step 1. Connectivity is restored for the shelf visit that follows.
 
 **6. Type `twain`, open `Mark Twain`, then go back.**
 
@@ -87,6 +97,12 @@ group and its label are gone.
 
 `A journal's picks` is still the only entry, matched by its curator.
 
+Replace it with `picks scenario-journal`: that same entry remains, with one
+word matched in its title and the other in its curator.
+
+Replace it with `gothic`: only `Gothic monsters` and its `shelves` group label
+remain. A surviving labelled group keeps its label.
+
 **9. Open the genre directory.**
 
 It offers no filter input.
@@ -98,6 +114,17 @@ counts. Version 2 corrects the fixture order to the reference producer's
 count-then-title order; it does not change the ordering rule or any payload.
 Clients pinned to the earlier draft must sync the corrected plan. No reader
 state or shared address needs migration.
+
+## Version 3 coverage extension
+
+Version 3 adds an offline filtering phase, a multiple-match order check,
+cross-field multiword matching and retention of a surviving group label. It
+also makes the clean, reachable start explicit. These exercise the existing
+rules rather than changing the payload or reader behavior. Clients pinned to
+an earlier draft must sync the executable plan and translate its network
+changes through their real test environment; no reader-state migration is
+needed. Clients additionally verify that typing attempts no network requests,
+since an offline response alone cannot prove no request was attempted.
 
 ## What this does not cover
 
