@@ -35,8 +35,11 @@ count, most first, each titled by its own name as its `/language/<tag>`
 shelf is ([`library-language.md`](library-language.md)); lists in Tale's curated
 groups, followed by lists people curate themselves, newest first, in a group
 with no label. Clients render the order they are given. They do not sort,
-group, count, filter or derive entries, and they do not infer a directory
-from the smaller discovery indexes.
+group, count or derive entries, and they do not infer a directory from the
+smaller discovery indexes. The local narrowing defined by
+[`filter-a-directory.md`](filter-a-directory.md) is the one filtering exception:
+it hides nonmatching entries and empty groups without changing their order or
+membership in the producer's payload.
 
 The genre directory payload also names an ordered `featured` subset of its
 entries. The library's browse line shows exactly that subset, in that order.
@@ -144,8 +147,9 @@ web.
 
 - Which genres are featured, how many there are, or what the curated list
   groups are called in production. Those are Tale's content.
-- Pagination of very long directories, searching within a directory, or any
-  sort a reader chooses.
+- Pagination of very long directories, or any sort a reader chooses.
+  Filtering a long directory by typing is
+  [`filter-a-directory.md`](filter-a-directory.md).
 - Creating, editing or grouping a list. A curated list's group is authored by
   Tale; a list someone curates themselves is never given a group label.
 - The shelves themselves; `library-browse` owns them.
