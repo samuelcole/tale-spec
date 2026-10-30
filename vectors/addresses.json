@@ -124,6 +124,72 @@
     },
     {
       "op": "route",
+      "name": "a German-interface address is the same book, tip and anchor",
+      "input": { "url": "https://tale.fyi/DE/Dracula/Tip-AbC#chapter-3-p14" },
+      "expected": { "kind": "reading", "door": "book", "visiblePath": "dracula/Tip-AbC", "canonicalPath": "dracula", "planTip": "Tip-AbC", "anchor": "chapter-3-p14" }
+    },
+    {
+      "op": "route",
+      "name": "a German-interface address is the same authored tale",
+      "input": { "url": "https://tale.fyi/de/@Sam/My-Tale/Tip-AbC#Scene%202" },
+      "expected": { "kind": "reading", "door": "authored-tale", "visiblePath": "@sam/my-tale/Tip-AbC", "canonicalPath": "@sam/my-tale", "planTip": "Tip-AbC", "anchor": "Scene 2" }
+    },
+    {
+      "op": "route",
+      "name": "a German-interface list context waits for the server canonical path",
+      "input": { "url": "https://tale.fyi/de/~Favorites/Shelf/Dracula#chapter-1-p2" },
+      "expected": { "kind": "reading", "door": "list-context", "visiblePath": "~favorites/shelf/dracula", "canonicalPath": null, "planTip": null, "anchor": "chapter-1-p2" }
+    },
+    {
+      "op": "route",
+      "name": "a German-interface address is the same shelf",
+      "input": { "url": "https://tale.fyi/de/eras/19th-Century" },
+      "expected": { "kind": "browse", "browseKind": "era", "slug": "19th-century", "canonicalPath": "/eras/19th-century" }
+    },
+    {
+      "op": "route",
+      "name": "the German library stays in the browser",
+      "input": { "url": "https://tale.fyi/de" },
+      "expected": { "kind": "browser", "url": "https://tale.fyi/de" }
+    },
+    {
+      "op": "route",
+      "name": "a German-interface web page stays unchanged in the browser",
+      "input": { "url": "https://tale.fyi/de/privacy?from=help#data" },
+      "expected": { "kind": "browser", "url": "https://tale.fyi/de/privacy?from=help#data" }
+    },
+    {
+      "op": "route",
+      "name": "a repeated German prefix is not dropped",
+      "input": { "url": "https://tale.fyi/de/de/dracula" },
+      "expected": { "kind": "browser", "url": "https://tale.fyi/de/de/dracula" }
+    },
+    {
+      "op": "route",
+      "name": "a German then Spanish prefix is not dropped",
+      "input": { "url": "https://tale.fyi/de/es/dracula" },
+      "expected": { "kind": "browser", "url": "https://tale.fyi/de/es/dracula" }
+    },
+    {
+      "op": "route",
+      "name": "a Spanish then German prefix is not dropped",
+      "input": { "url": "https://tale.fyi/es/de/dracula" },
+      "expected": { "kind": "browser", "url": "https://tale.fyi/es/de/dracula" }
+    },
+    {
+      "op": "route",
+      "name": "a book whose name begins with de is not a German prefix",
+      "input": { "url": "https://tale.fyi/Demons#chapter-1-p2" },
+      "expected": { "kind": "reading", "door": "book", "visiblePath": "demons", "canonicalPath": "demons", "planTip": null, "anchor": "chapter-1-p2" }
+    },
+    {
+      "op": "route",
+      "name": "a hyphenated book beginning de keeps its identity and tip",
+      "input": { "url": "https://tale.fyi/de-profundis/Tip-AbC#letter-p2" },
+      "expected": { "kind": "reading", "door": "book", "visiblePath": "de-profundis/Tip-AbC", "canonicalPath": "de-profundis", "planTip": "Tip-AbC", "anchor": "letter-p2" }
+    },
+    {
+      "op": "route",
       "name": "only one interface prefix is dropped",
       "input": { "url": "https://tale.fyi/es/es/dracula" },
       "expected": { "kind": "browser", "url": "https://tale.fyi/es/es/dracula" }

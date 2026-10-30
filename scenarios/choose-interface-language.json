@@ -1,6 +1,6 @@
 {
   "format": "tale-surface-scenario",
-  "version": 2,
+  "version": 3,
   "id": "choose-interface-language",
   "title": "Choose the interface language",
   "steps": [
@@ -57,6 +57,30 @@
       "expect": {
         "preferences": { "equals": "open" },
         "interfaceLanguage": { "equals": "es" },
+        "readerBlock": { "equals": { "ref": "successor" } },
+        "savedFillPosition": { "equals": { "ref": "savedFill" } }
+      }
+    },
+    {
+      "id": "choose-german",
+      "action": { "op": "choose-interface-language", "language": "de" },
+      "expect": {
+        "preferences": { "equals": "open" },
+        "cover": { "equals": "on-screen" },
+        "canonicalBook": { "equals": "/dracula-scenario" },
+        "interfaceLanguage": { "equals": "de" },
+        "bookLanguage": { "equals": "en" },
+        "savedFillPosition": { "equals": { "ref": "savedFill" } }
+      }
+    },
+    {
+      "id": "german-outlives-the-session",
+      "action": { "op": "end-open-and-open-preferences" },
+      "expect": {
+        "preferences": { "equals": "open" },
+        "canonicalBook": { "equals": "/dracula-scenario" },
+        "interfaceLanguage": { "equals": "de" },
+        "bookLanguage": { "equals": "en" },
         "readerBlock": { "equals": { "ref": "successor" } },
         "savedFillPosition": { "equals": { "ref": "savedFill" } }
       }
