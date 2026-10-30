@@ -26,7 +26,9 @@ negative, non-finite seconds, or an unknown kind as a usable time.
 
 Round seconds to the nearest whole minute, ties upward, with a minimum of one
 minute. Below 60 rounded minutes, display that minute count. From 60 rounded
-minutes, display the nearest whole hour, ties upward. English examples:
+minutes, display the nearest whole hour calculated from the original seconds
+(`round(seconds / 3600)`, ties upward), not from already rounded minutes.
+English examples:
 
 | supplied | displayed |
 | --- | --- |
@@ -35,6 +37,7 @@ minutes, display the nearest whole hour, ties upward. English examples:
 | read, 1 second | `~1 min read` |
 | read, 3569 seconds | `~59 min read` |
 | read, 3570 seconds | `~1 h read` |
+| audio, 5399 seconds | `1 h audiobook` |
 | audio, 5400 seconds | `2 h audiobook` |
 
 The unit and audio/read words follow the interface language. A reading estimate
