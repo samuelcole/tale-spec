@@ -15,7 +15,8 @@ surface and place observations are those of
 ## Portable rules
 
 - **The control.** The reading preferences offer one control listing every
-  interface language by its own name (`English`, `Español`), with the current
+  interface language by its own name (`English`, `Español`, `Português`,
+  `Italiano`, `Deutsch`), with the current
   one shown as selected. Choosing one applies it at once.
 - **What persists.** The choice is local, like the theme and text size: it
   needs no account and persists across relaunch. It takes precedence over the
@@ -77,11 +78,27 @@ are unchanged, and the reader is still at the open preferences.
 
 The controls are still Spanish, and the reader is back at their place.
 
+**6. Choose Deutsch.**
+
+The controls are German, the English book and saved place are unchanged, and
+the reader stays at the open preferences with the cover on screen.
+
+**7. End the session, reopen the book, and open the reading preferences.**
+
+The controls are still German on the Spanish device, and the reader is back
+at the same saved place in the same English book.
+
+## Version 3 rollout (TAL-456)
+
+Version 3 retains the first five observations and adds choosing and retaining
+German. A web client without the German option is intentionally red. Native
+clients using the operating system's per-app choice retain the platform note
+above; this does not require a second native picker.
+
 ## What this does not cover
 
 - Syncing the choice across a signed-in reader's devices.
-- Going back to "follow the device" after choosing: with two languages, the
-  device's language is always one of the two choices.
+- Going back to "follow the device" after choosing.
 - Choosing from a language's shelf: that is
   [`choose-language-from-a-shelf.md`](choose-language-from-a-shelf.md), the
   same choice offered in another place. The language chosen here also decides

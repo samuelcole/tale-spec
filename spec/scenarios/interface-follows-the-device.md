@@ -20,7 +20,7 @@ Spanish speaker may read English books.
   ([`choose-interface-language.md`](choose-interface-language.md)); otherwise
   the first of the device's preferred languages Tale's interface is
   translated into, compared by primary subtag; otherwise English. Today the
-  translations are English, Spanish, Portuguese, and Italian. Tale's
+  translations are English, Spanish, Portuguese, Italian, and German. Tale's
   Portuguese is written for Brazil, and any Portuguese device reaches it.
 - **What it covers.** The reading chrome: the library, shelves, the book
   page's controls, the player, marks, sharing, keeping a book offline, and
@@ -69,13 +69,27 @@ The controls are in Portuguese, and so is the book.
 
 The controls are in Italian; the book is still Portuguese.
 
-**6. On a fresh device whose preferred language is French, open the
+**6. On a fresh device whose preferred language is German (`de-DE`), open
+`/frankenstein-scenario`.**
+
+The controls are German; the book is still English.
+
+**7. On a fresh Austrian German device (`de-AT`), open the library.**
+
+The controls are German.
+
+**8. On a fresh Swiss German device (`de-CH`), open the library.**
+
+The controls are German. Regional variants reach the same interface; this does
+not prescribe a separate regional translation.
+
+**9. On a fresh device whose preferred language is French, open the
 library.**
 
 The controls are in English: Tale has no French interface, and falls back to
 English rather than to some other language.
 
-**7. On a fresh device whose preferred language is English, open the
+**10. On a fresh device whose preferred language is English, open the
 library.**
 
 The controls are in English.
@@ -93,4 +107,11 @@ The controls are in English.
 
 ## What the next scenario would extend
 
-A third interface language, proving the rule is a list rather than a pair.
+A device whose preferred-language list reaches a supported language only after
+an unsupported one, proving ordered fallback through the real platform surface.
+
+## Version 4 rollout (TAL-456)
+
+Version 4 adds German device observations; the prior seven observations are
+unchanged. Clients without German chrome are intentionally red until their
+German translation ships. Book text and identities do not migrate.
