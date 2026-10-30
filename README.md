@@ -24,6 +24,8 @@ the foundation carve-out are in [`AGENTS.md`](AGENTS.md).
 
 ## What's here
 
+- [Browse-row time](spec/browse-time.md) defines the optional producer duration and compact label shared by library and shelf rows (TAL-438).
+
 - **`spec/`** — the normative prose. Each document states the rules of one
   contract area, self-contained: an implementer needs nothing but this
   repository to build a reading layer with the same product semantics.

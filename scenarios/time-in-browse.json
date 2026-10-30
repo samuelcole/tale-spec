@@ -1,0 +1,122 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "time-in-browse",
+  "title": "A book's time is visible before opening it",
+  "steps": [
+    {
+      "id": "home-times",
+      "action": {
+        "op": "open-time-library"
+      },
+      "expect": {
+        "times": {
+          "equals": [
+            "1 min audiobook",
+            "~25 min read",
+            "~1 min read",
+            "~16 h read"
+          ]
+        },
+        "oneTimePerBook": {
+          "equals": true
+        }
+      }
+    },
+    {
+      "id": "search-time",
+      "action": {
+        "op": "search-time-book"
+      },
+      "expect": {
+        "query": {
+          "equals": "short reading"
+        },
+        "titles": {
+          "equals": [
+            "A short reading"
+          ]
+        },
+        "times": {
+          "equals": [
+            "~25 min read"
+          ]
+        }
+      }
+    },
+    {
+      "id": "shelf-times",
+      "action": {
+        "op": "open-time-shelf"
+      },
+      "expect": {
+        "titles": {
+          "equals": [
+            "The long recording",
+            "A short reading",
+            "A tiny reading",
+            "A long reading",
+            "A future reading"
+          ]
+        },
+        "times": {
+          "equals": [
+            "1 min audiobook",
+            "~25 min read",
+            "~1 min read",
+            "~16 h read",
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "id": "directory-roster-times",
+      "action": {
+        "op": "open-time-author-from-directory"
+      },
+      "expect": {
+        "titles": {
+          "equals": [
+            "A long reading",
+            "A short reading",
+            "A tiny reading",
+            "The long recording"
+          ]
+        },
+        "times": {
+          "equals": [
+            "~16 h read",
+            "~25 min read",
+            "~1 min read",
+            "1 min audiobook"
+          ]
+        }
+      }
+    },
+    {
+      "id": "return-keeps-times",
+      "action": {
+        "op": "open-time-book-and-return"
+      },
+      "expect": {
+        "titles": {
+          "equals": [
+            "A long reading",
+            "A short reading",
+            "A tiny reading",
+            "The long recording"
+          ]
+        },
+        "times": {
+          "equals": [
+            "~16 h read",
+            "~25 min read",
+            "~1 min read",
+            "1 min audiobook"
+          ]
+        }
+      }
+    }
+  ]
+}
