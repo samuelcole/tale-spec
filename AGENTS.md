@@ -61,6 +61,35 @@ implementation PR records its own exact pre-implementation failure and
 post-implementation pass. Client-owned unit tests may explain or localize a
 failure, but they do not replace that integration proof.
 
+## Promotion and feature accountability
+
+The [canonical workflow](https://github.com/samuelcole/tale/blob/main/docs/agent-workflow.md)
+and its start, orchestrate, finalize, merge and pre-close skills govern
+cross-repo delivery. One named coordinator owns web and native through delivery
+unless Sam explicitly excludes a client. A scenario merge is a partial
+checkpoint, not feature completion. Dispatching native work or putting it in
+Backlog does not transfer accountability; a named receiving owner must accept
+it. Release inactive execution claims while preserving the coordinator and
+per-client next actions. Parent completion requires all required clients.
+
+Proposed acceptance may live at an immutable SHA on a spec branch. Each client
+feature branch pins it for intentional red and green at the same SHA. Inspect
+the full delta from each client's known-green baseline: do not bundle unrelated
+unfinished scenarios. Client main keeps its green PIN until implementation and
+PIN promote together with full applicable gates green. A spec-only merge must
+not trigger known-red client PIN promotion or automatic latest-main sync.
+Existing red/unknown baseline health is a separately reported gap, not a pass
+or blanket waiver of required evidence.
+
+Acceptance changes follow the version policy and renew affected evidence at a
+new SHA. If squash/rebase only changes the SHA, prove complete consumed contract
+tree and scenario/vector membership equivalence before repinning, not just one
+feature file. Preserve durable fetchable refs for consumed SHAs until consumers
+migrate. A spec PR records the candidate SHA, required-client owners and expected
+starting states; the coordinator continues to both client implementations.
+Necessary bounded harness work retains an immediate consumer and earns no
+conformance credit itself. Sam still explicitly approves named merges.
+
 ## Foundation work may precede the surface harness
 
 Foundation work is work that adds no user-facing behavior: an app target, a
