@@ -246,8 +246,7 @@ plan unchanged does not bump it; a product decision that changes the plan does.
 
 ## Green client promotion and ownership
 
-See [the promotion rules](AGENTS.md#promotion-and-feature-accountability).
-Proposed spec SHAs are pinned on feature branches for matching red→green proof.
-Clients advance main pins together with green implementations, never as known-red
-acceptance-only updates. One coordinator owns both clients through delivery; a
-merged spec is a checkpoint. Keep consumed SHAs durably fetchable.
+See [the promotion rules](AGENTS.md#promotion-and-feature-accountability):
+feature branches pin a proposed spec SHA for matching red→green proof, client
+mains advance only with a green implementation, and one coordinator owns both
+clients through delivery.
