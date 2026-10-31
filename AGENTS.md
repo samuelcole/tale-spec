@@ -109,19 +109,20 @@ build generalized schedulers, transaction systems, cache layers, or proof
 frameworks for hypothetical future use. Once behavior is reachable through the
 product surface, the scenario-first lane applies again.
 
-## Growth is a mandatory pause
+## Review size and recovery
 
-Record the first-review base SHA and total changed lines (additions plus
-deletions), then compare later diffstats against that same base. A diff that
-grows past 1.5× its total changed lines at first review is a mandatory pause,
-not an automatic deletion: re-check the original acceptance, classify the
-branch's hunks as keep/defer/discard, and normally re-cut from the original
-base with only approved `keep` hunks. Continuing the existing branch requires
-the product owner's explicit decision and recorded rationale. Preserve the
-abandoned branch for forensics; do not destructively reset it.
-
-The rule binds this repository too. Building a framework to enforce a rule is
-the growth this rule exists to catch.
+Follow the [shared review-size audit](https://github.com/samuelcole/tale/blob/main/docs/agent-workflow.md#review-size-and-recovery).
+Estimate the complete unit, including executable tests/harness. Its first full
+assembled review sets the baseline; an early scenario checkpoint does not.
+Record raw total, owned code/harness, approved upstream and docs/evidence
+separately, retaining the original base and explaining integration overlap.
+Owned growth beyond 2× estimate or 1.5× full-review size triggers a mandatory
+coordinator audit and pause on expansion, not automatic branch replacement or
+another permission request. Record keep/defer/discard and a bounded repair or
+decomposition within authorized scope, with independent review. Sam decides
+new product/contract scope, durable subsystems, changed accepted risks and
+unresolved human acts. Repeated invalid proof or unbounded repair requires
+re-approach; preserve unique work. Do not reset baselines to hide churn.
 
 ## Current semantic vectors
 
@@ -137,3 +138,14 @@ runs. Foundation work is the only exception, and it carries no conformance
 credit. Do not mark an implementation PR ready while its scenario is missing,
 unrunnable, or red. Until a client passes through its real product UI, do not
 describe it as conforming.
+
+## Executable promotion and closeout
+
+Use the [canonical workflow gates](https://github.com/samuelcole/tale/blob/main/docs/workflow-gates.md)
+from a resolved Tale checkout for PIN-promotion verification, guarded client
+merge and whole-feature completion. Native requires iPhone and iPad full central
+census receipts plus the dedicated Catalyst VM platform lane; platform proof
+is not portable conformance. Never substitute a raw client merge command or
+mark a portable parent Done after a failed completion gate. Ordinary red
+feature commits remain allowed. Automatic paid CI and repository settings are
+unchanged; these commands do not grant human merge consent.
