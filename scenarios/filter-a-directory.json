@@ -1,0 +1,73 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 4,
+  "id": "filter-a-directory",
+  "title": "A long directory can be narrowed by typing",
+  "steps": [
+    {
+      "id": "open-author-directory",
+      "action": { "op": "open-browse-address", "clean": true, "network": "reachable", "address": "https://tale.fyi/authors" },
+      "expect": { "state": { "equals": "directory" }, "canonicalIdentity": { "equals": "/authors" }, "directoryFilterVisible": { "equals": true }, "directoryFilter": { "equals": "" }, "entries": { "equals": ["Mark Twain", "Mary Shelley", "Ann Radcliffe", "Charlotte Brontë"] } }
+    },
+    {
+      "id": "filter-by-surname",
+      "action": { "op": "replace-directory-filter", "text": "twain", "network": "unreachable" },
+      "expect": { "state": { "equals": "directory" }, "directoryFilter": { "equals": "twain" }, "entries": { "equals": ["Mark Twain"] } }
+    },
+    {
+      "id": "filter-keeps-producer-order",
+      "action": { "op": "replace-directory-filter", "text": "ar" },
+      "expect": { "state": { "equals": "directory" }, "entries": { "equals": ["Mark Twain", "Mary Shelley", "Charlotte Brontë"] } }
+    },
+    {
+      "id": "filter-folds-case-and-accents",
+      "action": { "op": "replace-directory-filter", "text": "  BRONTE  " },
+      "expect": { "state": { "equals": "directory" }, "entries": { "equals": ["Charlotte Brontë"] } }
+    },
+    {
+      "id": "filter-matches-nothing",
+      "action": { "op": "replace-directory-filter", "text": "zzz" },
+      "expect": { "state": { "equals": "directory" }, "directoryFilter": { "equals": "zzz" }, "entries": { "equals": [] }, "directoryFilterEmpty": { "equals": true } }
+    },
+    {
+      "id": "clear-restores-order",
+      "action": { "op": "replace-directory-filter", "text": "", "network": "reachable" },
+      "expect": { "state": { "equals": "directory" }, "directoryFilter": { "equals": "" }, "entries": { "equals": ["Mark Twain", "Mary Shelley", "Ann Radcliffe", "Charlotte Brontë"] } }
+    },
+    {
+      "id": "open-filtered-entry",
+      "action": { "op": "filter-and-activate-directory-entry", "text": "twain", "title": "Mark Twain" },
+      "expect": { "state": { "equals": "shelf" }, "kind": { "equals": "author" }, "canonicalIdentity": { "equals": "/author/mark-twain" } }
+    },
+    {
+      "id": "return-keeps-filter",
+      "action": { "op": "return-to-directory" },
+      "expect": { "state": { "equals": "directory" }, "canonicalIdentity": { "equals": "/authors" }, "directoryFilter": { "equals": "twain" }, "entries": { "equals": ["Mark Twain"] } }
+    },
+    {
+      "id": "filter-list-directory-hides-empty-groups",
+      "action": { "op": "open-and-filter-directory", "address": "https://tale.fyi/lists", "text": "journal" },
+      "expect": { "state": { "equals": "directory" }, "canonicalIdentity": { "equals": "/lists" }, "groupLabels": { "equals": [null] }, "entries": { "equals": ["A journal's picks"] } }
+    },
+    {
+      "id": "filter-matches-curator",
+      "action": { "op": "replace-directory-filter", "text": "scenario-journal" },
+      "expect": { "state": { "equals": "directory" }, "entries": { "equals": ["A journal's picks"] } }
+    },
+    {
+      "id": "filter-words-span-title-and-curator",
+      "action": { "op": "replace-directory-filter", "text": "picks scenario-journal" },
+      "expect": { "state": { "equals": "directory" }, "entries": { "equals": ["A journal's picks"] }, "groupLabels": { "equals": [null] } }
+    },
+    {
+      "id": "filter-keeps-labelled-group",
+      "action": { "op": "replace-directory-filter", "text": "gothic" },
+      "expect": { "state": { "equals": "directory" }, "entries": { "equals": ["Gothic monsters"] }, "groupLabels": { "equals": ["shelves"] } }
+    },
+    {
+      "id": "short-directory-has-no-filter",
+      "action": { "op": "open-browse-address", "address": "https://tale.fyi/genres" },
+      "expect": { "state": { "equals": "directory" }, "canonicalIdentity": { "equals": "/genres" }, "directoryFilterVisible": { "equals": false } }
+    }
+  ]
+}
