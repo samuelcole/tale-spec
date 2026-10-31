@@ -111,18 +111,9 @@ product surface, the scenario-first lane applies again.
 
 ## Review size and recovery
 
-Follow the [shared review-size audit](https://github.com/samuelcole/tale/blob/main/docs/agent-workflow.md#review-size-and-recovery).
-Estimate the complete unit, including executable tests/harness. Its first full
-assembled review sets the baseline; an early scenario checkpoint does not.
-Record raw total, owned code/harness, approved upstream and docs/evidence
-separately, retaining the original base and explaining integration overlap.
-Owned growth beyond 2× estimate or 1.5× full-review size triggers a mandatory
-coordinator audit and pause on expansion, not automatic branch replacement or
-another permission request. Record keep/defer/discard and a bounded repair or
-decomposition within authorized scope, with independent review. Sam decides
-new product/contract scope, durable subsystems, changed accepted risks and
-unresolved human acts. Repeated invalid proof or unbounded repair requires
-re-approach; preserve unique work. Do not reset baselines to hide churn.
+Follow the [shared review-size audit](https://github.com/samuelcole/tale/blob/main/docs/agent-workflow.md#review-size-and-recovery)
+as written there, not a restatement. The rule binds this repository too:
+building a framework to enforce a rule is the growth the rule exists to catch.
 
 ## Current semantic vectors
 
@@ -141,11 +132,7 @@ describe it as conforming.
 
 ## Executable promotion and closeout
 
-Use the [canonical workflow gates](https://github.com/samuelcole/tale/blob/main/docs/workflow-gates.md)
-from a resolved Tale checkout for PIN-promotion verification, guarded client
-merge and whole-feature completion. Native requires iPhone and iPad full central
-census receipts plus the dedicated Catalyst VM platform lane; platform proof
-is not portable conformance. Never substitute a raw client merge command or
-mark a portable parent Done after a failed completion gate. Ordinary red
-feature commits remain allowed. Automatic paid CI and repository settings are
-unchanged; these commands do not grant human merge consent.
+Clients promote a PIN through the [canonical workflow gates](https://github.com/samuelcole/tale/blob/main/docs/workflow-gates.md),
+which verify the full pinned census against exact source before a guarded
+merge and query both client PRs before a portable parent is Done. The gate
+grants no merge consent.
