@@ -243,3 +243,10 @@ scenario starts at 1. Any change to its actions, captures, observations, or
 expected results bumps that version so an adapter cannot report against a
 different plan by accident. A prose clarification that leaves the executable
 plan unchanged does not bump it; a product decision that changes the plan does.
+
+## Green client promotion and ownership
+
+See [the promotion rules](AGENTS.md#promotion-and-feature-accountability):
+feature branches pin a proposed spec SHA for matching red→green proof, client
+mains advance only with a green implementation, and one coordinator owns both
+clients through delivery.

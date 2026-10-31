@@ -61,6 +61,19 @@ implementation PR records its own exact pre-implementation failure and
 post-implementation pass. Client-owned unit tests may explain or localize a
 failure, but they do not replace that integration proof.
 
+## Promotion and feature accountability
+
+The [canonical Tale workflow](https://github.com/samuelcole/tale/blob/main/docs/agent-workflow.md#feature-ownership-and-conformance-promotion) governs delivery: one coordinator owns
+web and native through delivery unless Sam excludes a client, and a scenario
+merge is a checkpoint, not completion. Proposed acceptance may live at an
+immutable SHA on a spec branch; each client pins that SHA on its feature branch
+for red and green alike, and promotes its main PIN only together with the green
+implementation. A spec-only merge never triggers a known-red client PIN bump or
+an automatic latest-main sync. Acceptance changes follow the version policy and
+renew evidence at a new SHA; a SHA-only squash needs proof that the consumed
+tree and scenario/vector membership are unchanged. Keep consumed SHAs fetchable
+until every client has moved on.
+
 ## Foundation work may precede the surface harness
 
 Foundation work is work that adds no user-facing behavior: an app target, a
@@ -80,19 +93,11 @@ build generalized schedulers, transaction systems, cache layers, or proof
 frameworks for hypothetical future use. Once behavior is reachable through the
 product surface, the scenario-first lane applies again.
 
-## Growth is a mandatory pause
+## Review size and recovery
 
-Record the first-review base SHA and total changed lines (additions plus
-deletions), then compare later diffstats against that same base. A diff that
-grows past 1.5× its total changed lines at first review is a mandatory pause,
-not an automatic deletion: re-check the original acceptance, classify the
-branch's hunks as keep/defer/discard, and normally re-cut from the original
-base with only approved `keep` hunks. Continuing the existing branch requires
-the product owner's explicit decision and recorded rationale. Preserve the
-abandoned branch for forensics; do not destructively reset it.
-
-The rule binds this repository too. Building a framework to enforce a rule is
-the growth this rule exists to catch.
+Follow the [shared review-size audit](https://github.com/samuelcole/tale/blob/main/docs/agent-workflow.md#review-size-and-recovery)
+as written there, not a restatement. The rule binds this repository too:
+building a framework to enforce a rule is the growth the rule exists to catch.
 
 ## Current semantic vectors
 
@@ -108,3 +113,10 @@ runs. Foundation work is the only exception, and it carries no conformance
 credit. Do not mark an implementation PR ready while its scenario is missing,
 unrunnable, or red. Until a client passes through its real product UI, do not
 describe it as conforming.
+
+## Executable promotion and closeout
+
+Clients promote a PIN through the [canonical workflow gates](https://github.com/samuelcole/tale/blob/main/docs/workflow-gates.md),
+which verify the full pinned census against exact source before a guarded
+merge and query both client PRs before a portable parent is Done. The gate
+grants no merge consent.
