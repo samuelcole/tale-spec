@@ -1,12 +1,13 @@
 # Scenario: an address speaks its language
 
 **The claim.** Every page has an address in each language Tale's interface
-speaks, that anyone can share and any search engine can index: the plain
+speaks, that anyone can share and any search engine can reach: the plain
 address is English, `/es/…` is Spanish, `/pt/…` is Portuguese, `/it/…`
 is Italian, and `/de/…` is German. A reader who prefers one of those arrives at that language's address on
 their own. A language's address holds for a reader who hasn't decided
 otherwise, and gives way only to a choice the reader made. Every address is
-the same book, with the same place in it.
+the same book, with the same place in it, so a search engine is told only
+one of them: the address of the language the book is written in.
 
 Read [`README.md`](README.md) first. This extends
 [`interface-follows-the-device.md`](interface-follows-the-device.md) and
@@ -44,16 +45,24 @@ The address rule itself is in [`../addresses.md`](../addresses.md),
 - **A link Tale hands over is the plain address** — a copied passage, a
   share — so whoever opens it gets their own language. An address copied out of the address bar is the reader's to
   share, and holds its language as above.
-- **Each page names them all.** A page declares its English, Spanish,
-  Portuguese, Italian, German and default addresses as alternates (`hreflang`); the default
-  is the plain one.
+- **A book names one address for search.** Every address of a book
+  declares the same canonical: the address of the language its text is in
+  when Tale's interface speaks that language, otherwise the plain address. A
+  Portuguese book's canonical is `/pt/<book>` at each of its addresses; an
+  English or a French book's is `/<book>`. A book declares no language
+  alternates (`hreflang`): its other addresses are the same text with other
+  controls, not translations of it, and are offered to readers, not to
+  search. The same holds for an authored tale, by the language its author
+  declared.
 
 ## Observing it
 
 - `addressPath` is the path in the address the reader is at once the page
   has settled, after any move.
-- `englishAddress`, `spanishAddress`, `portugueseAddress`,
-  `italianAddress`, `germanAddress` and `defaultAddress` are the page's declared language alternates, absolute.
+- `canonicalAddress` is the address the page declares as canonical,
+  absolute.
+- `languageAlternates` is the list of languages the page declares an
+  alternate (`hreflang`) for, in document order; empty when it declares none.
 - `copiedUrl` is the address a passage copy carries as it is written, before
   any plan tip replaces it ([`../marks.md`](../marks.md)).
 - `canonicalBook`, `interfaceLanguage`, `bookLanguage` and `readerBlock` are
@@ -64,6 +73,7 @@ The address rule itself is in [`../addresses.md`](../addresses.md),
 - A signed-out device with no restored state for each `clean` step.
 - `Dracula` at `/dracula-scenario`, an English book long enough to read
   several screens.
+- `Dom Casmurro` at `/dom-casmurro-scenario`, a Portuguese book.
 
 These names are test material, not prescribed production content.
 
@@ -73,10 +83,9 @@ These names are test material, not prescribed production content.
 `/dracula-scenario`.**
 
 The reader lands at `/es/dracula-scenario`, with Spanish controls around the
-English book. The page names `/dracula-scenario` as its English and default
-address, `/es/dracula-scenario` as its Spanish one, `/pt/dracula-scenario`
-as its Portuguese one, `/it/dracula-scenario` as its Italian one and
-`/de/dracula-scenario` as its German one.
+English book. The page names `https://tale.fyi/dracula-scenario`, the English
+book's English address, as its canonical, and declares no language
+alternates.
 
 **2. Copy a passage.**
 
@@ -86,13 +95,14 @@ The copy carries `https://tale.fyi/dracula-scenario`, without the prefix.
 open `/dracula-scenario`.**
 
 The reader lands at `/pt/dracula-scenario`, with Portuguese controls around
-the English book. The page names the same alternates.
+the English book. The canonical is the same plain address, and there are
+still no alternates.
 
 **4. On a fresh device whose preferred language is English, open
 `/es/dracula-scenario`.**
 
-The address holds and the controls are Spanish. The page names the same
-alternates.
+The address holds and the controls are Spanish. The canonical is the same
+plain address, and there are no alternates.
 
 **5. Read several screens.**
 
@@ -116,14 +126,13 @@ at the same place.
 **10. On a fresh German device (`de-DE`), open `/dracula-scenario`.**
 
 The reader lands at `/de/dracula-scenario`, with German controls around the
-English book. Its German alternate is `https://tale.fyi/de/dracula-scenario`
-and its default is the plain address. It names the full set of English,
-Spanish, Portuguese, Italian, German and default alternates from step 1.
+English book. The canonical is the plain address, and there are no
+alternates.
 
 **11. On a fresh English device, open `/de/dracula-scenario`.**
 
 The address holds and the controls are German. The book is the same English
-book; the page declares the same full set of alternates.
+book; the canonical is the plain address, with no alternates.
 
 **12. Read several screens at the German address.**
 
@@ -149,6 +158,25 @@ The address becomes `/dracula-scenario`, for the same book.
 The chosen English outranks the German address: English controls at the plain
 address, at the same saved place.
 
+**18. On a fresh English device, open `/es/dom-casmurro-scenario`.**
+
+The address holds: Spanish controls around the Portuguese book. The page
+names `https://tale.fyi/pt/dom-casmurro-scenario`, the Portuguese book's
+Portuguese address, as its canonical, and declares no language alternates.
+
+**19. On a fresh English device, open `/dom-casmurro-scenario`.**
+
+English controls around the Portuguese book, at the plain address. The
+canonical is still `https://tale.fyi/pt/dom-casmurro-scenario`.
+
+## Version 5 (TAL-424)
+
+Version 5 replaces each book page's full set of language alternates with one
+canonical, the address of the book's own language, and adds a Portuguese
+book to prove that canonical is neither the address opened nor the plain
+one. Routing, the reading place and every address's identity are unchanged.
+A client still declaring alternates between a book's addresses is red.
+
 ## Version 4 rollout (TAL-456)
 
 Version 4 retains the first nine actions, adds the German alternate to the
@@ -169,6 +197,8 @@ address rule in [`../addresses.md`](../addresses.md) and its vectors.
 - Translated page titles, descriptions and share cards. They follow the
   interface language at each address, but a scenario proves which address
   serves which language, not wording.
-- The sitemap's alternates.
+- The sitemap, which names each book once, at its canonical.
+- Pages whose own words are translated (the library, shelves, directories),
+  which keep naming every language's address as alternates.
 - A further interface language; its prefix is the language's primary
   subtag, as `es`, `pt`, `it` and `de` are.
