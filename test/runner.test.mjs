@@ -556,3 +556,47 @@ test("the CLI exits 75 when nothing failed and something was inconclusive, 1 whe
   assert.equal(single.code, 75);
   assert.match(single.out, /^INCONCLUSIVE alpha: keep: adapter exited 75/m);
 });
+
+test("run judges every client of a matrix even after one is inconclusive", async () => {
+  const { authoritativeDir, matrixPath } = await keepGoingFixture(`process.exitCode = 75;\n`, {
+    batch: false,
+  });
+  const root = dirname(matrixPath);
+  const second = join(root, "second");
+  await mkdir(join(second, "scenarios"), { recursive: true });
+  await writeFile(
+    join(second, "scenarios", "alpha.json"),
+    await readFile(join(authoritativeDir, "alpha.json"), "utf8"),
+  );
+  await writeFile(
+    join(second, "adapter.mjs"),
+    `import { writeFileSync } from "node:fs";\nwriteFileSync("ran", "yes");\n` +
+      `console.log("TALE_CONFORMANCE_RESULT " + JSON.stringify({ protocol: 1, client: process.env.TALE_CONFORMANCE_CLIENT, scenario: "alpha", version: 1, steps: [{ id: "observe", observations: { ready: false } }] }));\n`,
+  );
+  const matrix = JSON.parse(await readFile(matrixPath, "utf8"));
+  matrix.clients.push({
+    id: "second",
+    cwd: "second",
+    scenario: "scenarios/alpha.json",
+    command: [process.execPath, "adapter.mjs"],
+  });
+  await writeFile(matrixPath, JSON.stringify(matrix));
+  // The second client ran, and its wrong answer outranks the first's
+  // inconclusive.
+  await assert.rejects(
+    runMatrix(join(authoritativeDir, "alpha.json"), matrixPath),
+    (error) => !(error instanceof InconclusiveVerdict) && /ready/.test(error.message),
+  );
+  assert.equal(await readFile(join(second, "ran"), "utf8"), "yes");
+});
+
+test("run fails an adapter that reports more than one result, whatever it exits", async () => {
+  const { authoritativeDir, matrixPath } = await keepGoingFixture(
+    `report(ids[0], false);\nreport(ids[0], true);\nprocess.exitCode = 75;\n`,
+    { batch: false },
+  );
+  await assert.rejects(
+    runMatrix(join(authoritativeDir, "alpha.json"), matrixPath),
+    (error) => !(error instanceof InconclusiveVerdict) && /2 result records/.test(error.message),
+  );
+});

@@ -377,6 +377,11 @@ async function runClient(
       TALE_CONFORMANCE_SCENARIO_ID: scenario.id,
     },
   );
+  // More than one record for one plan is malformed whatever the exit, and
+  // must not slip past judgment behind an exit 75.
+  if (results.length > 1) {
+    failVerdict(`${client.id}: adapter emitted ${results.length} result records, expected 1`);
+  }
   if (exitCode === INCONCLUSIVE_EXIT) {
     // Judge what it did report; a wrong answer is still a failure.
     if (results.length === 1) {
@@ -492,11 +497,24 @@ export async function runMatrix(scenarioPath, matrixPath) {
   if (new Set(ids).size !== ids.length) {
     fail("matrix client ids must be unique");
   }
+  // An inconclusive client doesn't stop the others; a failure still does,
+  // and outranks it. Once every client has run, any inconclusive is thrown.
   const reports = [];
+  const undecided = [];
   for (const client of matrix.clients) {
-    reports.push(
-      await runClient(scenario, scenarioText, dirname(resolve(matrixPath)), client),
-    );
+    try {
+      reports.push(
+        await runClient(scenario, scenarioText, dirname(resolve(matrixPath)), client),
+      );
+    } catch (error) {
+      if (!(error instanceof InconclusiveVerdict)) throw error;
+      undecided.push(error.message);
+    }
+  }
+  if (undecided.length > 0) {
+    const error = new InconclusiveVerdict(undecided.join("; "));
+    error.reports = reports;
+    throw error;
   }
   return reports;
 }
@@ -610,6 +628,11 @@ async function main(args) {
       reports = await runMatrix(resolve(scenarioArg), resolve(matrixArg));
     } catch (error) {
       if (!(error instanceof InconclusiveVerdict)) throw error;
+      for (const report of error.reports ?? []) {
+        console.log(
+          `PASS ${report.client} ${report.scenario}@${report.version} (${report.steps} steps)`,
+        );
+      }
       const id = basename(scenarioArg, ".json");
       console.log(`INCONCLUSIVE ${id}: ${error.message}`);
       process.exitCode = INCONCLUSIVE_EXIT;
