@@ -171,6 +171,23 @@ test cannot grant itself conformance by weakening or omitting an expectation.
 produces rather than consumes its content API—so an absent adapter cannot look
 like a pass.
 
+By default `run-all` stops at the first failure: a mismatch, a plan the
+adapter never reported, or an adapter that exited nonzero. A batch adapter
+exits nonzero when any one of its tests is red, so that single failure throws
+away every other plan's verdict. `--keep-going` judges every plan the adapter
+did report and prints one `PASS`, `FAIL` or `N/A` line per plan. It then
+prints a count and exits 1 if anything failed. The adapter's own nonzero exit
+is still a failure, because it can come from a check no plan reports, such as
+a web-only regression test. A structural error still stops the run at once: a
+bad matrix, a vendored plan that differs from this repository's, or an
+unknown or duplicated result. Use `--keep-going` when one red must not hide
+the rest, as on a busy machine, where one false red would otherwise mask a
+real one (TAL-494).
+
+```sh
+tale-spec run-all --keep-going scenarios path/to/matrix.json
+```
+
 ## The constellation
 
 tale is several repositories, and this one is the hub — the only thing every
