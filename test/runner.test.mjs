@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { spawn } from "node:child_process";
 import test from "node:test";
 import { mkdir, mkdtemp, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -8,6 +9,7 @@ import {
   checkResult,
   checkScenarioPairs,
   runAll,
+  InconclusiveVerdict,
   runMatrix,
   validateScenario,
 } from "../bin/tale-spec.mjs";
@@ -378,7 +380,14 @@ async function keepGoingFixture(adapterBody, { batch = true } = {}) {
       clients: [
         batch
           ? { id: "keep", cwd: "client", scenarioDir: "scenarios", batchCommand: command }
-          : { id: "keep", cwd: "client", scenarioDir: "scenarios", command },
+          : {
+              id: "keep",
+              cwd: "client",
+              scenarioDir: "scenarios",
+              // `run` names its one copy; `run-all` uses scenarioDir.
+              scenario: "scenarios/alpha.json",
+              command,
+            },
       ],
     }),
   );
@@ -438,4 +447,112 @@ test("run-all --keep-going still stops on a structural error", async () => {
     runAll(authoritativeDir, matrixPath, { keepGoing: true }),
     /vendored scenario differs/,
   );
+});
+
+// Exit 75 (EX_TEMPFAIL) is the adapter saying it could not decide: a timeout
+// on the test's clock, a lost server, a duration bound missed under a CPU
+// throttle. INCONCLUSIVE is neither a pass nor a fail (TAL-494).
+
+test("run reports an adapter that exits 75 as inconclusive, not failed", async () => {
+  const { authoritativeDir, matrixPath } = await keepGoingFixture(`process.exitCode = 75;\n`, {
+    batch: false,
+  });
+  await assert.rejects(
+    runMatrix(join(authoritativeDir, "alpha.json"), matrixPath),
+    (error) => error instanceof InconclusiveVerdict && /could not decide/.test(error.message),
+  );
+});
+
+test("run still fails a mismatched result even when the adapter exits 75", async () => {
+  const { authoritativeDir, matrixPath } = await keepGoingFixture(
+    `report(ids[0], false);\nprocess.exitCode = 75;\n`,
+    { batch: false },
+  );
+  await assert.rejects(
+    runMatrix(join(authoritativeDir, "alpha.json"), matrixPath),
+    (error) => !(error instanceof InconclusiveVerdict) && /ready/.test(error.message),
+  );
+});
+
+test("run-all records an inconclusive plan and judges the rest, even without --keep-going", async () => {
+  const { authoritativeDir, matrixPath } = await keepGoingFixture(
+    `const [id] = ids;\n` +
+      `if (id === "alpha") process.exitCode = 75;\n` +
+      `if (id === "beta") report(id, true);\n` +
+      `if (id === "gamma") report(id, true);\n`,
+    { batch: false },
+  );
+  const result = await runAll(authoritativeDir, matrixPath);
+  assert.deepEqual(
+    result.reports.map(({ scenario }) => scenario),
+    ["beta", "gamma"],
+  );
+  assert.deepEqual(result.failures, []);
+  assert.deepEqual(
+    result.inconclusive.map(({ scenario }) => scenario),
+    ["alpha"],
+  );
+});
+
+test("run-all judges a batch that exits 75: reported plans pass or fail, unreported ones are inconclusive", async () => {
+  const { authoritativeDir, matrixPath } = await keepGoingFixture(
+    `for (const id of ids) { if (id === "beta") report(id, true); }\n` + `process.exitCode = 75;\n`,
+  );
+  const result = await runAll(authoritativeDir, matrixPath);
+  assert.deepEqual(
+    result.reports.map(({ scenario }) => scenario),
+    ["beta"],
+  );
+  assert.deepEqual(result.failures, []);
+  assert.deepEqual(
+    result.inconclusive.map(({ scenario }) => scenario),
+    [null, "alpha", "gamma"],
+  );
+  assert.match(result.inconclusive[0].message, /adapter exited 75/);
+});
+
+test("a batch that exits 75 still fails a mismatched plan", async () => {
+  const { authoritativeDir, matrixPath } = await keepGoingFixture(
+    `for (const id of ids) { if (id === "alpha") report(id, false); if (id === "beta") report(id, true); }\n` +
+      `process.exitCode = 75;\n`,
+  );
+  const result = await runAll(authoritativeDir, matrixPath, { keepGoing: true });
+  assert.deepEqual(
+    result.failures.map(({ scenario }) => scenario),
+    ["alpha"],
+  );
+  assert.deepEqual(
+    result.inconclusive.map(({ scenario }) => scenario),
+    [null, "gamma"],
+  );
+});
+
+test("the CLI exits 75 when nothing failed and something was inconclusive, 1 when anything failed", async () => {
+  const cli = fileURLToPath(new URL("../bin/tale-spec.mjs", import.meta.url));
+  const exit = (args) =>
+    new Promise((resolveExit) => {
+      const child = spawn(process.execPath, [cli, ...args], { stdio: ["ignore", "pipe", "pipe"] });
+      let out = "";
+      child.stdout.on("data", (chunk) => {
+        out += chunk;
+      });
+      child.on("close", (code) => resolveExit({ code, out }));
+    });
+  const inconclusive = await keepGoingFixture(
+    `for (const id of ids) { if (id !== "alpha") report(id, true); }\nprocess.exitCode = 75;\n`,
+  );
+  const quiet = await exit(["run-all", inconclusive.authoritativeDir, inconclusive.matrixPath]);
+  assert.equal(quiet.code, 75);
+  assert.match(quiet.out, /^INCONCLUSIVE alpha: /m);
+
+  const failing = await keepGoingFixture(
+    `for (const id of ids) { if (id === "beta") report(id, false); if (id === "gamma") report(id, true); }\nprocess.exitCode = 75;\n`,
+  );
+  const red = await exit(["run-all", "--keep-going", failing.authoritativeDir, failing.matrixPath]);
+  assert.equal(red.code, 1);
+
+  const one = await keepGoingFixture(`process.exitCode = 75;\n`, { batch: false });
+  const single = await exit(["run", join(one.authoritativeDir, "alpha.json"), one.matrixPath]);
+  assert.equal(single.code, 75);
+  assert.match(single.out, /^INCONCLUSIVE keep alpha/m);
 });

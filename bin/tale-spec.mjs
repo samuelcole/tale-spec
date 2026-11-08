@@ -25,6 +25,24 @@ function failVerdict(message) {
   throw new VerdictFailure(message);
 }
 
+/**
+ * Exit 75 (EX_TEMPFAIL): the adapter could not decide. A timeout on its own
+ * clock, a lost server, a duration bound missed under a CPU throttle. An
+ * inconclusive plan is neither a pass nor a fail: it is reported, it never
+ * counts as conformance, and it never stops a run, because it says nothing
+ * against the verdicts after it (TAL-494). A result the adapter did report is
+ * still judged, so exit 75 can never hide a wrong answer.
+ */
+const INCONCLUSIVE_EXIT = 75;
+
+export class InconclusiveVerdict extends Error {}
+
+function inconclusive(client, scenario) {
+  return new InconclusiveVerdict(
+    `${client}: adapter exited ${INCONCLUSIVE_EXIT}${scenario ? ` with no result for ${scenario}` : ""}; the instrument could not decide`,
+  );
+}
+
 function asVerdict(error) {
   return error instanceof VerdictFailure ? error : new VerdictFailure(error.message);
 }
@@ -359,6 +377,17 @@ async function runClient(
       TALE_CONFORMANCE_SCENARIO_ID: scenario.id,
     },
   );
+  if (exitCode === INCONCLUSIVE_EXIT) {
+    // Judge what it did report; a wrong answer is still a failure.
+    if (results.length === 1) {
+      try {
+        checkResult(scenario, results[0], client.id);
+      } catch (error) {
+        throw asVerdict(error);
+      }
+    }
+    throw inconclusive(client.id);
+  }
   if (exitCode !== 0) {
     failVerdict(`${client.id}: adapter exited ${exitCode}`);
   }
@@ -372,7 +401,13 @@ async function runClient(
   }
 }
 
-async function runBatchClient(scenarios, matrixDir, clientConfig, failures = null) {
+async function runBatchClient(
+  scenarios,
+  matrixDir,
+  clientConfig,
+  failures = null,
+  undecided = [],
+) {
   const client = object(clientConfig, "matrix client");
   const commandParts = adapterCommand(client, "batchCommand");
   const cwd = resolve(matrixDir, client.cwd ?? ".");
@@ -395,12 +430,17 @@ async function runBatchClient(scenarios, matrixDir, clientConfig, failures = nul
   // Without --keep-going the first problem ends the run, as it always has.
   // With it, the adapter's own exit is one failure and each plan is judged on
   // what the adapter did report for it.
-  if (exitCode !== 0) {
+  // Exit 75 decides nothing for the batch as a whole, and a plan it did not
+  // report is inconclusive rather than omitted.
+  const couldNotDecide = exitCode === INCONCLUSIVE_EXIT;
+  if (couldNotDecide) {
+    undecided.push({ client: client.id, scenario: null, message: inconclusive(client.id).message });
+  } else if (exitCode !== 0) {
     const message = `${client.id}: adapter exited ${exitCode}`;
     if (!failures) fail(message);
     failures.push({ client: client.id, scenario: null, message });
   }
-  if (!failures && results.length !== scenarios.length) {
+  if (!failures && !couldNotDecide && results.length !== scenarios.length) {
     fail(
       `${client.id}: batch adapter emitted ${results.length} result records, expected ${scenarios.length}`,
     );
@@ -422,6 +462,14 @@ async function runBatchClient(scenarios, matrixDir, clientConfig, failures = nul
   for (const { scenario } of scenarios) {
     try {
       if (!byScenario.has(scenario.id)) {
+        if (couldNotDecide) {
+          undecided.push({
+            client: client.id,
+            scenario: scenario.id,
+            message: inconclusive(client.id, scenario.id).message,
+          });
+          continue;
+        }
         failVerdict(`${client.id}: batch adapter omitted ${scenario.id}`);
       }
       reports.push(checkResult(scenario, byScenario.get(scenario.id), client.id));
@@ -477,6 +525,7 @@ export async function runAll(scenarioDir, matrixPath, { keepGoing = false } = {}
   const reports = [];
   const skipped = [];
   const failures = keepGoing ? [] : null;
+  const undecided = [];
   const matrixDir = dirname(resolve(matrixPath));
   for (const clientConfig of matrix.clients) {
     const client = object(clientConfig, "matrix client");
@@ -521,16 +570,22 @@ export async function runAll(scenarioDir, matrixPath, { keepGoing = false } = {}
         try {
           reports.push(await runClient(scenario, scenarioText, matrixDir, client, scenarioCopy));
         } catch (error) {
+          if (error instanceof InconclusiveVerdict) {
+            undecided.push({ client: client.id, scenario: scenario.id, message: error.message });
+            continue;
+          }
           if (!failures || !(error instanceof VerdictFailure)) throw error;
           failures.push({ client: client.id, scenario: scenario.id, message: error.message });
         }
       }
     }
     if (client.batchCommand !== undefined && batchScenarios.length > 0) {
-      reports.push(...(await runBatchClient(batchScenarios, matrixDir, client, failures)));
+      reports.push(
+        ...(await runBatchClient(batchScenarios, matrixDir, client, failures, undecided)),
+      );
     }
   }
-  return { reports, skipped, failures: failures ?? [] };
+  return { reports, skipped, failures: failures ?? [], inconclusive: undecided };
 }
 
 async function main(args) {
@@ -550,7 +605,16 @@ async function main(args) {
     return;
   }
   if (command === "run" && scenarioArg && matrixArg) {
-    const reports = await runMatrix(resolve(scenarioArg), resolve(matrixArg));
+    let reports;
+    try {
+      reports = await runMatrix(resolve(scenarioArg), resolve(matrixArg));
+    } catch (error) {
+      if (!(error instanceof InconclusiveVerdict)) throw error;
+      const id = basename(scenarioArg, ".json");
+      console.log(`INCONCLUSIVE ${error.message.split(":")[0]} ${id}: ${error.message}`);
+      process.exitCode = INCONCLUSIVE_EXIT;
+      return;
+    }
     for (const report of reports) {
       console.log(
         `PASS ${report.client} ${report.scenario}@${report.version} (${report.steps} steps)`,
@@ -559,9 +623,11 @@ async function main(args) {
     return;
   }
   if (command === "run-all" && scenarioArg && matrixArg) {
-    const { reports, skipped, failures } = await runAll(resolve(scenarioArg), resolve(matrixArg), {
-      keepGoing,
-    });
+    const { reports, skipped, failures, inconclusive: undecided } = await runAll(
+      resolve(scenarioArg),
+      resolve(matrixArg),
+      { keepGoing },
+    );
     for (const report of reports) {
       console.log(
         `PASS ${report.client} ${report.scenario}@${report.version} (${report.steps} steps)`,
@@ -573,10 +639,17 @@ async function main(args) {
     for (const failure of failures) {
       console.log(`FAIL ${failure.scenario ? `${failure.scenario}: ` : ""}${failure.message}`);
     }
-    if (keepGoing) {
-      console.log(`${reports.length} passed, ${failures.length} failed, ${skipped.length} not applicable`);
+    for (const entry of undecided) {
+      console.log(`INCONCLUSIVE ${entry.scenario ? `${entry.scenario}: ` : ""}${entry.message}`);
     }
+    if (keepGoing || undecided.length > 0) {
+      console.log(
+        `${reports.length} passed, ${failures.length} failed, ${undecided.length} inconclusive, ${skipped.length} not applicable`,
+      );
+    }
+    // A failure outranks everything; an inconclusive run is never a pass.
     if (failures.length > 0) process.exitCode = 1;
+    else if (undecided.length > 0) process.exitCode = INCONCLUSIVE_EXIT;
     return;
   }
   fail(
