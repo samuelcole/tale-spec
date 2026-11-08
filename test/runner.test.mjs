@@ -345,3 +345,97 @@ test("run-all accepts every plan from one batch adapter process", async () => {
   );
   assert.equal(await readFile(join(clientDir, "batch-ran"), "utf8"), "once");
 });
+
+async function keepGoingFixture(adapterBody, { batch = true } = {}) {
+  const root = await mkdtemp(join(tmpdir(), "tale-spec-keep-going-"));
+  const authoritativeDir = join(root, "authoritative");
+  const clientDir = join(root, "client");
+  await Promise.all([
+    mkdir(authoritativeDir, { recursive: true }),
+    mkdir(join(clientDir, "scenarios"), { recursive: true }),
+  ]);
+  for (const id of ["alpha", "beta", "gamma"]) {
+    const text = JSON.stringify({
+      format: "tale-surface-scenario",
+      version: 1,
+      id,
+      steps: [{ id: "observe", action: { op: "observe" }, expect: { ready: { equals: true } } }],
+    });
+    await writeFile(join(authoritativeDir, `${id}.json`), text);
+    await writeFile(join(clientDir, "scenarios", `${id}.json`), text);
+  }
+  await writeFile(
+    join(clientDir, "adapter.mjs"),
+    `const report = (id, ready) => console.log("TALE_CONFORMANCE_RESULT " + JSON.stringify({ protocol: 1, client: process.env.TALE_CONFORMANCE_CLIENT, scenario: id, version: 1, steps: [{ id: "observe", observations: { ready } }] }));\n` +
+      `const ids = process.env.TALE_CONFORMANCE_SCENARIO_IDS ? JSON.parse(process.env.TALE_CONFORMANCE_SCENARIO_IDS) : [process.env.TALE_CONFORMANCE_SCENARIO_ID];\n` +
+      adapterBody,
+  );
+  const matrixPath = join(root, "matrix.json");
+  const command = [process.execPath, "adapter.mjs"];
+  await writeFile(
+    matrixPath,
+    JSON.stringify({
+      clients: [
+        batch
+          ? { id: "keep", cwd: "client", scenarioDir: "scenarios", batchCommand: command }
+          : { id: "keep", cwd: "client", scenarioDir: "scenarios", command },
+      ],
+    }),
+  );
+  return { authoritativeDir, matrixPath };
+}
+
+// alpha mismatches, beta passes, gamma is never reported, and the adapter
+// exits 1, as Playwright does when any one test is red.
+const oneOfEach =
+  `for (const id of ids) { if (id === "alpha") report(id, false); if (id === "beta") report(id, true); }\n` +
+  `process.exitCode = 1;\n`;
+
+test("run-all stops at the first failure by default", async () => {
+  const { authoritativeDir, matrixPath } = await keepGoingFixture(oneOfEach);
+  await assert.rejects(runAll(authoritativeDir, matrixPath), /adapter exited 1/);
+});
+
+test("run-all --keep-going judges every plan a failing batch adapter reported", async () => {
+  const { authoritativeDir, matrixPath } = await keepGoingFixture(oneOfEach);
+  const result = await runAll(authoritativeDir, matrixPath, { keepGoing: true });
+  assert.deepEqual(
+    result.reports.map(({ scenario }) => scenario),
+    ["beta"],
+  );
+  assert.deepEqual(
+    result.failures.map(({ scenario }) => scenario),
+    [null, "alpha", "gamma"],
+  );
+  assert.match(result.failures[0].message, /adapter exited 1/);
+  assert.match(result.failures[1].message, /ready/);
+  assert.match(result.failures[2].message, /omitted gamma/);
+});
+
+test("run-all --keep-going judges every plan of a one-at-a-time adapter", async () => {
+  const { authoritativeDir, matrixPath } = await keepGoingFixture(
+    `const [id] = ids;\n` +
+      `if (id === "alpha") report(id, false);\n` +
+      `if (id === "beta") report(id, true);\n` +
+      `if (id === "gamma") process.exitCode = 1;\n`,
+    { batch: false },
+  );
+  const result = await runAll(authoritativeDir, matrixPath, { keepGoing: true });
+  assert.deepEqual(
+    result.reports.map(({ scenario }) => scenario),
+    ["beta"],
+  );
+  assert.deepEqual(
+    result.failures.map(({ scenario }) => scenario),
+    ["alpha", "gamma"],
+  );
+});
+
+test("run-all --keep-going still stops on a structural error", async () => {
+  const { authoritativeDir, matrixPath } = await keepGoingFixture(oneOfEach);
+  await writeFile(join(dirname(matrixPath), "client", "scenarios", "beta.json"), "{}");
+  await assert.rejects(
+    runAll(authoritativeDir, matrixPath, { keepGoing: true }),
+    /vendored scenario differs/,
+  );
+});
