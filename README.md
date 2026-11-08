@@ -188,6 +188,21 @@ real one (TAL-494).
 tale-spec run-all --keep-going scenarios path/to/matrix.json
 ```
 
+An adapter that exits 75 (`EX_TEMPFAIL`) is saying it could not decide, for
+example:
+
+- a timeout on its own clock;
+- a server that stopped answering;
+- a duration bound missed while the CPU was throttled on purpose.
+
+That plan is `INCONCLUSIVE`. It is not a pass and not a failure. It never
+counts as conformance, and it never stops a run, because it says nothing
+against the verdicts after it. Any result the adapter did report is still
+judged, so a wrong answer under exit 75 is still a `FAIL`. A batch adapter
+that exits 75 gets its reported plans judged as usual, and each plan it did
+not report is `INCONCLUSIVE`. `run` and `run-all` exit 1 if anything failed,
+otherwise 75 if anything was inconclusive, otherwise 0 (TAL-494).
+
 ## The constellation
 
 tale is several repositories, and this one is the hub — the only thing every
