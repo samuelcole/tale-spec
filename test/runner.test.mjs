@@ -554,5 +554,5 @@ test("the CLI exits 75 when nothing failed and something was inconclusive, 1 whe
   const one = await keepGoingFixture(`process.exitCode = 75;\n`, { batch: false });
   const single = await exit(["run", join(one.authoritativeDir, "alpha.json"), one.matrixPath]);
   assert.equal(single.code, 75);
-  assert.match(single.out, /^INCONCLUSIVE keep alpha/m);
+  assert.match(single.out, /^INCONCLUSIVE alpha: keep: adapter exited 75/m);
 });

@@ -611,7 +611,7 @@ async function main(args) {
     } catch (error) {
       if (!(error instanceof InconclusiveVerdict)) throw error;
       const id = basename(scenarioArg, ".json");
-      console.log(`INCONCLUSIVE ${error.message.split(":")[0]} ${id}: ${error.message}`);
+      console.log(`INCONCLUSIVE ${id}: ${error.message}`);
       process.exitCode = INCONCLUSIVE_EXIT;
       return;
     }
