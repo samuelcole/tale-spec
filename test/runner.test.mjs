@@ -620,3 +620,25 @@ test("the CLI runs when it is reached through a symlink (TAL-523)", async () => 
   assert.equal(result.code, 0);
   assert.match(result.out, /^open-and-read@\d+: \d+ steps$/m);
 });
+
+test("importing the module never runs or breaks on an entry point that isn't a file", async () => {
+  const module = new URL("../bin/tale-spec.mjs", import.meta.url).href;
+  const result = await new Promise((resolveExit) => {
+    const child = spawn(process.execPath, ["--input-type=module", "-"], {
+      stdio: ["pipe", "pipe", "pipe"],
+    });
+    let out = "";
+    let err = "";
+    child.stdout.on("data", (chunk) => {
+      out += chunk;
+    });
+    child.stderr.on("data", (chunk) => {
+      err += chunk;
+    });
+    child.on("close", (code) => resolveExit({ code, out, err }));
+    child.stdin.end(`const m = await import(${JSON.stringify(module)});\nconsole.log(typeof m.runAll);\n`);
+  });
+  assert.equal(result.err, "");
+  assert.equal(result.code, 0);
+  assert.equal(result.out.trim(), "function");
+});

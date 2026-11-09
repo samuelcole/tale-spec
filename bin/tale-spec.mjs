@@ -684,10 +684,18 @@ async function main(args) {
 // Compare real paths: reached through a symlink (macOS /tmp is one), argv[1]
 // names the link while import.meta.url names the target, and a plain
 // comparison would silently skip main and exit 0 having run nothing (TAL-523).
-if (
-  process.argv[1] &&
-  realpathSync(fileURLToPath(import.meta.url)) === realpathSync(process.argv[1])
-) {
+// An argv[1] that names no file (`node -` reading stdin) means we were
+// imported, not run.
+function isEntryPoint() {
+  if (!process.argv[1]) return false;
+  try {
+    return realpathSync(fileURLToPath(import.meta.url)) === realpathSync(process.argv[1]);
+  } catch {
+    return false;
+  }
+}
+
+if (isEntryPoint()) {
   main(process.argv.slice(2)).catch((error) => {
     console.error(`FAIL ${error.message}`);
     process.exitCode = 1;
