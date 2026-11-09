@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import test from "node:test";
-import { mkdir, mkdtemp, readFile, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -599,4 +599,46 @@ test("run fails an adapter that reports more than one result, whatever it exits"
     runMatrix(join(authoritativeDir, "alpha.json"), matrixPath),
     (error) => !(error instanceof InconclusiveVerdict) && /2 result records/.test(error.message),
   );
+});
+
+test("the CLI runs when it is reached through a symlink (TAL-523)", async () => {
+  const repo = fileURLToPath(new URL("..", import.meta.url));
+  const link = join(await mkdtemp(join(tmpdir(), "tale-spec-link-")), "tale-spec");
+  await symlink(repo, link, "dir");
+  const result = await new Promise((resolveExit) => {
+    const child = spawn(
+      process.execPath,
+      [join(link, "bin/tale-spec.mjs"), "validate", join(link, "scenarios/open-and-read.json")],
+      { stdio: ["ignore", "pipe", "pipe"] },
+    );
+    let out = "";
+    child.stdout.on("data", (chunk) => {
+      out += chunk;
+    });
+    child.on("close", (code) => resolveExit({ code, out }));
+  });
+  assert.equal(result.code, 0);
+  assert.match(result.out, /^open-and-read@\d+: \d+ steps$/m);
+});
+
+test("importing the module never runs or breaks on an entry point that isn't a file", async () => {
+  const module = new URL("../bin/tale-spec.mjs", import.meta.url).href;
+  const result = await new Promise((resolveExit) => {
+    const child = spawn(process.execPath, ["--input-type=module", "-"], {
+      stdio: ["pipe", "pipe", "pipe"],
+    });
+    let out = "";
+    let err = "";
+    child.stdout.on("data", (chunk) => {
+      out += chunk;
+    });
+    child.stderr.on("data", (chunk) => {
+      err += chunk;
+    });
+    child.on("close", (code) => resolveExit({ code, out, err }));
+    child.stdin.end(`const m = await import(${JSON.stringify(module)});\nconsole.log(typeof m.runAll);\n`);
+  });
+  assert.equal(result.err, "");
+  assert.equal(result.code, 0);
+  assert.equal(result.out.trim(), "function");
 });
