@@ -4,7 +4,8 @@ import { spawn } from "node:child_process";
 import { isDeepStrictEqual } from "node:util";
 import { readFile, readdir } from "node:fs/promises";
 import { basename, dirname, extname, join, resolve } from "node:path";
-import { pathToFileURL } from "node:url";
+import { realpathSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 
 const RESULT_PREFIX = "TALE_CONFORMANCE_RESULT ";
 
@@ -680,7 +681,13 @@ async function main(args) {
   );
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+// Compare real paths: reached through a symlink (macOS /tmp is one), argv[1]
+// names the link while import.meta.url names the target, and a plain
+// comparison would silently skip main and exit 0 having run nothing (TAL-523).
+if (
+  process.argv[1] &&
+  realpathSync(fileURLToPath(import.meta.url)) === realpathSync(process.argv[1])
+) {
   main(process.argv.slice(2)).catch((error) => {
     console.error(`FAIL ${error.message}`);
     process.exitCode = 1;
