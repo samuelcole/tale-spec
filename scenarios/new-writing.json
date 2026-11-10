@@ -1,0 +1,43 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "new-writing",
+  "title": "New writing has a door of its own",
+  "steps": [
+    {
+      "id": "open-blank-library",
+      "action": { "op": "open-library", "clean": true, "network": "reachable", "deviceLanguage": "en" },
+      "expect": { "state": { "equals": "library" }, "query": { "equals": "" }, "browseNewWriting": { "equals": true }, "libraryRowsIncludeNewWriting": { "equals": false } }
+    },
+    {
+      "id": "open-new-writing",
+      "action": { "op": "activate-browse-new-writing" },
+      "expect": { "state": { "equals": "shelf" }, "kind": { "equals": "new-writing" }, "canonicalIdentity": { "equals": "/new-writing" }, "title": { "equals": "New writing" }, "roster": { "equals": ["After Frankenstein", "A Quiet Draft"] }, "rosterBylines": { "equals": ["@scenario-writer", "@other-writer"] } }
+    },
+    {
+      "id": "return-from-new-writing",
+      "action": { "op": "return-to-library" },
+      "expect": { "state": { "equals": "library" }, "query": { "equals": "" }, "browseNewWriting": { "equals": true } }
+    },
+    {
+      "id": "search-finds-both-catalog-first",
+      "action": { "op": "replace-library-query", "text": "frankenstein" },
+      "expect": { "state": { "equals": "library" }, "resultGroupLabels": { "equals": [null, "new writing"] }, "results": { "equals": ["Frankenstein", "After Frankenstein"] } }
+    },
+    {
+      "id": "search-finds-only-new-writing",
+      "action": { "op": "replace-library-query", "text": "quiet" },
+      "expect": { "state": { "equals": "library" }, "resultGroupLabels": { "equals": ["new writing"] }, "results": { "equals": ["A Quiet Draft"] } }
+    },
+    {
+      "id": "author-directory-stays-catalog",
+      "action": { "op": "clear-and-activate-browse-directory", "identity": "/authors" },
+      "expect": { "state": { "equals": "directory" }, "canonicalIdentity": { "equals": "/authors" }, "entries": { "equals": ["Mary Shelley", "Ann Radcliffe"] } }
+    },
+    {
+      "id": "open-new-writing-address",
+      "action": { "op": "open-browse-address", "address": "https://tale.fyi/new-writing" },
+      "expect": { "state": { "equals": "shelf" }, "canonicalIdentity": { "equals": "/new-writing" }, "roster": { "equals": ["After Frankenstein", "A Quiet Draft"] }, "webFallback": { "equals": false } }
+    }
+  ]
+}
