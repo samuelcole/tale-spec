@@ -13,7 +13,8 @@ immutability apply everywhere.
 ## A mark starts locally
 
 The client mints every new node's opaque ID before persistence. The node also
-carries its tale, anchor, optional note and due date, and the ID of its parent
+carries its tale, anchor, optional note, due date and
+[highlight string](#a-mark-may-highlight-words), and the ID of its parent
 tip. A root has no parent.
 
 An ID is exactly eight cryptographically random bytes encoded as unpadded
@@ -37,6 +38,63 @@ must, with no network:
 The local chain is production data, not optimistic decoration. A failed
 request may not roll it back, and a client may not require a round trip before
 showing it.
+
+## A mark may highlight words
+
+A mark on a paragraph may carry a **highlight string**: words from that
+paragraph, as the reader selected them. With one, the mark highlights those
+words and not the rest of the paragraph. Without one (absent or `null`) the
+mark highlights its whole anchor, exactly as before. It is still one mark on
+one anchor: the highlight string narrows what is painted, never what is
+marked, and a paragraph carries at most one mark whichever way it is painted.
+
+The string is an immutable field of the node like the note and the date, and
+it takes part in [idempotent persistence](#idempotent-persistence) like them.
+It is stored as offered: a client neither folds nor trims it before minting.
+
+A highlight string is valid when all of these hold, and a node carrying one
+that is not is refused by name, before it enters the local chain and again at
+the persistence boundary:
+
+- the anchor is a paragraph, not a section;
+- it is a string with at least one non-whitespace character, and at most
+  1,000 UTF-16 code units long; and
+- it is found in the anchor's paragraph text under the quote fold of
+  [`scenarios/open-at-a-quote.md`](scenarios/open-at-a-quote.md): case is
+  ignored, every run of whitespace is one space, and typographic and keyboard
+  quotation marks, apostrophes and dashes are equal. A string never matches
+  across two paragraphs.
+
+Where a paragraph holds the string more than once, the first match in the
+paragraph is the one painted. The painted range is the one `locate-highlight`
+in [`vectors/marks.json`](../vectors/marks.json) computes, in the
+paragraph's own UTF-16 offsets.
+
+Painting the words is paint only. A word highlight sits on the same layout a
+whole-paragraph mark gives its paragraph and moves no glyph relative to it:
+the reader sees the same lines with some of their words lit.
+
+A mark keeps its highlight string forever. When a later edition's paragraph
+no longer holds the string, the mark does not vanish and is not refused: it
+highlights the whole paragraph it lands on under [`anchors.md`](anchors.md),
+as a mark without a string would. A later edition that still holds the string
+paints just the words again.
+
+### Operation: `locate-highlight`
+
+[`vectors/marks.json`](../vectors/marks.json) carries one operation.
+
+- **Input:** `text`, a paragraph's plain text as the reader sees it, and
+  `highlightString`.
+- **Result:** `{ "start", "end" }`, the first range of `text` the string
+  matches under the quote fold, as UTF-16 offsets into `text` (end
+  exclusive); or `null` when the string is empty, only whitespace, or not
+  found. Whitespace around the string is not part of it. Invisible format
+  characters inside the matched text (a word joiner beside a dash) belong to
+  the range; they are skipped, never matched.
+
+`null` refuses a node at the boundary and, when rendering a later edition,
+means the whole paragraph is highlighted.
 
 ## An unpublished mark is not yet shareable
 

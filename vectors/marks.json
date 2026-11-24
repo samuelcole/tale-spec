@@ -1,0 +1,155 @@
+{
+  "area": "marks",
+  "version": 1,
+  "cases": [
+    {
+      "op": "locate-highlight",
+      "name": "finds the words where they are",
+      "input": {
+        "text": "It was a dark and stormy night; the rain fell in torrents.",
+        "highlightString": "a dark and stormy night"
+      },
+      "expected": {
+        "start": 7,
+        "end": 30
+      }
+    },
+    {
+      "op": "locate-highlight",
+      "name": "ignores case",
+      "input": {
+        "text": "It was a dark and stormy night; the rain fell in torrents.",
+        "highlightString": "A DARK and Stormy"
+      },
+      "expected": {
+        "start": 7,
+        "end": 24
+      }
+    },
+    {
+      "op": "locate-highlight",
+      "name": "a keyboard apostrophe finds a typographic one",
+      "input": {
+        "text": "I don’t know, she said.",
+        "highlightString": "don't know"
+      },
+      "expected": {
+        "start": 2,
+        "end": 12
+      }
+    },
+    {
+      "op": "locate-highlight",
+      "name": "typographic quotation marks find keyboard ones",
+      "input": {
+        "text": "He said \"no\" twice.",
+        "highlightString": "“no”"
+      },
+      "expected": {
+        "start": 8,
+        "end": 12
+      }
+    },
+    {
+      "op": "locate-highlight",
+      "name": "a hyphen finds an em dash",
+      "input": {
+        "text": "Wait—what was that?",
+        "highlightString": "wait-what"
+      },
+      "expected": {
+        "start": 0,
+        "end": 9
+      }
+    },
+    {
+      "op": "locate-highlight",
+      "name": "a run of whitespace in the text is one space",
+      "input": {
+        "text": "the  quick\n brown fox",
+        "highlightString": "quick brown"
+      },
+      "expected": {
+        "start": 5,
+        "end": 17
+      }
+    },
+    {
+      "op": "locate-highlight",
+      "name": "surrounding whitespace in the string is not part of it",
+      "input": {
+        "text": "the  quick\n brown fox",
+        "highlightString": "  quick   brown  "
+      },
+      "expected": {
+        "start": 5,
+        "end": 17
+      }
+    },
+    {
+      "op": "locate-highlight",
+      "name": "invisible format characters in the text are skipped",
+      "input": {
+        "text": "In 1853⁠—⁠1854 the war began.",
+        "highlightString": "1853-1854"
+      },
+      "expected": {
+        "start": 3,
+        "end": 14
+      },
+      "note": "the word joiners either side of the dash are inside the painted range"
+    },
+    {
+      "op": "locate-highlight",
+      "name": "the first match in the paragraph wins",
+      "input": {
+        "text": "the cat and the hat",
+        "highlightString": "the"
+      },
+      "expected": {
+        "start": 0,
+        "end": 3
+      }
+    },
+    {
+      "op": "locate-highlight",
+      "name": "offsets are UTF-16 code units",
+      "input": {
+        "text": "Café 😀 society",
+        "highlightString": "society"
+      },
+      "expected": {
+        "start": 8,
+        "end": 15
+      }
+    },
+    {
+      "op": "locate-highlight",
+      "name": "words the paragraph does not hold are not found",
+      "input": {
+        "text": "It was a dark and stormy night; the rain fell in torrents.",
+        "highlightString": "a bright and sunny day"
+      },
+      "expected": null,
+      "note": "at the persistence boundary this refuses the node; when rendering a later edition it means highlight the whole paragraph"
+    },
+    {
+      "op": "locate-highlight",
+      "name": "an empty string is not found",
+      "input": {
+        "text": "It was a dark and stormy night; the rain fell in torrents.",
+        "highlightString": ""
+      },
+      "expected": null
+    },
+    {
+      "op": "locate-highlight",
+      "name": "a string of only whitespace is not found",
+      "input": {
+        "text": "It was a dark and stormy night; the rain fell in torrents.",
+        "highlightString": "   "
+      },
+      "expected": null
+    }
+  ]
+}

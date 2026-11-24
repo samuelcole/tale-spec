@@ -1,0 +1,65 @@
+{
+  "format": "tale-surface-scenario",
+  "version": 1,
+  "id": "mark-some-words",
+  "title": "Mark some words of a paragraph",
+  "steps": [
+    {
+      "id": "open-fresh",
+      "action": { "op": "open-book", "clean": true },
+      "expect": {
+        "cover": { "equals": "on-screen" },
+        "position": { "equals": "start" }
+      }
+    },
+    {
+      "id": "read-to-the-passage",
+      "action": { "op": "read-to-block", "block": "P" },
+      "expect": { "settled": { "equals": true } }
+    },
+    {
+      "id": "mark-words-of-the-passage",
+      "action": { "op": "mark-words", "passage": "P", "words": "W" },
+      "expect": {
+        "markedPassages": { "equals": ["P"] },
+        "highlighted": { "equals": ["P:W"] },
+        "textMoved": { "equals": false },
+        "markCount": { "equals": 1 },
+        "clipboardPassage": { "equals": "W" },
+        "clipboardAttribution": { "equals": "present" },
+        "planUrl": { "equals": "available" }
+      }
+    },
+    {
+      "id": "mark-a-whole-passage",
+      "action": { "op": "mark-passage", "passage": "Q" },
+      "expect": {
+        "markedPassages": { "equals": ["P", "Q"] },
+        "highlighted": { "equals": ["P:W", "Q:whole"] },
+        "markCount": { "equals": 2 },
+        "planUrl": { "equals": "available" }
+      },
+      "capture": { "publishedPlanUrl": "planUrlValue" }
+    },
+    {
+      "id": "reopen-the-plan",
+      "action": { "op": "end-session-and-open-current-plan" },
+      "expect": {
+        "markedPassages": { "equals": ["P", "Q"] },
+        "highlighted": { "equals": ["P:W", "Q:whole"] },
+        "markCount": { "equals": 2 }
+      }
+    },
+    {
+      "id": "open-the-plan-without-local-data",
+      "action": { "op": "open-published-plan", "context": "fresh", "network": "reachable" },
+      "expect": {
+        "state": { "equals": "book" },
+        "markedPassages": { "equals": ["P", "Q"] },
+        "highlighted": { "equals": ["P:W", "Q:whole"] },
+        "markCount": { "equals": 2 },
+        "planUrlValue": { "equals": { "ref": "publishedPlanUrl" } }
+      }
+    }
+  ]
+}
