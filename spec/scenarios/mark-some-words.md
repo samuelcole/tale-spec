@@ -49,10 +49,13 @@ nothing on the web and nothing on the native client.
   of P is, `"Q:whole"` when Q is lit as a whole-paragraph mark lights it. Anything else (a
   wider or narrower range, two ranges, the words and the paragraph) is reported
   as observed and fails.
-- **`textMoved`** is `true` when any glyph of P sits at a different place in
-  the page's text layout after the mark than before it. Scroll is not text
-  layout: an adapter compares positions within the page, not on screen, and a
-  page that scrolls to keep the reader's place has not moved text.
+- **`textMoved`** is `true` when any glyph of P is somewhere else on screen
+  once the mark has settled than it was before the reader marked: the reader
+  must find P's words where they left them. A product may make room for its
+  mark's controls and offset the page by exactly that room to hold the
+  reader's place, as a whole-paragraph mark already does; the glyphs have not
+  moved for the reader, so that is not moved text. Moving the page without
+  compensating, or reflowing P's lines, is.
 - **`markedPassages`**, **`markCount`**, **`planUrl`**, **`planUrlValue`**,
   **`clipboardPassage`**, **`clipboardAttribution`**, **`cover`**,
   **`position`**, **`settled`** and **`state`** are the observations of the
