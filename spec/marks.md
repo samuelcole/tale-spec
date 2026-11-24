@@ -98,7 +98,10 @@ was already drawn: whole.
   exclusive); or `null` when the string is empty, only whitespace, or not
   found. Whitespace around the string is not part of it. Invisible format
   characters inside the matched text (a word joiner beside a dash) belong to
-  the range; they are skipped, never matched.
+  the range; they are skipped, never matched. A run of whitespace in the string matches any
+  run of whitespace and invisible characters in the text that holds at least
+  one whitespace character. Locating is linear in the text: verse, with a
+  newline and a run of tabs between lines, must not make a failed locate slow.
 
 `null` refuses a node at the boundary and, when rendering a later edition,
 means the whole paragraph is highlighted.

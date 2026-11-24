@@ -125,6 +125,54 @@
     },
     {
       "op": "locate-highlight",
+      "name": "a whitespace run may hold invisible characters",
+      "input": {
+        "text": "LIVORNO ­ RAFFAELLO ­ GIUSTI",
+        "highlightString": "LIVORNO RAFFAELLO GIUSTI"
+      },
+      "expected": {
+        "start": 0,
+        "end": 28
+      },
+      "note": "the fold drops the soft hyphens and then collapses the spaces either side into one gap"
+    },
+    {
+      "op": "locate-highlight",
+      "name": "a selection holding an invisible character inside a line break finds itself",
+      "input": {
+        "text": "quote\n­\nhere",
+        "highlightString": "quote\n­\nhere"
+      },
+      "expected": {
+        "start": 0,
+        "end": 12
+      }
+    },
+    {
+      "op": "locate-highlight",
+      "name": "verse line breaks are one gap each",
+      "input": {
+        "text": "line 0 of the chorus \n\t\t\t\t\t\t\t\tline 1 of the chorus \n\t\t\t\t\t\t\t\tline 2 of the chorus \n\t\t\t\t\t\t\t\tline 3 of the chorus \n\t\t\t\t\t\t\t\tline 4 of the chorus \n\t\t\t\t\t\t\t\tline 5 of the chorus \n\t\t\t\t\t\t\t\tline 6 of the chorus \n\t\t\t\t\t\t\t\tline 7 of the chorus \n\t\t\t\t\t\t\t\tline 8 of the chorus \n\t\t\t\t\t\t\t\tline 9 of the chorus \n\t\t\t\t\t\t\t\tline 10 of the chorus \n\t\t\t\t\t\t\t\tline 11 of the chorus",
+        "highlightString": "line 0 of the chorus line 1 of the chorus line 2 of the chorus line 3 of the chorus line 4 of the chorus line 5 of the chorus line 6 of the chorus line 7 of the chorus line 8 of the chorus line 9 of the chorus line 10 of the chorus line 11 of the chorus"
+      },
+      "expected": {
+        "start": 0,
+        "end": 352
+      },
+      "note": "a newline and eight tabs between lines, the shape Standard Ebooks verse carries; a client's locate must also stay linear here"
+    },
+    {
+      "op": "locate-highlight",
+      "name": "verse that differs only in its last word is not found",
+      "input": {
+        "text": "line 0 of the chorus \n\t\t\t\t\t\t\t\tline 1 of the chorus \n\t\t\t\t\t\t\t\tline 2 of the chorus \n\t\t\t\t\t\t\t\tline 3 of the chorus \n\t\t\t\t\t\t\t\tline 4 of the chorus \n\t\t\t\t\t\t\t\tline 5 of the chorus \n\t\t\t\t\t\t\t\tline 6 of the chorus \n\t\t\t\t\t\t\t\tline 7 of the chorus \n\t\t\t\t\t\t\t\tline 8 of the chorus \n\t\t\t\t\t\t\t\tline 9 of the chorus \n\t\t\t\t\t\t\t\tline 10 of the chorus \n\t\t\t\t\t\t\t\tline 11 of the chorus",
+        "highlightString": "line 0 of the chorus line 1 of the chorus line 2 of the chorus line 3 of the chorus line 4 of the chorus line 5 of the chorus line 6 of the chorus line 7 of the chorus line 8 of the chorus line 9 of the chorus line 10 of the chorus line 11 of the chorUX"
+      },
+      "expected": null,
+      "note": "fails as late as possible; an implementation that backtracks across each gap takes exponential time on this case"
+    },
+    {
+      "op": "locate-highlight",
       "name": "words the paragraph does not hold are not found",
       "input": {
         "text": "It was a dark and stormy night; the rain fell in torrents.",
