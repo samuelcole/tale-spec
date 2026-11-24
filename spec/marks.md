@@ -80,6 +80,13 @@ highlights the whole paragraph it lands on under [`anchors.md`](anchors.md),
 as a mark without a string would. A later edition that still holds the string
 paints just the words again.
 
+The boundary checks the string against the paragraph the anchor lands on in the
+edition it serves. A client rebuilding a chain (an edit or a removal elsewhere
+mints new nodes for the marks after it) therefore copies a mark's highlight
+string into the new node only while the paragraph it lands on still holds it,
+and mints the node without one otherwise. The rebuilt mark then reads as it
+was already drawn: whole.
+
 ### Operation: `locate-highlight`
 
 [`vectors/marks.json`](../vectors/marks.json) carries one operation.
