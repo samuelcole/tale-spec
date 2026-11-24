@@ -173,6 +173,28 @@
     },
     {
       "op": "locate-highlight",
+      "name": "a zero-width no-break space is not whitespace",
+      "input": {
+        "text": " b“﻿İ",
+        "highlightString": " “ İ"
+      },
+      "expected": null,
+      "note": "some regex engines count U+FEFF as whitespace; the fold drops it as invisible"
+    },
+    {
+      "op": "locate-highlight",
+      "name": "a zero-width no-break space between letters is skipped",
+      "input": {
+        "text": "a﻿b c",
+        "highlightString": "ab c"
+      },
+      "expected": {
+        "start": 0,
+        "end": 5
+      }
+    },
+    {
+      "op": "locate-highlight",
       "name": "words the paragraph does not hold are not found",
       "input": {
         "text": "It was a dark and stormy night; the rain fell in torrents.",
