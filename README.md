@@ -35,7 +35,8 @@ the foundation carve-out are in [`AGENTS.md`](AGENTS.md).
     high-water mark, merging across devices and across renamed keys, and the
     plan-tip rules.
   - [`spec/marks.md`](spec/marks.md) — immutable plan authoring: locally minted
-    tips, durable offline chains, and idempotent parent-first publication.
+    tips, durable offline chains, idempotent parent-first publication, and a
+    mark that highlights some words of its paragraph.
   - [`spec/reader.md`](spec/reader.md) — the one current-paragraph rule and
     everything derived from it: percent, arrival dimming, resume, finished.
   - [`spec/timeline.md`](spec/timeline.md) — the whole-book audio timeline:
